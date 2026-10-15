@@ -1,12 +1,19 @@
 import { NextResponse } from "next/server";
-import { auth } from "@/lib/auth/server";
+import { getAuth } from "@/lib/auth/server";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-const handlers = auth.handler();
-
-export const GET = handlers.GET;
+export async function GET(request: Request) {
+  try {
+    return await getAuth().handler().GET(request);
+  } catch {
+    return NextResponse.json(
+      { error: "Layanan autentikasi belum dikonfigurasi." },
+      { status: 503, headers: { "Cache-Control": "no-store" } },
+    );
+  }
+}
 
 export async function POST(request: Request) {
   const pathname = new URL(request.url).pathname;
@@ -20,5 +27,12 @@ export async function POST(request: Request) {
     );
   }
 
-  return handlers.POST(request);
+  try {
+    return await getAuth().handler().POST(request);
+  } catch {
+    return NextResponse.json(
+      { error: "Layanan autentikasi belum dikonfigurasi." },
+      { status: 503, headers: { "Cache-Control": "no-store" } },
+    );
+  }
 }
