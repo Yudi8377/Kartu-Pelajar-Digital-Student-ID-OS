@@ -5,17 +5,18 @@ import type { PoolClient } from "pg";
 export async function consumeDigitalCardRateLimit(
   client: PoolClient,
   secret: string,
-  operation: "issue" | "revoke",
+  operation: "issue" | "revoke" | "verify",
   issuerId: string,
   actorId: string,
   maxHits: number,
+  windowSeconds = 3600,
 ): Promise<boolean> {
   if (secret.length < 32) throw new Error("Rate-limit secret is not configured");
   const bucketHash = createHmac("sha256", secret)
     .update(operation).update(":").update(issuerId).update(":").update(actorId).digest("hex");
   const result = await client.query<{ allowed: boolean }>(
-    "SELECT public.consume_digital_card_rate_limit($1, 3600, $2) AS allowed",
-    [bucketHash, maxHits],
+    "SELECT public.consume_digital_card_rate_limit($1, $2, $3) AS allowed",
+    [bucketHash, windowSeconds, maxHits],
   );
   return result.rows[0]?.allowed === true;
 }
