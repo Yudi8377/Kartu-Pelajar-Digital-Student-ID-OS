@@ -5,32 +5,34 @@ Last checked: 2026-10-15
 ## Public UI preview
 
 - URL: https://kartu-pelajar-digital-student-id-os-n0ar6x.v2.appdeploy.ai/
-- Status: deployment reported ready by the hosting platform.
-- Scope: static, interactive UI preview with synthetic example identity only.
-- Automated visual QA reported no frontend or network errors.
-- The preview is a separate hosting snapshot. It is not automatically synchronized with this GitHub repository.
-- The preview is not the operational Student ID OS. It does not authenticate users, read/write Neon student records, issue QR tokens, or verify real cards.
+- Scope: static interactive UI preview with fictional identity details only.
+- This is a separate hosting snapshot, not automatically synchronized with GitHub.
+- It does not authenticate users, read/write Neon records, issue QR credentials, or verify real cards. It is not the production application.
 
 ## Source repository and CI
 
 - Repository: https://github.com/Yudi8377/Kartu-Pelajar-Digital-Student-ID-OS
-- Production source branch: `main`
-- Latest verified source commit at the time of this record: `28c4775aa2a8d9e2c9d6879813e80331e63f48c8`
-- GitHub Actions run for that commit: https://github.com/Yudi8377/Kartu-Pelajar-Digital-Student-ID-OS/actions/runs/38668112673
-- Result: success.
+- Development branch: `feat/kpd-modular-education-welfare`
+- Pull request: https://github.com/Yudi8377/Kartu-Pelajar-Digital-Student-ID-OS/pull/3
+- Recent source changes: native Next.js flat ESLint configuration, transaction-scoped auth identity, `/api/me`, tenant-scoped student APIs, and the institution workspace UI.
+- Latest CI runs are in progress at the time of this update; do not treat CI as green until the latest commit's workflow completes successfully.
 
-## Neon database
+## Neon database and authentication
 
-The initial schema is present on the production Neon branch. See `DB-STATUS.md` for project and schema details. The application server has a PostgreSQL connection module and `GET /api/ready`, but the public UI preview is static and does not use that endpoint. The endpoint is only meaningful after a trusted server host has a securely configured server-side `DATABASE_URL`.
+The production Neon branch has migrations 0001–0003 applied. Twelve application tables exist, RLS is enabled on all twelve, and all application tables remain empty. Neon Auth has been provisioned on the production branch, but no production application host/origin or runtime secrets are configured. The runtime DB role still requires secure credential setup.
 
-## Required gates before operational launch
+Vercel project creation was attempted but blocked because the connected GitHub account has no Login Connection configured. No Vercel project or deployment was created by that attempt.
 
-1. Select and configure the production application host so it builds from the GitHub source of truth and supports Next.js server routes.
-2. Configure a restricted database role and deliver its connection string through the host's secret manager. Do not use the database owner role for routine app traffic.
-3. Implement and verify authentication, school-scoped authorization, membership provisioning, and an auditable first-admin bootstrap.
-4. Implement school and student workflows, QR token issuance/rotation/revocation, and a minimal public verification endpoint.
-5. Add integration tests for cross-school isolation, role boundaries, expiry/revocation, and generic invalid-token responses.
-6. Verify HTTPS, environment secrets, backups/restore, monitoring, retention/deletion controls, privacy notice, and applicable Indonesian personal-data requirements.
-7. Re-run CI and smoke tests against the exact production deployment SHA.
+## Commercial launch gates
 
-Do not enter real student personal data or use the preview as an identity verification service until all applicable gates are verified.
+1. Connect GitHub to the chosen Next.js host and deploy a preview from this source branch.
+2. Configure the production HTTPS origin in Neon Auth and store `NEON_AUTH_BASE_URL`, a fresh `NEON_AUTH_COOKIE_SECRET`, and least-privilege `DATABASE_URL` in the host secret manager.
+3. Provision the first school/admin through a reviewed controlled procedure; never open unauthenticated self-registration or public bootstrap.
+4. Verify sign-in, sign-out, session restoration, `/api/me`, and protected API behavior against the live deployment.
+5. Implement class/teacher assignment, attendance workflows, QR issuance/rotation/revocation and rate-limited verification.
+6. Run behavioral tests for cross-school isolation and role boundaries using the exact runtime role.
+7. Configure monitoring, backup/restore, incident response, retention/deletion, privacy notices, and legal review for Indonesian personal and child data.
+8. Complete mobile/accessibility/device QA, abuse/load tests, support and escalation process, pricing/contract terms, onboarding and school offboarding.
+9. Run end-to-end smoke tests against the exact production deployment SHA before onboarding a pilot school.
+
+Do not enter real student data or present the current preview as a live identity-verification service until the gates above pass.

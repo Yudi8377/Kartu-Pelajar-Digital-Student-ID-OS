@@ -1,6 +1,10 @@
-# QR Verification API Contract (Planned)
+# QR Verification Contract and Implementation Status
 
-This document defines the expected behavior for a future endpoint. It does not mean the endpoint exists today.
+## Current implementation checkpoint — 2026-10-15
+
+The source branch now includes `POST /api/students/:studentId/card` to issue or rotate a card for an authorized school user. It generates a cryptographically random token, stores only its SHA-256 hash, marks previous active cards as replaced, writes an audit event, and returns the raw token once with `Cache-Control: no-store`. The endpoint has not yet been verified end-to-end on a live host. It does not render a QR image or create a public verification endpoint.
+
+The public verification endpoint below remains planned. Do not treat card issuance as a complete QR verification product.
 
 ## Endpoint
 
@@ -70,6 +74,11 @@ For invalid, unknown, expired, revoked, replaced, or otherwise unverifiable cred
 - Raw token is absent from logs and audit metadata.
 - Rate limits and generic error behavior are exercised.
 
-## Current implementation status
+## Remaining implementation status
 
-This is a planned contract only. The database schema stores a unique token hash, but the verification endpoint, token issuance/rotation flow, rate limiting, and end-to-end tests have not been implemented.
+- Card issue/rotation API exists in the source branch, but no live-host end-to-end test has passed yet.
+- Public verification endpoint is not implemented.
+- Durable rate limiting, abuse monitoring, QR image rendering, and verification end-to-end tests are not implemented.
+- Production runtime database credentials and application host are not configured.
+
+Until these are complete, do not use issued tokens as a public operational identity credential.

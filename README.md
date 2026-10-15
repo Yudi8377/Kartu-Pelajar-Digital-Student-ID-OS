@@ -1,44 +1,60 @@
 # Kartu Pelajar Digital — Student ID OS
 
-PWA-first digital student identity platform for Indonesian schools. The repository is the application source foundation; it is not yet the operational production system and must not be used with real student data.
+PWA-first Digital Card OS: a reusable digital identity-card platform, beginning with Indonesian schools and designed for separate domains such as project-worker and institution-member cards. The source application is under active development; it is not yet an operational commercial production service and must not be used with real student data.
 
 ## Public preview
 
-A public, interactive UI preview is available at https://kartu-pelajar-digital-student-id-os-n0ar6x.v2.appdeploy.ai/. It uses fictional demo identity details only. It is a separate static hosting snapshot, not automatically synchronized with this repository, and it does not connect to Neon, authenticate users, issue QR credentials, or verify real cards.
+A public UI preview is available at https://kartu-pelajar-digital-student-id-os-n0ar6x.v2.appdeploy.ai/. It uses fictional demo identity details only. It is a separate static hosting snapshot, not synchronized with GitHub, and does not connect to Neon, authenticate users, issue QR credentials, or verify real cards.
 
-## Current scope
-- Indonesian-language PWA shell in the source repository
-- Neon PostgreSQL schema foundation
-- Server-only database connectivity check at `GET /api/ready`
-- CI checks and scenario-test catalogue
-- Security-first multi-tenant architecture notes
+## Implemented source-branch scope
 
-## Development status
-The `/health` endpoint is a lightweight liveness check. `/api/ready` runs a trivial database query and returns 200 only when `DATABASE_URL` is configured and reachable; it returns a generic 503 otherwise. It does not create, read, or update student records.
+- Indonesian public landing page and reusable card-domain templates
+- Neon PostgreSQL schema foundation and row-level security policies
+- Neon Auth server adapter and same-origin auth proxy scaffold
+- Sign-in page with self-registration blocked
+- `GET /api/me`: resolves the server-side session, provisions the app-user profile under RLS, and returns active institution memberships
+- `GET /api/students?school_id=<uuid>`: tenant-scoped student listing, maximum 200 rows
+- `POST /api/students`: validated student creation with an audit event, constrained by database RLS
+- `POST /api/students/:studentId/card`: issue/rotate a card, store only the token hash, and return the opaque token once
+- `GET /api/health` and `GET /api/ready`
+- Institution workspace UI for membership selection and student records
 
-Authentication, server-side authorization, school/tenant isolation, QR issuance/verification, and student workflow integration are not yet implemented in the source application. The demo card is placeholder UI only. Do not enter real student personal data.
+## Current release status
 
-## Principles
+Production Neon Auth has been provisioned on the production Neon branch, but the public application host, trusted production origin, auth/runtime secrets, and runtime database connection are not configured. Login and protected APIs have not yet passed end-to-end tests on a live application URL. First-admin and school-membership provisioning remain controlled operational steps; a new login does not automatically gain school access.
+
+Attendance operations, QR issuance/rotation/verification, guardian/student self-service, billing, monitoring, backup/restore rehearsal, privacy/legal review, and multi-tenant behavioral tests remain incomplete. Do not enter real student data.
+
+The `/api/ready` response only confirms that the server can execute `SELECT 1`; it does not prove authorization or commercial readiness.
+
+## Security principles
+
 - Keep database credentials server-side only.
+- Use the dedicated least-privilege runtime database role, not the owner role.
+- Bind the verified auth subject inside each database transaction so RLS cannot inherit identity from another pooled request.
 - Enforce school/tenant authorization on every protected server request.
 - QR codes must contain opaque random tokens, never student details; store only token hashes.
-- Require human review for production migrations and releases.
-- Use a separate Neon development branch and synthetic test data.
+- Use synthetic data and a separate rehearsal branch until all release gates pass.
 
 ## Getting started
+
 1. Install Node.js 22+ and npm.
 2. Run `npm install`.
 3. Copy `.env.example` to `.env.local`.
-4. Set `DATABASE_URL` to a development-only Neon connection string. Never commit `.env.local` or expose the value with a `NEXT_PUBLIC_` prefix.
+4. Configure a development-only Neon `DATABASE_URL`, the matching branch `NEON_AUTH_BASE_URL`, and a unique `NEON_AUTH_COOKIE_SECRET` of at least 32 characters.
 5. Run `npm run dev`.
-6. Open `/api/ready` to check server-to-database connectivity.
+6. Check `/health`, `/api/ready`, and after signing in `/api/me`.
 
-A successful readiness response confirms only that the server can execute `SELECT 1`; it does not prove authorization, schema correctness, or production readiness.
+## References
 
-## Security and deployment references
-- `docs/DEPLOYMENT.md` — public preview, CI evidence, and production launch gates.
-- `docs/SECURITY-READINESS.md` — mandatory release gates before real student data.
-- `docs/QR-VERIFICATION-CONTRACT.md` — planned privacy-preserving QR API behavior.
-- `docs/DB-STATUS.md` — verified database migration status.
-- `docs/ARCHITECTURE.md` and `docs/ROADMAP.md` — architecture and phases.
-- `tests/scenarios.md` — test scenarios.
+- `docs/DEPLOYMENT.md` — current host/CI status and release gates.
+- `docs/AUTH-INTEGRATION.md` — auth setup and environment requirements.
+- `docs/FIRST-ADMIN-BOOTSTRAP.md` — controlled first-school administrator setup; manual operational procedure only.
+- `docs/DB-STATUS.md` — production schema and runtime-role status.
+- `docs/SECURITY-READINESS.md` — mandatory gates before real student data.
+- `docs/QR-VERIFICATION-CONTRACT.md` — privacy-preserving QR design.
+- `docs/COMMERCIAL-READINESS.md` — commercial release tiers and operational requirements.
+- `docs/PRODUCT-VISION-COMPLIANCE.md` and `docs/CARD-DOMAINS-AND-ATTENDANCE.md` — product domains and safeguards.
+- `docs/EMERGENCY-GUARDIAN.md` — emergency guardian concept and launch gates.
+- `docs/ARCHITECTURE.md` and `docs/ROADMAP.md` — architecture and roadmap.
+- `tests/scenarios.md` — security and workflow scenarios.
