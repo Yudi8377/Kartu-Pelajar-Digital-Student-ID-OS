@@ -89,6 +89,7 @@ CREATE TABLE IF NOT EXISTS public.attendance_events (
     REFERENCES public.attendance_sessions(school_id, id) ON DELETE RESTRICT,
   FOREIGN KEY (school_id, student_id)
     REFERENCES public.students(school_id, id) ON DELETE RESTRICT,
+  UNIQUE (school_id, id),
   UNIQUE (session_id, student_id, event_type),
   UNIQUE (school_id, idempotency_key)
 );
