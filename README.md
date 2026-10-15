@@ -15,6 +15,7 @@ A public UI preview is available at https://kartu-pelajar-digital-student-id-os-
 - `GET /api/me`: resolves the server-side session, provisions the app-user profile under RLS, and returns active institution memberships
 - `GET /api/students?school_id=<uuid>`: tenant-scoped student listing, maximum 200 rows
 - `POST /api/students`: validated student creation with an audit event, constrained by database RLS
+- `POST /api/students/:studentId/card`: issue/rotate a card, store only the token hash, and return the opaque token once
 - `GET /api/health` and `GET /api/ready`
 - Institution workspace UI for membership selection and student records
 
