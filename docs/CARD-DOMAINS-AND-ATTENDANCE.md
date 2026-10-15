@@ -57,7 +57,7 @@ A QR scan alone does not prove that the named student is physically present or t
 - attendance_corrections: original event, replacement/decision, reason, reviewer, timestamp and audit reference.
 - attendance_policies: allowed methods, grace window, duplicate policy, correction roles and notification policy.
 
-These are proposed logical entities, not confirmation that production tables have been created. Use foreign keys, tenant-scoped uniqueness, indexes and server-side authorization. Do not put student details in event IDs or QR values.
+The proposed schema is now drafted in `db/migrations/0003_student_attendance.sql` on the development branch, with static guardrail tests in `tests/attendance-migration.test.ts`. It has not been applied to production and is not yet connected to an authenticated application workflow. Use foreign keys, tenant-scoped uniqueness, indexes and server-side authorization. Do not put student details in event IDs or QR values. See `docs/ATTENDANCE-IMPLEMENTATION-STATUS.md` for current limitations and release gates.
 
 ## Project worker card domain
 
