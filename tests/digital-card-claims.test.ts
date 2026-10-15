@@ -58,7 +58,7 @@ describe("generic digital card claims", () => {
   });
 
   it("requires registered required fields and stores private contact data separately", () => {
-    const missing = validateCardClaims("digital_name_card", { full_name: "Contoh Fiktif" }, {});
+    const missing = validateCardClaims("digital_name_card", { issuer_name: "Penerbit" }, {});
     expect(missing.ok).toBe(false);
     const complete = validateCardClaims("digital_name_card", {
       full_name: "Contoh Fiktif",
