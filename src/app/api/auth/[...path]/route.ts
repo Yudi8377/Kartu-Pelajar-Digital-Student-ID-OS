@@ -4,19 +4,19 @@ import { getAuth } from "@/lib/auth/server";
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-async function unavailable() {
-  return NextResponse.json(
-    { error: "Authentication service is not configured" },
-    { status: 503, headers: { "Cache-Control": "no-store" } },
-  );
-}
+type AuthHandler = (request: Request) => Promise<Response> | Response;
 
 async function handler(request: Request) {
   try {
-    const auth = getAuth();
-    return await auth.handler()(request);
+    const handlers = getAuth().handler() as Record<string, AuthHandler>;
+    const selected = handlers[request.method];
+    if (!selected) return NextResponse.json({ error: "Method not allowed" }, { status: 405 });
+    return await selected(request);
   } catch {
-    return unavailable();
+    return NextResponse.json(
+      { error: "Authentication service is not configured" },
+      { status: 503, headers: { "Cache-Control": "no-store" } },
+    );
   }
 }
 
