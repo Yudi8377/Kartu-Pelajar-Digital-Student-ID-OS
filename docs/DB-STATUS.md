@@ -33,7 +33,8 @@ The source repository's GET /api/ready checks whether the server can connect usi
 
 ## Remaining production blockers
 
-- Trusted authentication/session integration and secure user provisioning are not implemented.
+- A sign-in page and Neon Auth proxy scaffold exist in the feature branch. Neon Auth is provisioned only on the isolated rehearsal branch; production auth is not enabled.
+- Session-to-app-user mapping, school membership provisioning, and authorization-aware APIs are not implemented.
 - Server API routes for school, student, card lifecycle, attendance sessions/events/corrections are not implemented.
 - QR issuance/rotation and a public rate-limited verification API are not implemented in the application.
 - Behavioral RLS tests with two synthetic schools and multiple roles have not yet been run against the production runtime role.
