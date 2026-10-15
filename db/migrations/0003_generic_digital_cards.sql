@@ -102,12 +102,10 @@ AS $function$
     SELECT 1
     FROM public.digital_card_issuer_memberships AS im
     JOIN public.app_users AS au ON au.id = im.user_id
-    JOIN public.digital_card_issuers AS di ON di.id = im.issuer_id
     WHERE im.issuer_id = p_issuer_id
       AND au.auth_subject = current_setting('app.auth_subject', true)
       AND au.status = 'active'
       AND im.status = 'active'
-      AND di.status = 'active'
       AND (p_roles IS NULL OR im.role = ANY(p_roles))
   )
 $function$;
