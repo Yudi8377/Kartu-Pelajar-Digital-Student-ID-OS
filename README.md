@@ -41,5 +41,6 @@ A successful readiness response confirms only that the server can execute `SELEC
 - `docs/QR-VERIFICATION-CONTRACT.md` — planned privacy-preserving QR API behavior.
 - `docs/DB-STATUS.md` — verified database migration status.
 - `docs/PRODUCT-VISION-COMPLIANCE.md` — modular KPD vision, DTSEN/desil safeguards, legal baseline, and release gates.
+- `docs/EMERGENCY-GUARDIAN.md` — Emergency Guardian flow, Android constraints, location privacy, and launch gates.
 - `docs/ARCHITECTURE.md` and `docs/ROADMAP.md` — architecture and phases.
 - `tests/scenarios.md` — test scenarios.
