@@ -4,22 +4,32 @@ Last checked: 2026-10-15
 
 ## Hosting decision
 
-The selected direction is **GitHub only** for source, review, CI, and a possible static GitHub Pages site. Do not add Hatchable, AppDeploy, Vercel, Cloudflare, Supabase, Neon-hosted production services, or another provider unless the owner explicitly revises this constraint.
+The selected direction is **GitHub only** for source control, code review, CI, and a possible static GitHub Pages site. Do not add Hatchable, AppDeploy, Vercel, Cloudflare, Supabase, Neon-hosted production services, or another provider unless the owner explicitly revises this constraint.
 
 GitHub Pages serves static files. It does not execute the Next.js server runtime or provide a private transactional database, managed school authentication, or server-side secrets. GitHub Pages alone cannot operate the intended multi-school SaaS with private student data.
 
-## Static site added
+## Current repository status
+
+- Repository: https://github.com/Yudi8377/Kartu-Pelajar-Digital-Student-ID-OS
+- Default branch: `main`.
+- PR #4 was merged on 2026-10-15; merge commit: `ccf9c3eb863d6cf4cf43b9bd436158ecb20d7d71`.
+- CI passed on the exact PR head before merge. A fresh successful CI run on the current main commit must still be checked independently.
+- GitHub Pages deployment is **not yet confirmed**. Configure repository Settings → Pages → Build and deployment → Source = GitHub Actions, then verify the workflow completes successfully and reports a deployment URL.
+- The previous AppDeploy preview is a separate static snapshot and is not the selected deployment direction. Hatchable compatibility work is archived and not selected.
+
+## Static preview
 
 - Public static site source: `site/index.html`.
 - Deployment workflow: `.github/workflows/pages.yml`.
 - The workflow packages only the `site/` directory, keeping internal documentation out of the published artifact.
+- The workflow validates that the static page exists and scans it for selected secret/private-data identifiers before upload.
 - The page uses fictional sample details and explicitly states that it does not support login, real QR verification, card issuance, or attendance.
-- **Deployment is not yet confirmed.** Repository Pages settings must be set to **GitHub Actions** and the workflow must complete successfully on `main`. Do not publish the Pages URL as live until the successful deployment URL is visible in GitHub Actions.
+- A workflow run can still fail if repository Pages settings or environment permissions are not configured.
 
 ## What GitHub-only can deliver
 
 - Public product website and static UI demonstration with fictional data.
-- Source control, reviewable PRs, CI quality checks, and static release artifacts.
+- Source control, reviewable changes, CI quality checks, and static release artifacts.
 - Documentation and reproducible development workflow.
 
 ## What GitHub Pages alone cannot deliver
@@ -31,20 +41,11 @@ GitHub Pages serves static files. It does not execute the Next.js server runtime
 
 The repository still contains Next.js server routes and legacy Neon auth/database integration code. Those routes do not run on GitHub Pages. Never ship secrets in static assets, and do not treat a static export as the full application.
 
-## Current source status
+## Release stages
 
-- Repository: https://github.com/Yudi8377/Kartu-Pelajar-Digital-Student-ID-OS
-- Active review branch: `feat/card-admin-attendance-safety`
-- PR #4: https://github.com/Yudi8377/Kartu-Pelajar-Digital-Student-ID-OS/pull/4 (open, draft; not merged)
-- Student list/create API exists in source, but exact-head CI, integration tests, UI integration, and runtime authorization evidence are pending.
-- The previous AppDeploy preview is a separate static snapshot and is not the selected deployment direction.
-- Hatchable compatibility work is archived and is not the selected host.
-
-## GitHub-only release stages
-
-1. Verify typecheck, lint, automated tests, and build on the exact latest PR commit.
+1. Verify typecheck, lint, automated tests, and build on the exact latest `main` commit.
 2. Configure GitHub Pages to use GitHub Actions and verify the static workflow on `main`.
-3. Keep server routes out of static deployment and verify no secrets/private docs are included in the artifact.
+3. Confirm the deployed URL and test the site on desktop and mobile; verify only static public assets are published.
 4. Continue local/rehearsal testing with synthetic data only.
 5. Before real school use, the owner must either provide infrastructure under their own control (server and database) or explicitly revise the no-third-party-hosting constraint. GitHub Pages alone is not a viable production backend.
 6. If self-managed infrastructure is unavailable, keep the product a static demo; do not onboard schools or enter real student data.
