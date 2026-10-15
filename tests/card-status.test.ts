@@ -13,6 +13,9 @@ describe('isCardVerifiable', () => {
   it('rejects a card at or after expiry', () => {
     expect(isCardVerifiable({ status: 'active', expiresAt: now, now })).toBe(false);
   });
+  it('rejects an active card with an invalid expiry timestamp', () => {
+    expect(isCardVerifiable({ status: 'active', expiresAt: new Date(Number.NaN), now })).toBe(false);
+  });
   it('rejects all non-active statuses', () => {
     for (const status of ['pending', 'revoked', 'expired', 'replaced'] as const) {
       expect(isCardVerifiable({ status, expiresAt: null, now })).toBe(false);
