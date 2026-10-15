@@ -11,3 +11,12 @@
 - The theme stylesheet and Bootstrap are separate from the Digital Card OS product code. Preserve upstream copyright and license notices when vendoring assets in a future change.
 
 The Digital Card OS UI adapts the Modern Business page structure for Indonesian copy, card-type modules, and a local-only Card Studio preview.
+
+## Education photography — Unsplash
+
+The public marketing page uses three education-themed photos as illustrative imagery. Each image is linked to its Unsplash photo page, which identifies the creator and states that the photo is free to use under the Unsplash License:
+- Quilia, “students in classroom with teacher presenting”: https://unsplash.com/photos/students-in-classroom-with-teacher-presenting-zFSo6bnZJTw
+- Vitaly Gariev, “Students listen to a lecture in a classroom”: https://unsplash.com/photos/students-listen-to-a-lecture-in-a-classroom-8c0ndhIXDzQ
+- Fajar Herlambang STUDIO, “Students are taking a test in a classroom”: https://unsplash.com/photos/students-are-taking-a-test-in-a-classroom-TmdrCRVDOnQ
+
+The images are loaded from images.unsplash.com with responsive sizing and lazy loading. They are not part of the MIT-licensed template code. Review each photo page and the current Unsplash License before any future redistribution or changes to use.
