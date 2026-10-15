@@ -24,4 +24,4 @@ Authentication, server-side authorization, QR verification, and live database in
 3. Copy `.env.example` to `.env.local` and configure a development-only `DATABASE_URL` when backend integration is implemented.
 4. Run `npm run dev`.
 
-See `docs/ARCHITECTURE.md`, `docs/ROADMAP.md`, and `tests/scenarios.md` before implementing features.
+See `docs/ARCHITECTURE.md`, `docs/ROADMAP.md`, `docs/DB-STATUS.md`, and `tests/scenarios.md` before implementing features.
