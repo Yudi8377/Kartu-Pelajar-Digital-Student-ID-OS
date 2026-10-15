@@ -21,7 +21,7 @@ export default function SignInPage() {
         setError("Email atau kata sandi tidak sesuai, atau layanan autentikasi belum siap.");
         return;
       }
-      window.location.assign("/");
+      window.location.assign("/workspace");
     } catch {
       setError("Layanan masuk belum dapat dihubungi. Coba lagi nanti.");
     } finally {
