@@ -1,0 +1,12 @@
+{
+  "id": "/",
+  "name": "Kartu Pelajar Digital — Student ID OS",
+  "short_name": "Student ID OS",
+  "description": "Fondasi kartu pelajar digital untuk sekolah Indonesia.",
+  "lang": "id-ID",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f4f7fb",
+  "theme_color": "#102b50"
+}
