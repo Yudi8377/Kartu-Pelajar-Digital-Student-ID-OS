@@ -21,6 +21,19 @@ describe("KPD modular product registry", () => {
     expect(emergency?.guardrail).toMatch(/salah/);
   });
 
+  it("keeps student attendance planned and school-confidential", () => {
+    const attendance = KPD_MODULES.find((module) => module.id === "student-attendance");
+    expect(attendance?.status).toBe("planned");
+    expect(attendance?.sensitivity).toBe("school-confidential");
+    expect(attendance?.guardrail).toMatch(/dikoreksi|koreksi/i);
+  });
+
+  it("keeps project worker identity separate and planned", () => {
+    const worker = KPD_MODULES.find((module) => module.id === "workforce-project");
+    expect(worker?.status).toBe("planned");
+    expect(worker?.guardrail).toMatch(/tenant sekolah/);
+  });
+
   it("labels roadmap status without implying all modules are live", () => {
     expect(getKpdModuleStatusLabel("foundation")).toBe("Fondasi");
     expect(getKpdModuleStatusLabel("planned")).toBe("Tahap berikutnya");
