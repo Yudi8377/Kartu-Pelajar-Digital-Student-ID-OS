@@ -44,6 +44,7 @@ A successful readiness response confirms only that the server can execute `SELEC
 - `docs/PRODUCT-BLUEPRINT.md` — approved product direction, domains, phased implementation, and release gates.
 - `docs/DEPLOYMENT.md` — public preview, CI evidence, and production launch gates.
 - `docs/SECURITY-READINESS.md` — mandatory release gates before real student data.
+- `docs/AUTH-SETUP.md` — Neon Auth environment setup and required verification.
 - `docs/QR-VERIFICATION-CONTRACT.md` — planned privacy-preserving QR API behavior.
 - `docs/ATTENDANCE-AND-SAFETY.md` — school-scoped identity, attendance methods, study-tour safety mode, location privacy, and release gates.
 - `docs/HATCHABLE-PORT.md` and `hatchable-port/` — framework-free UI prototype for a separate Hatchable compatibility test (not deployed).
