@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { getAuth } from "@/lib/auth/server";
 import { withAuthenticatedDb } from "@/lib/db";
 import { readJsonBodyLimited } from "@/lib/http-json";
+import { consumeDigitalCardRateLimit } from "@/lib/digital-card-rate-limit";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -15,6 +16,11 @@ const jsonError = (message: string, status: number) =>
 export async function POST(request: Request, context: { params: Promise<{ cardId: string }> }) {
   if (process.env.DIGITAL_CARD_LIFECYCLE_API_ENABLED !== "true") {
     return jsonError("Pengelolaan kartu digital belum diaktifkan pada lingkungan ini", 503);
+  }
+
+  const rateLimitSecret = process.env.DIGITAL_CARD_RATE_LIMIT_SECRET?.trim();
+  if (!rateLimitSecret || rateLimitSecret.length < 32) {
+    return jsonError("Konfigurasi pengaman pengelolaan kartu belum lengkap", 503);
   }
 
   try {
@@ -48,6 +54,11 @@ export async function POST(request: Request, context: { params: Promise<{ cardId
       );
       if (membership.rowCount !== 1) return { kind: "forbidden" as const };
 
+      const allowedByRateLimit = await consumeDigitalCardRateLimit(
+        client, rateLimitSecret, "revoke", issuerId, actor.id, 60,
+      );
+      if (!allowedByRateLimit) return { kind: "rate_limited" as const };
+
       const cardResult = await client.query<{ id: string; status: string }>(
         "SELECT id, status FROM public.digital_cards WHERE id = $1 AND issuer_id = $2 FOR UPDATE",
         [cardId, issuerId],
@@ -70,6 +81,7 @@ export async function POST(request: Request, context: { params: Promise<{ cardId
 
     if (result.kind === "forbidden") return jsonError("Akses penerbit ditolak", 403);
     if (result.kind === "not_found") return jsonError("Kartu tidak ditemukan", 404);
+    if (result.kind === "rate_limited") return jsonError("Batas pencabutan kartu tercapai; coba lagi nanti", 429);
     if (result.kind === "not_reversible") return jsonError("Status kartu tidak dapat dicabut melalui operasi ini", 409);
     return NextResponse.json(
       { cardId, issuerId, status: "revoked", alreadyRevoked: result.kind === "already_revoked" },
