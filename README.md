@@ -18,7 +18,7 @@ A public, interactive UI preview is available at https://kartu-pelajar-digital-s
 ## Development status
 The `/health` endpoint is a lightweight liveness check. `/api/ready` runs a trivial database query and returns 200 only when `DATABASE_URL` is configured and reachable; it returns a generic 503 otherwise. It does not create, read, or update student records.
 
-Authentication, server-side authorization, school/tenant isolation, QR issuance/verification, and student workflow integration are not yet implemented in the source application. The demo card is placeholder UI only. Do not enter real student personal data.
+A sign-in page and Neon Auth proxy scaffold exist in the feature branch, but production authentication is not enabled and end-to-end login has not been verified. Server-side authorization, school/tenant isolation, QR issuance/verification, and student workflow integration are not yet implemented in the source application. The demo card is placeholder UI only. Do not enter real student personal data.
 
 ## Principles
 - Keep database credentials server-side only.
