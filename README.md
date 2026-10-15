@@ -1,6 +1,6 @@
 # Kartu Pelajar Digital — Student ID OS
 
-PWA-first digital student identity platform for Indonesian schools. The repository is the application source foundation; it is not yet the operational production system and must not be used with real student data.
+PWA-first Digital Card OS: a reusable digital identity-card platform, beginning with Indonesian schools and designed for separate domains such as project-worker and institution-member cards. The repository is the application source foundation; it is not yet the operational production system and must not be used with real student data.
 
 ## Public preview
 
@@ -9,6 +9,8 @@ A public, interactive UI preview is available at https://kartu-pelajar-digital-s
 ## Current scope
 - Indonesian-language PWA shell in the source repository
 - Neon PostgreSQL schema foundation
+- Reusable card-domain templates for students, project workers, and institution members
+- Student attendance module specification (planned; not yet operational)
 - Server-only database connectivity check at `GET /api/ready`
 - CI checks and scenario-test catalogue
 - Security-first multi-tenant architecture notes
@@ -41,6 +43,7 @@ A successful readiness response confirms only that the server can execute `SELEC
 - `docs/QR-VERIFICATION-CONTRACT.md` — planned privacy-preserving QR API behavior.
 - `docs/DB-STATUS.md` — verified database migration status.
 - `docs/PRODUCT-VISION-COMPLIANCE.md` — modular KPD vision, DTSEN/desil safeguards, legal baseline, and release gates.
+- `docs/CARD-DOMAINS-AND-ATTENDANCE.md` — reusable card domains, student attendance workflow, project-worker domain, and activation gates.
 - `docs/EMERGENCY-GUARDIAN.md` — Emergency Guardian flow, Android constraints, location privacy, and launch gates.
 - `docs/ARCHITECTURE.md` and `docs/ROADMAP.md` — architecture and phases.
 - `tests/scenarios.md` — test scenarios.
