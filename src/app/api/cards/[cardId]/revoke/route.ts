@@ -53,7 +53,7 @@ export async function POST(request: Request, context: { params: Promise<{ cardId
       );
       const card = cardResult.rows[0];
       if (!card) return { kind: "not_found" as const };
-      if (card.status === "revoked") return { kind: "revoked" as const };
+      if (card.status === "revoked") return { kind: "already_revoked" as const };
       if (card.status !== "active" && card.status !== "pending") return { kind: "not_reversible" as const };
 
       await client.query(
@@ -70,7 +70,7 @@ export async function POST(request: Request, context: { params: Promise<{ cardId
     if (result.kind === "forbidden") return jsonError("Akses sekolah ditolak", 403);
     if (result.kind === "not_found") return jsonError("Kartu tidak ditemukan", 404);
     if (result.kind === "not_reversible") return jsonError("Status kartu tidak dapat dicabut melalui operasi ini", 409);
-    return NextResponse.json({ cardId, status: "revoked", alreadyRevoked: result.kind === "revoked" }, { headers: NO_STORE });
+    return NextResponse.json({ cardId, status: "revoked", alreadyRevoked: result.kind === "already_revoked" }, { headers: NO_STORE });
   } catch {
     return jsonError("Layanan pencabutan kartu sementara tidak tersedia", 503);
   }
