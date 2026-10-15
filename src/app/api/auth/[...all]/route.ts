@@ -1,12 +1,16 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { getAuth } from "@/lib/auth/server";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
-export async function GET(request: Request) {
+type AuthRouteContext = {
+  params: Promise<{ all: string[] }>;
+};
+
+export async function GET(request: NextRequest, context: AuthRouteContext) {
   try {
-    return await getAuth().handler().GET(request);
+    return await getAuth().handler().GET(request, context);
   } catch {
     return NextResponse.json(
       { error: "Layanan autentikasi belum dikonfigurasi." },
@@ -15,7 +19,7 @@ export async function GET(request: Request) {
   }
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest, context: AuthRouteContext) {
   const pathname = new URL(request.url).pathname;
 
   // Student accounts are provisioned by an authorized school administrator.
@@ -28,7 +32,7 @@ export async function POST(request: Request) {
   }
 
   try {
-    return await getAuth().handler().POST(request);
+    return await getAuth().handler().POST(request, context);
   } catch {
     return NextResponse.json(
       { error: "Layanan autentikasi belum dikonfigurasi." },
