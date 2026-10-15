@@ -1,5 +1,5 @@
 export type KpdModuleStatus = "foundation" | "planned" | "gated";
-export type KpdDataSensitivity = "public-minimal" | "school-confidential" | "sensitive-restricted";
+export type KpdDataSensitivity = "public-minimal" | "school-confidential" | "organization-confidential" | "sensitive-restricted";
 
 export interface KpdModule {
   id: string;
@@ -124,7 +124,7 @@ export const KPD_MODULES: readonly KpdModule[] = [
     tagline: "Kartu pekerja lintas kontraktor dan proyek",
     description: "Template identitas kerja dengan penugasan proyek, perusahaan/kontraktor, masa aktif, catatan sertifikasi, induksi keselamatan, dan akses area bila diaktifkan.",
     status: "planned",
-    sensitivity: "school-confidential",
+    sensitivity: "organization-confidential",
     phase: 5,
     access: "Pekerja, pengawas, admin proyek, admin kontraktor, dan petugas K3 sesuai penugasan serta kewenangan.",
     guardrail: "Data pekerja dipisahkan dari tenant sekolah dan dibatasi per proyek; catatan K3 dan sertifikasi tidak diumbar melalui QR publik."
