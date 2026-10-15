@@ -4,47 +4,54 @@ Last checked: 2026-10-15
 
 ## Hosting decision
 
-The product owner has chosen **GitHub as the only third-party platform** for the current phase. Do not create or migrate to Hatchable, AppDeploy, Vercel, Cloudflare, Supabase, Neon, or another hosted provider as part of this direction without a new explicit decision.
+The selected direction is **GitHub only** for source, review, CI, and a possible static GitHub Pages site. Do not add Hatchable, AppDeploy, Vercel, Cloudflare, Supabase, Neon-hosted production services, or another provider unless the owner explicitly revises this constraint.
 
-GitHub is the source repository, code review, CI, and (for static content only) a possible GitHub Pages host. GitHub Pages does **not** execute the Next.js server runtime or provide a private transactional database, managed school authentication, or server-side secrets. Therefore GitHub Pages alone cannot operate the intended multi-school SaaS with private student data.
+GitHub Pages serves static files. It does not execute the Next.js server runtime or provide a private transactional database, managed school authentication, or server-side secrets. GitHub Pages alone cannot operate the intended multi-school SaaS with private student data.
 
-## What can be delivered with GitHub alone
+## Static site added
 
-- Public product website and static, fictional-data UI demonstration via GitHub Pages.
-- Repository-hosted source, issues/PR review, and GitHub Actions quality checks.
-- Static/offline prototype with no real student records, no real QR credentials, and no claims of live attendance or identity verification.
-- Documented, reproducible build artifacts and release checklist.
+- Public static site source: `site/index.html`.
+- Deployment workflow: `.github/workflows/pages.yml`.
+- The workflow packages only the `site/` directory, keeping internal documentation out of the published artifact.
+- The page uses fictional sample details and explicitly states that it does not support login, real QR verification, card issuance, or attendance.
+- **Deployment is not yet confirmed.** Repository Pages settings must be set to **GitHub Actions** and the workflow must complete successfully on `main`. Do not publish the Pages URL as live until the successful deployment URL is visible in GitHub Actions.
 
-## What cannot honestly be claimed with GitHub Pages alone
+## What GitHub-only can deliver
 
-- Secure server-side sign-in/session management for school operators.
+- Public product website and static UI demonstration with fictional data.
+- Source control, reviewable PRs, CI quality checks, and static release artifacts.
+- Documentation and reproducible development workflow.
+
+## What GitHub Pages alone cannot deliver
+
+- Secure server-side school sign-in and session management.
 - Private multi-tenant student database and server-enforced role/tenant authorization.
-- Card issuance/revocation, trusted QR verification, or attendance writes backed by a private database.
-- Production monitoring, backups/restores, or operational SLA for a live school SaaS.
+- Real card issuance/revocation, trusted QR verification, or attendance writes.
+- Operational backups/restores, private monitoring, or a production service-level commitment.
 
-The existing Next.js project contains server routes and Neon Auth/database integration. Those routes will not run on GitHub Pages. Do not publish a static export as though it were the full application, and do not place credentials or student records in the browser bundle or Git repository.
+The repository still contains Next.js server routes and legacy Neon auth/database integration code. Those routes do not run on GitHub Pages. Never ship secrets in static assets, and do not treat a static export as the full application.
 
 ## Current source status
 
 - Repository: https://github.com/Yudi8377/Kartu-Pelajar-Digital-Student-ID-OS
 - Active review branch: `feat/card-admin-attendance-safety`
 - PR #4: https://github.com/Yudi8377/Kartu-Pelajar-Digital-Student-ID-OS/pull/4 (open, draft; not merged)
-- The latest reviewed branch has an initial `/api/students` list/create API slice, but its integration tests and exact-head CI still need verification.
-- Existing AppDeploy preview is a separate static snapshot and is no longer the selected deployment direction. Do not rely on it for release status.
-- Hatchable prototype/docs are legacy exploration only and are not the chosen host.
+- Student list/create API exists in source, but exact-head CI, integration tests, UI integration, and runtime authorization evidence are pending.
+- The previous AppDeploy preview is a separate static snapshot and is not the selected deployment direction.
+- Hatchable compatibility work is archived and is not the selected host.
 
 ## GitHub-only release stages
 
-1. Keep the current application source and reviewable branch in GitHub.
-2. Make the public website/static demo build reproducibly as static assets with fictional data only.
-3. Run typecheck, lint, automated tests, build, dependency checks, and secret scanning in GitHub Actions on the exact release commit.
-4. Keep all server-only API routes disabled from any static deployment; never ship environment secrets.
-5. Before real school use, the owner must either approve a self-managed server/database operated under their control or explicitly revise the no-third-party constraint. GitHub Pages alone is not a viable production backend.
-6. If self-managed infrastructure is not available, keep the release as a static demo and do not onboard schools or enter real student data.
+1. Verify typecheck, lint, automated tests, and build on the exact latest PR commit.
+2. Configure GitHub Pages to use GitHub Actions and verify the static workflow on `main`.
+3. Keep server routes out of static deployment and verify no secrets/private docs are included in the artifact.
+4. Continue local/rehearsal testing with synthetic data only.
+5. Before real school use, the owner must either provide infrastructure under their own control (server and database) or explicitly revise the no-third-party-hosting constraint. GitHub Pages alone is not a viable production backend.
+6. If self-managed infrastructure is unavailable, keep the product a static demo; do not onboard schools or enter real student data.
 
 ## Mandatory gates before operational launch
 
-- Authentication and session lifecycle E2E, including account recovery and revocation.
+- Complete authentication and session lifecycle tests.
 - Restricted runtime database role and independently tested RLS/tenant isolation.
 - Student CRUD, card issuance/rotation/revocation, QR verification and shared abuse controls.
 - Negative integration tests for school A vs school B, roles, expired/revoked tokens, and transaction rollback.
