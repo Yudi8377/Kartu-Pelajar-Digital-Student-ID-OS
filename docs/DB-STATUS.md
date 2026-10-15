@@ -1,6 +1,6 @@
 # Database status — Student ID OS
 
-Last verified: 2026-10-15
+Last verified: 2026-10-15 (read-only production inspection)
 
 ## Production database
 
@@ -9,40 +9,44 @@ Last verified: 2026-10-15
 - Database: `neondb`
 - Schema: `public`
 - PostgreSQL: 18.6
-- Initial migration source: `db/migrations/0001_initial.sql`
-- Pending security migration source: `db/migrations/0002_runtime_security.sql`
+- Initial migration source in repository: `db/migrations/0001_initial.sql`
+- Security migration source in repository: `db/migrations/0002_runtime_security.sql`
 
-## Applied schema
+## Verified live schema and data state
 
-The initial schema migration was applied to the production branch after being prepared and tested on an isolated temporary branch. The temporary branch was then removed by the migration workflow.
+A read-only query confirmed 12 tables in `public`:
 
-Expected application tables:
+- `schools`, `app_users`, `school_memberships`, `students`, `student_cards`, `audit_events`
+- `school_classes`, `school_class_students`, `school_class_teachers`
+- `attendance_sessions`, `attendance_events`, `attendance_corrections`
 
-- `schools`
-- `app_users`
-- `school_memberships`
-- `students`
-- `student_cards`
-- `audit_events`
+Read-only row-count queries on all 12 tables returned zero rows. No real or synthetic student records are present in these application tables.
 
-A read-only verification after initial application found all six tables in `public`. No sample or real student records were inserted. Recheck production row counts before onboarding.
+Row-level security is enabled on all 12 tables. A read-only inspection also found policies for school membership, assigned classes, attendance, and card access, plus helper functions such as `is_school_member` and `can_manage_school_class`. This is broader than the initial six-table migration in the repository, so the database and repository migration history must be reconciled before another schema change. Do not blindly reapply the SQL migration or infer that every policy has been independently tested.
 
-## Runtime database role and pending security migration
+## Runtime role
 
-A dedicated role named `student_id_os_runtime` has been created on the production branch using SQL with `NOBYPASSRLS`, `NOCREATEDB`, and `NOCREATEROLE`. It currently has no password, so it cannot authenticate as an application connection. Do not use the database owner role as a substitute for routine app traffic.
+The role `student_id_os_runtime` exists with `NOBYPASSRLS`, `NOCREATEDB`, and `NOCREATEROLE`. Its observed table grants are limited to SELECT/INSERT/UPDATE on business tables and SELECT/INSERT on audit events; it has no DELETE grant and no UPDATE grant on `audit_events`.
 
-The migration in `db/migrations/0002_runtime_security.sql` was prepared and tested on an isolated temporary branch (`br-hidden-tree-b35m3xvr`). Verification confirmed row-level security is enabled on all six application tables, the runtime role lacks DELETE and audit UPDATE privileges, it is neither superuser nor RLS-bypass, and an unknown QR hash returns a generic invalid result without personal data. The migration has **not** been applied to production. Production application of this security migration requires explicit approval.
+A connection test explicitly using this role failed because the Neon connection service reported missing password credentials. Treat the runtime connection as **not configured/verified**. Do not use `neondb_owner` for normal application requests; it has RLS bypass capability. Configure the runtime role password only through an approved secret-management workflow, and never paste it into chat, source code, or GitHub.
 
-Before the application can connect, set a password for `student_id_os_runtime` through the Neon Console, then store its connection string only in the hosting platform's secret manager. Do not paste the password or connection string into chat, GitHub, source files, or public environment variables.
+## Neon Auth
+
+Neon Managed Better Auth is provisioned on both production and rehearsal branches. The application login integration is being developed on the feature branch. A provisioned identity service is not proof that the app's full sign-up/sign-in/session flow or school authorization has passed end-to-end tests.
+
+See `docs/AUTH-SETUP.md` for branch URLs, required host secrets, trusted-origin setup, and verification checklist.
 
 ## Connectivity readiness endpoint
 
-The source repository's `GET /api/ready` checks that a server can connect using its server-side `DATABASE_URL` and execute `SELECT 1`. It returns a generic 503 when configuration is absent or the database cannot be reached. It does not inspect table existence, perform student CRUD, validate tenant permissions, or establish production readiness. The existing `GET /health` remains a lightweight liveness response.
+`GET /api/ready` checks only whether the server-side `DATABASE_URL` can execute `SELECT 1`. It does not verify schema version, application permissions, tenant isolation, or production readiness. `GET /health` is a liveness check.
 
-## Important limitations
+## Blocking items before commercial production
 
-- Authentication and server-side school-scoped authorization are not implemented in the source application.
-- The public UI preview is a separate static hosting snapshot and is not connected to the database.
-- QR issuance and live verification are not yet exposed by the application.
-- Do not enter real student personal data until server-side authorization, tenant-isolation tests, privacy review, backup/recovery procedures, and a real deployment check are complete.
-- Use temporary Neon branches for migration rehearsal and require human approval before applying production security/schema changes.
+- Reconcile database schema/policy history with checked-in migrations and add a repeatable migration ledger.
+- Provide the restricted runtime database credential via the selected host's secret manager and test it without owner privileges.
+- Complete auth end-to-end tests and enforce school membership plus role authorization on every private server route.
+- Implement and test tenant isolation, card issuance/revocation, QR verification/rate limiting, and attendance APIs.
+- Verify backups/restore, monitoring, incident response, privacy notices, retention/deletion, and applicable Indonesian child-data requirements.
+- Select and configure a production Next.js host and domain, then smoke-test the exact deployment SHA.
+
+Use synthetic data until all applicable release gates pass. Production schema changes still require rehearsal, evidence, and explicit approval.
