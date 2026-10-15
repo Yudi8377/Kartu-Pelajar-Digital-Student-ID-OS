@@ -25,3 +25,38 @@ jobs:
       - run: npm run lint
       - run: npm run test --if-present
       - run: npm run build
+
+  database-migrations:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: digital_card_os_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d digital_card_os_test"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create restricted runtime role for migration rehearsal
+        env:
+          PGPASSWORD: postgres
+        run: psql -h localhost -U postgres -d digital_card_os_test -v ON_ERROR_STOP=1 -c "CREATE ROLE student_id_os_runtime NOLOGIN"
+      - name: Apply all migrations to a disposable PostgreSQL instance
+        env:
+          PGPASSWORD: postgres
+        run: |
+          psql -h localhost -U postgres -d digital_card_os_test -v ON_ERROR_STOP=1 -f db/migrations/0001_initial.sql
+          psql -h localhost -U postgres -d digital_card_os_test -v ON_ERROR_STOP=1 -f db/migrations/0002_runtime_security.sql
+          psql -h localhost -U postgres -d digital_card_os_test -v ON_ERROR_STOP=1 -f db/migrations/0003_generic_digital_cards.sql
+      - name: Assert generic card RLS and verification function exist
+        env:
+          PGPASSWORD: postgres
+        run: |
+          psql -h localhost -U postgres -d digital_card_os_test -v ON_ERROR_STOP=1 -c "DO \$\$ BEGIN IF NOT (SELECT relrowsecurity FROM pg_class WHERE oid = 'public.digital_cards'::regclass) THEN RAISE EXCEPTION 'digital_cards RLS is disabled'; END IF; IF NOT EXISTS (SELECT 1 FROM pg_proc WHERE oid = 'public.verify_digital_card(bytea)'::regprocedure) THEN RAISE EXCEPTION 'verification function is missing'; END IF; END \$\$;"
