@@ -1,4 +1,5 @@
 import { getKpdModuleStatusLabel, KPD_MODULES } from "../lib/kpd-modules";
+import { CARD_DOMAIN_TEMPLATES, getCardDomainStatusLabel } from "../lib/card-domains";
 
 export default function HomePage() {
   return (
@@ -29,6 +30,31 @@ export default function HomePage() {
           <p>Aplikasi ini belum terhubung ke autentikasi, database operasional, atau layanan pemerintah. QR belum aktif. Jangan masukkan data siswa asli.</p>
           <p className="notice-emphasis">Desil keluarga tidak ditampilkan pada kartu atau QR.</p>
         </aside>
+      </section>
+
+      <section className="domains-section">
+        <div className="section-heading">
+          <p className="eyebrow">SATU PLATFORM · BERBAGAI BIDANG</p>
+          <h2>Template kartu digital yang dapat dikembangkan</h2>
+          <p>Fondasi identitas dipakai bersama. Modul, aturan akses, dan data tiap bidang tetap dipisahkan. Status template tidak berarti semua alur kerja sudah aktif.</p>
+        </div>
+        <div className="domain-grid">
+          {CARD_DOMAIN_TEMPLATES.map((domain) => (
+            <article className="domain-card" key={domain.id}>
+              <div className="module-card-top">
+                <span className="module-number">{domain.id.toUpperCase().replace("-", " ")}</span>
+                <span className={`module-status ${domain.status === "available-as-template" ? "module-status--foundation" : ""}`}>{getCardDomainStatusLabel(domain.status)}</span>
+              </div>
+              <h3>{domain.name}</h3>
+              <p className="module-description">{domain.description}</p>
+              <div className="domain-module-list">
+                <strong>Modul domain</strong>
+                <p>{domain.modules.join(" · ")}</p>
+              </div>
+              <div className="module-guardrail"><strong>Pengaman:</strong> {domain.guardrail}</div>
+            </article>
+          ))}
+        </div>
       </section>
 
       <section className="innovation-section">
