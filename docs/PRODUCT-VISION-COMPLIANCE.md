@@ -16,6 +16,19 @@ Kartu Pelajar Digital (KPD) is a modular student identity and education-services
 6. **Student services:** optional library, extracurricular, transport or facility access; each integration is independently enabled.
 7. **Trust & Privacy Center:** access history, data correction, retention, incident handling, consent/notice records and audit controls.
 
+## Reusable digital card domains
+
+KPD's shared foundation is intended to support several separately governed card domains:
+- **Student card:** school identity, attendance, class schedule, leave, verified guardian access and student services.
+- **Project-worker card:** employer/contractor and project assignment, work attendance, certification validity, safety induction and optional site access.
+- **Institution-member card:** membership lifecycle, event check-in and facility access.
+
+These are configuration templates, not claims that all workflows are implemented. Each domain must have a distinct tenant scope, roles, data classification, retention rules and module activation approval. Shared card identity must not become shared access to every domain's records. Project workers, school staff and general QR verifiers must not gain permissions outside their assigned purpose.
+
+Student attendance is the first proposed domain-specific workflow after authentication, tenant authorization and card lifecycle are complete. It needs session-based events, duplicate-event handling, server timestamps, explicit correction history, role-limited reports and guardian visibility. QR scanning alone is not proof of identity or physical presence. Continuous student location collection is not part of the default attendance design.
+
+The detailed workflow and logical data model are specified in `docs/CARD-DOMAINS-AND-ATTENDANCE.md`.
+
 ## Family desil / DTSEN integration: the safe design
 
 The social-economic ranking data commonly referred to as *desil* should **not** be printed on the student card, embedded in a QR code, exposed to a general verifier, or used as a public label for a child.
