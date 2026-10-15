@@ -5,20 +5,22 @@ This checklist is a release gate, not a claim that the application is currently 
 ## P0 — Required before any real student data
 
 - [ ] Authentication is enforced on every private server route. Unauthenticated requests fail closed.
+- [ ] Complete sign-up/sign-in/sign-out, session refresh, recovery, email verification, and account lifecycle behavior is tested on a hosted rehearsal.
 - [ ] Authorization is evaluated on the server for every request; hiding UI controls is not authorization.
 - [ ] Every student, card, membership, and audit query is scoped to the authenticated user's active school membership.
-- [ ] Cross-school isolation tests prove that a user from school A cannot read, modify, enumerate, or verify private records belonging to school B.
-- [ ] The database connection string and any elevated database credential are server-only; no secret is exposed in browser bundles, public environment variables, logs, or error responses.
+- [ ] Cross-school isolation tests prove that a user from school A cannot read, modify, enumerate, export, or verify private records belonging to school B.
+- [ ] Database credentials and elevated credentials are server-only; no secret is exposed in browser bundles, public environment variables, logs, or error responses.
 - [ ] Database access follows least privilege. The application runtime does not use a schema-owner role for routine requests.
+- [ ] The runtime credential is tested directly against a rehearsal environment and confirmed to have no owner/superuser/BYPASSRLS privileges.
 - [ ] QR credentials are generated with a cryptographically secure random source, shown only when issued, stored only as a one-way hash, revocable, and never written to logs or audit metadata.
 - [ ] Public verification responses disclose only the minimum fields needed to establish validity; they never return student number, full birth date, address, contact details, guardian data, or internal identifiers.
-- [ ] QR verification is rate-limited, uses generic invalid responses, and has tests for expired, revoked, replaced, pending, malformed, and unknown credentials.
+- [ ] QR verification is rate-limited at a reliable shared enforcement layer, uses generic invalid responses, and has tests for expired, revoked, replaced, pending, malformed, and unknown credentials.
 - [ ] Audit events record actor, action, entity, school scope, request ID, and timestamp without recording credentials or unnecessary student personal data.
 - [ ] Input validation, output encoding, CSRF protections where applicable, safe error handling, and security headers are tested.
 - [ ] Dependency and secret scanning are enabled in CI; dependency updates are reviewed.
 - [ ] Backup and restore are tested. Recovery objectives and an incident-response contact/process are documented.
-- [ ] Privacy notices, lawful basis, retention/deletion rules, access/correction procedures, and a review of applicable Indonesian personal-data and child-data requirements are completed by the responsible operator/legal reviewer.
-- [ ] Production access, deployment environment variables, database permissions, and domain/TLS settings are reviewed before launch.
+- [ ] Privacy notices, lawful basis, retention/deletion rules, access/correction procedures, and review of applicable Indonesian personal-data and child-data requirements are completed by the responsible operator/legal reviewer.
+- [ ] Production access, deployment environment variables, database permissions, domain/TLS settings, and rollback are reviewed before launch.
 
 ## P1 — Required before wider school rollout
 
@@ -32,6 +34,17 @@ This checklist is a release gate, not a claim that the application is currently 
 
 For each checked item, record the test or review artifact, date, reviewer, and commit/deployment SHA. A checkbox must not be marked complete based only on code being present.
 
-## Current baseline
+## Current baseline (2026-10-15)
 
-The initial database schema exists, and the current application is still a foundation. Authentication, server-side authorization, tenant isolation, live database integration, and the QR verification endpoint are not yet implemented. Therefore, do not enter real student personal data.
+- The branch has authentication integration routes, a protected admin entry point, and a self-profile endpoint that does not grant school roles.
+- The branch has transaction-local authenticated DB context and database RLS policies in checked-in migrations.
+- The admin card designer is still a UI prototype: no database-backed school/student CRUD, settings persistence, or real card issuance.
+- The QR API contract and SQL verification function are present as design/schema components; a deployed, rate-limited end-to-end verification API and issuance/revocation flow are not verified.
+- Neon production schema/RLS was inspected read-only; the 12 business tables were empty at the time. Runtime credential verification and the migration-history reconciliation remain pending.
+- GitHub Actions run #118 passed for commit `12cf49d7099e4efa6291968a893e9a2cf3888fea`, but CI success does not establish hosted auth, tenant-isolation, backup/restore, or security-review completion.
+- Hatchable has no connected Student ID OS project and is not approved as a free-tier paid-customer production host under its current policy.
+- Therefore the product is not approved for real student data or production launch.
+
+## Release rule
+
+Do not mark a control complete without evidence. No real student personal data or operational school onboarding until every P0 gate has been independently verified and the responsible operator has approved the exact release.
