@@ -2,6 +2,10 @@
 
 PWA-first digital student identity platform for Indonesian schools. The repository is the application source foundation; it is not yet the operational production system and must not be used with real student data.
 
+## Approved product direction
+
+The approved target is a **national multi-school SaaS**, delivered in stages, with official cross-school transfer and location tracking limited to authorized, disclosed, time-bounded sessions. Read `docs/PRODUCT-BLUEPRINT.md` for the product domains, workspaces, staged plan, and mandatory production gates.
+
 ## Public preview
 
 A public, interactive UI preview is available at https://kartu-pelajar-digital-student-id-os-n0ar6x.v2.appdeploy.ai/. It uses fictional demo identity details only. It is a separate static hosting snapshot, not automatically synchronized with this repository, and it does not connect to Neon, authenticate users, issue QR credentials, or verify real cards.
@@ -14,6 +18,7 @@ A public, interactive UI preview is available at https://kartu-pelajar-digital-s
 - Security-first multi-tenant architecture notes
 
 ## Development status
+
 The `/health` endpoint is a lightweight liveness check. `/api/ready` runs a trivial database query and returns 200 only when `DATABASE_URL` is configured and reachable; it returns a generic 503 otherwise. It does not create, read, or update student records.
 
 Authentication, server-side authorization, school/tenant isolation, QR issuance/verification, and student workflow integration are not yet implemented in the source application. The demo card is placeholder UI only. Do not enter real student personal data.
@@ -36,6 +41,7 @@ Authentication, server-side authorization, school/tenant isolation, QR issuance/
 A successful readiness response confirms only that the server can execute `SELECT 1`; it does not prove authorization, schema correctness, or production readiness.
 
 ## Security and deployment references
+- `docs/PRODUCT-BLUEPRINT.md` — approved product direction, domains, phased implementation, and release gates.
 - `docs/DEPLOYMENT.md` — public preview, CI evidence, and production launch gates.
 - `docs/SECURITY-READINESS.md` — mandatory release gates before real student data.
 - `docs/QR-VERIFICATION-CONTRACT.md` — planned privacy-preserving QR API behavior.
