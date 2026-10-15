@@ -13,6 +13,34 @@ function jsonError(message: string, status: number) {
   return NextResponse.json({ error: message }, { status, headers: NO_STORE });
 }
 
+async function readLimitedBody(request: Request, maxBytes: number): Promise<string | null> {
+  if (!request.body) return "";
+  const reader = request.body.getReader();
+  const chunks: Uint8Array[] = [];
+  let totalBytes = 0;
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      totalBytes += value.byteLength;
+      if (totalBytes > maxBytes) {
+        await reader.cancel();
+        return null;
+      }
+      chunks.push(value);
+    }
+  } finally {
+    reader.releaseLock();
+  }
+  const bytes = new Uint8Array(totalBytes);
+  let offset = 0;
+  for (const chunk of chunks) {
+    bytes.set(chunk, offset);
+    offset += chunk.byteLength;
+  }
+  return new TextDecoder("utf-8", { fatal: true }).decode(bytes);
+}
+
 async function currentUser() {
   const result = await getAuth().getSession();
   const user = result.data?.user as { id?: string } | undefined;
@@ -80,14 +108,13 @@ export async function POST(request: Request) {
     const contentType = request.headers.get("content-type")?.toLowerCase() ?? "";
     if (!contentType.includes("application/json")) return jsonError("Content-Type harus application/json", 415);
 
-    let rawBody: string;
+    let rawBody: string | null;
     try {
-      rawBody = await request.text();
+      rawBody = await readLimitedBody(request, 8_192);
     } catch {
       return jsonError("JSON tidak valid", 400);
     }
-    // Enforce a limit on the actual body, not just the optional Content-Length header.
-    if (new TextEncoder().encode(rawBody).byteLength > 8_192) return jsonError("Ukuran permintaan terlalu besar", 413);
+    if (rawBody === null) return jsonError("Ukuran permintaan terlalu besar", 413);
 
     let body: unknown;
     try {
