@@ -55,8 +55,10 @@ jobs:
           psql -h localhost -U postgres -d digital_card_os_test -v ON_ERROR_STOP=1 -f db/migrations/0001_initial.sql
           psql -h localhost -U postgres -d digital_card_os_test -v ON_ERROR_STOP=1 -f db/migrations/0002_runtime_security.sql
           psql -h localhost -U postgres -d digital_card_os_test -v ON_ERROR_STOP=1 -f db/migrations/0003_generic_digital_cards.sql
+          psql -h localhost -U postgres -d digital_card_os_test -v ON_ERROR_STOP=1 -f db/migrations/0004_digital_card_rate_limits.sql
       - name: Assert generic card RLS and verification function exist
         env:
           PGPASSWORD: postgres
         run: |
-          psql -h localhost -U postgres -d digital_card_os_test -v ON_ERROR_STOP=1 -c "DO \$\$ BEGIN IF NOT (SELECT relrowsecurity FROM pg_class WHERE oid = 'public.digital_cards'::regclass) THEN RAISE EXCEPTION 'digital_cards RLS is disabled'; END IF; IF NOT EXISTS (SELECT 1 FROM pg_proc WHERE oid = 'public.verify_digital_card(bytea)'::regprocedure) THEN RAISE EXCEPTION 'verification function is missing'; END IF; END \$\$;"
+          psql -h localhost -U postgres -d digital_card_os_test -v ON_ERROR_STOP=1 -c "DO \$\$ BEGIN IF NOT (SELECT relrowsecurity FROM pg_class WHERE oid = 'public.digital_cards'::regclass) THEN RAISE EXCEPTION 'digital_cards RLS is disabled'; END IF; IF NOT EXISTS (SELECT 1 FROM pg_proc WHERE oid = 'public.verify_digital_card(bytea)'::regprocedure) THEN RAISE EXCEPTION 'verification function is missing'; END IF; IF NOT EXISTS (SELECT 1 FROM pg_proc WHERE oid = 'public.consume_digital_card_rate_limit(text,integer,integer)'::regprocedure) THEN RAISE EXCEPTION 'rate-limit function is missing'; END IF; END \$\$;"
+          psql -h localhost -U postgres -d digital_card_os_test -v ON_ERROR_STOP=1 -c "DO \$\$ DECLARE v_allowed boolean; v_bucket text := repeat('a', 64); BEGIN SELECT public.consume_digital_card_rate_limit(v_bucket, 60, 1) INTO v_allowed; IF NOT v_allowed THEN RAISE EXCEPTION 'first rate-limit hit should pass'; END IF; SELECT public.consume_digital_card_rate_limit(v_bucket, 60, 1) INTO v_allowed; IF v_allowed THEN RAISE EXCEPTION 'second rate-limit hit should be blocked'; END IF; END \$\$;"
