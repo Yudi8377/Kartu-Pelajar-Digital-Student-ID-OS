@@ -21,6 +21,8 @@ describe("student attendance migration guardrails", () => {
   it("limits event creation to an open session window and enrolled active students", () => {
     expect(migration).toMatch(/s\.status = 'open'/);
     expect(migration).toMatch(/statement_timestamp\(\) BETWEEN s\.starts_at AND s\.ends_at/);
+    expect(migration).toMatch(/attendance_events\.occurred_at BETWEEN s\.starts_at AND s\.ends_at/);
+    expect(migration).toMatch(/ct\.starts_on <= CURRENT_DATE/);
     expect(migration).toMatch(/public\.is_active_school_student\(school_id, student_id\)/);
     expect(migration).toMatch(/cs\.status = 'active'/);
   });
