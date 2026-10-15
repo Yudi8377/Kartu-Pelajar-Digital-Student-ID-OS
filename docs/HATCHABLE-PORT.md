@@ -1,68 +1,27 @@
-# Hatchable compatibility and commercial launch decision
+# Archived: Hatchable compatibility exploration
 
-## Decision summary
+## Current decision
 
-Hatchable is **not approved as the zero-cost production host for a paid-customer launch**.
+The product owner has selected GitHub as the only third-party platform for the current phase. Hatchable is **not the selected host**. Do not create/import/deploy a Hatchable project unless the owner explicitly revises this decision and the account operator meets the provider's terms.
 
-Official references (re-check before release):
-- Terms: https://hatchable.com/terms — account holders must meet the platform's minimum age requirement (18+).
-- Acceptable Use Policy: https://hatchable.com/acceptable-use — the free tier is not production infrastructure for paying customers.
-- Pricing: https://hatchable.com/pricing — the free tier's public-app allowance and usage caps do not override the Acceptable Use Policy.
-- Developer docs: https://hatchable.com/docs/developers/mcp — this Next.js/TSX repository cannot be imported and deployed unchanged; a separate compatible project format is required.
+This file is retained only as project history so earlier implementation work is not confused with the current deployment plan.
 
-Because this product is intended for schools and may serve paying customers, do not launch a paid production service on Hatchable Free. Do not bypass age or account requirements. If Hatchable is used, an adult who meets the platform's terms must own and manage the account. The production hosting decision must match the intended business model and current provider terms.
+## Legacy prototype status
 
-## Verified connection status
+- `hatchable-port/` is a static, framework-free UI prototype.
+- It uses fictional data and has no authentication, database persistence, valid QR credential, or attendance integration.
+- No Student ID OS project was connected/deployed on Hatchable during the previous check.
+- The AppDeploy preview URL was a separate static snapshot, not the operational service.
 
-- Hatchable connector currently returns no projects for the connected account.
-- No Hatchable project has been created, imported, or deployed for Student ID OS.
-- Do not claim that the application is live on Hatchable.
-- A public UI preview hosted elsewhere is not the operational service.
+## GitHub-only limitation
 
-## Source of truth
+GitHub Pages can host static assets. It cannot run this repository's Next.js server routes, private database transactions, managed auth, or server-only secrets. The GitHub-only scope can provide a public website and a static demo; it cannot honestly be called a production multi-school SaaS.
 
-- Keep this repository and its reviewed commits as the source of truth.
-- Do not import the Next.js repository root into Hatchable and expect it to run unchanged.
-- `hatchable-port/` is a static, framework-free prototype only. It uses synthetic data and has no authentication, database persistence, valid QR credential, or attendance integration.
-- Do not migrate or duplicate the Neon production schema/data into a new provider without a reviewed migration, rollback plan, export test, and explicit approval.
-- Never put database credentials, auth secrets, or student data in public browser code or Git history.
+To support real student records while honoring a strict no-third-party-hosting requirement, the owner would need infrastructure under their own control (for example, a school/organization-operated server and database). That is still infrastructure to operate and secure, not something GitHub Pages supplies.
 
-## Commercial hosting gate
+## Safety and release rule
 
-Before selecting a production host, record evidence for every item:
-1. Current terms explicitly allow the intended commercial model and customer data.
-2. Pricing and resource caps are understood, including what happens when limits are reached.
-3. The host supports the required server-side runtime and encrypted secret handling.
-4. Authentication, server-side authorization, and tenant isolation can be implemented and tested.
-5. Database backup/export/restore, incident response, monitoring, and rollback are practical.
-6. Data-processing, region, privacy, and retention terms are reviewed by the responsible operator/legal reviewer.
-7. Deployment from the reviewed Git commit is reproducible and verifiable.
-
-If zero cost and paid-customer production cannot both be supported by the same provider's terms, keep the app in non-production test/pilot state until a compliant hosting plan is chosen. Do not mislabel a static preview as an operational service.
-
-## Mandatory product security gates
-
-No real student records until all applicable controls are implemented and evidenced:
-- Authentication on all private routes; server-side role and school-scope authorization on every request.
-- Cross-school isolation tests for reads, writes, enumeration, exports, and QR verification.
-- Least-privilege database credentials; no owner/superuser role for normal app traffic.
-- QR tokens generated with a cryptographically secure random source; only hashes stored; expiry, revocation, rotation, rate limiting, and generic invalid responses tested.
-- Audit events omit raw tokens and unnecessary personal information.
-- Validation, safe errors, CSRF protection where applicable, security headers, dependency/secret scanning.
-- Backup restore rehearsal, retention/deletion/export workflows, monitoring and incident-response process.
-- Mobile/accessibility/offline behavior tests; offline UI must not claim live verification.
-- Privacy notice and review of Indonesian personal-data and child-data requirements by the responsible operator/legal reviewer.
-- Exact release commit, test artifacts, reviewer, date, and rollback target recorded.
-
-## Current verified status (2026-10-15)
-
-- GitHub Actions CI run #118 succeeded for documentation update commit `12cf49d7099e4efa6291968a893e9a2cf3888fea`: https://github.com/Yudi8377/Kartu-Pelajar-Digital-Student-ID-OS/actions/runs/38709296736
-- A successful CI run is not evidence of production security or end-to-end readiness.
-- The existing AppDeploy URL is a static UI preview and is not connected to the operational Neon/auth flow.
-- Authentication and profile bootstrap code exist on the feature branch, but the complete sign-up/sign-in/session flow and server-side school authorization have not passed end-to-end verification.
-- Runtime DB credentials and the application of the security migration to the target environment remain unverified/pending; never substitute the database owner role.
-- No production launch, production migration, or PR merge is authorized by this document.
-
-## Release rule
-
-Keep all release work in a reviewable branch/PR. Do not merge, publish as operational, onboard schools, or enter real student data until the hosting decision and all mandatory gates have verifiable evidence and the responsible owner approves the release.
+- Do not use real student data in the static demo.
+- Do not publish database credentials, auth secrets, or student personal data in Git.
+- Do not claim QR verification, attendance, or sign-in works in static mode.
+- Keep PR/release reviewable and require documented security, privacy, restore, and operator-approval evidence before operational use.
