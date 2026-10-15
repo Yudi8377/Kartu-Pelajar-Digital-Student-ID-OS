@@ -6,9 +6,10 @@ import AdminCardDesigner from "./admin-card-designer";
 export const dynamic = "force-dynamic";
 
 export default async function AdminPage() {
-  let session: Awaited<ReturnType<ReturnType<typeof getAuth>["getSession"]>> | null = null;
+  let authenticated = false;
   try {
-    session = await getAuth().getSession();
+    const result = await getAuth().getSession();
+    authenticated = Boolean(result.data?.user);
   } catch {
     return (
       <main className="auth-shell">
@@ -21,7 +22,6 @@ export default async function AdminPage() {
       </main>
     );
   }
-  if (!session?.data?.user) redirect("/auth/sign-in");
-
+  if (!authenticated) redirect("/auth/sign-in");
   return <AdminCardDesigner />;
 }
