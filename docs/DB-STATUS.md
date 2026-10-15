@@ -26,10 +26,14 @@ Expected application tables:
 
 A read-only verification after application found all six tables in `public`. The initial row-count check on the temporary branch returned zero rows for each table; no sample or real student records were inserted. Recheck production row counts before onboarding.
 
+## Connectivity readiness endpoint
+
+`GET /api/ready` checks that the server can connect using its server-side `DATABASE_URL` and execute `SELECT 1`. It returns a generic 503 when configuration is absent or the database cannot be reached. It does not inspect table existence, perform student CRUD, validate tenant permissions, or establish production readiness. The existing `GET /health` remains a lightweight liveness response.
+
 ## Important limitations
 
 - The schema does not mean authentication or authorization is implemented.
-- The web UI is still a clearly labeled demo and is not connected to the database.
+- The web UI is still a clearly labeled demo and is not connected to the database for student workflows.
 - QR issuance and verification endpoints are not implemented.
 - Do not enter real student personal data until server-side authorization, tenant-isolation tests, privacy review, backup/recovery procedures, and a real deployment check are complete.
 - Production schema changes require human approval. Use a temporary Neon branch for migration rehearsal first.
