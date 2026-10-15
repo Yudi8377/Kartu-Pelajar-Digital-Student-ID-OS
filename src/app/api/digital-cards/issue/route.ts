@@ -1,4 +1,4 @@
-import { createHash, randomBytes } from "node:crypto";
+import { randomBytes } from "node:crypto";
 import { NextResponse } from "next/server";
 import { getAuth } from "@/lib/auth/server";
 import { bindIssuerName, validateCardClaims } from "@/lib/digital-card-claims";
@@ -6,6 +6,7 @@ import { createQrCredential, parseFutureExpiry } from "@/lib/card-credentials";
 import { getCardType } from "@/lib/card-types/registry";
 import { withAuthenticatedDb } from "@/lib/db";
 import { readJsonBodyLimited } from "@/lib/http-json";
+import { consumeDigitalCardRateLimit } from "@/lib/digital-card-rate-limit";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -64,13 +65,6 @@ export async function POST(request: Request) {
 
     const { token, tokenHash } = createQrCredential();
     const cardNumber = "DCO-" + randomBytes(8).toString("hex").toUpperCase();
-    const bucketHash = createHash("sha256")
-      .update(rateLimitSecret, "utf8")
-      .update(":issue:")
-      .update(issuerId)
-      .update(":")
-      .update(authSubject)
-      .digest("hex");
     const requestId = request.headers.get("x-request-id")?.slice(0, 100) ?? null;
 
     const issued = await withAuthenticatedDb(authSubject, async (client) => {
@@ -94,11 +88,10 @@ export async function POST(request: Request) {
       );
       if (membership.rowCount !== 1) return { kind: "forbidden" as const };
 
-      const rate = await client.query<{ allowed: boolean }>(
-        "SELECT public.consume_digital_card_rate_limit($1, 3600, 30) AS allowed",
-        [bucketHash],
+      const allowedByRateLimit = await consumeDigitalCardRateLimit(
+        client, rateLimitSecret, "issue", issuerId, actor.id, 30,
       );
-      if (!rate.rows[0]?.allowed) return { kind: "rate_limited" as const };
+      if (!allowedByRateLimit) return { kind: "rate_limited" as const };
 
       const claims = bindIssuerName(cardType, initialClaims, issuer.display_name);
       if (!claims.ok) return { kind: "invalid_claims" as const };
