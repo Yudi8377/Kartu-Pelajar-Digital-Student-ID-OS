@@ -7,6 +7,7 @@ export default function HomePage() {
       <header className="topbar">
         <span className="brand-mark">KPD</span>
         <div><p className="eyebrow">STUDENT ID OS</p><strong>Kartu Pelajar Digital</strong></div>
+        <a className="topbar-signin" href="/sign-in">Masuk</a>
         <span className="status-pill">Fondasi pengembangan</span>
       </header>
 
