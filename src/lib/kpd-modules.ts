@@ -106,6 +106,28 @@ export const KPD_MODULES: readonly KpdModule[] = [
     phase: 1,
     access: "Pemilik data melalui alur yang sesuai; petugas privasi dan auditor sesuai kewenangan.",
     guardrail: "Log tidak memuat isi data sensitif secara berlebihan; akses istimewa tercatat dan ditinjau."
+  },
+  {
+    id: "student-attendance",
+    name: "Absensi & Kehadiran Siswa",
+    tagline: "Kehadiran yang tercatat dan dapat dikoreksi",
+    description: "Pencatatan hadir, terlambat, izin, sakit, pulang, rekap kelas, koreksi kehadiran, dan pemberitahuan kepada wali.",
+    status: "planned",
+    sensitivity: "school-confidential",
+    phase: 2,
+    access: "Guru/petugas absensi pada kelas yang ditugaskan; siswa/wali melihat data yang diizinkan; operator sekolah mengelola kebijakan.",
+    guardrail: "Peristiwa absensi mencatat sumber, waktu, dan petugas/perangkat; koreksi diaudit. QR check-in tidak dianggap bukti lokasi atau identitas kuat tanpa kontrol tambahan."
+  },
+  {
+    id: "workforce-project",
+    name: "Identitas Pekerja Proyek",
+    tagline: "Kartu pekerja lintas kontraktor dan proyek",
+    description: "Template identitas kerja dengan penugasan proyek, perusahaan/kontraktor, masa aktif, catatan sertifikasi, induksi keselamatan, dan akses area bila diaktifkan.",
+    status: "planned",
+    sensitivity: "school-confidential",
+    phase: 5,
+    access: "Pekerja, pengawas, admin proyek, admin kontraktor, dan petugas K3 sesuai penugasan serta kewenangan.",
+    guardrail: "Data pekerja dipisahkan dari tenant sekolah dan dibatasi per proyek; catatan K3 dan sertifikasi tidak diumbar melalui QR publik."
   }
 ];
 
