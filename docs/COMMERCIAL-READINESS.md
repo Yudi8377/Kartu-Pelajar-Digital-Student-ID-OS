@@ -1,5 +1,14 @@
 # Commercial readiness plan
 
+## Current checkpoint — 2026-10-15
+
+Implemented in the feature branch: public landing page, institution workspace, sign-in/auth proxy scaffold, session-to-app-user mapping at `GET /api/me`, tenant-scoped student list/create APIs, audit event for student creation, and a student-card issue/rotation API that stores only a SHA-256 token hash. Neon Auth is provisioned on the production branch. Source changes are still awaiting CI completion and live smoke tests.
+
+Not commercially live: no deployed Next.js host connected to this repository; Vercel project creation is blocked until the GitHub Login Connection is configured. Production Neon Auth trusted origin and host secrets are not configured. The runtime DB role still has no usable credential. First-admin bootstrap is a controlled manual runbook, not an in-app workflow. QR public verification, durable abuse/rate limiting, attendance APIs/UI, cross-tenant behavioral tests, backup/restore, monitoring, legal/privacy review, support and billing remain open.
+
+**Release rule:** do not onboard real students or accept payment for an operational school service until these blockers are closed and evidenced. The AppDeploy URL is a static demo only.
+
+
 This is the operational release plan for Student ID OS. A feature is commercially ready only when implementation, security tests, deployment evidence, support ownership, and privacy review exist. A UI card or passing compile is not sufficient.
 
 ## Release tiers
