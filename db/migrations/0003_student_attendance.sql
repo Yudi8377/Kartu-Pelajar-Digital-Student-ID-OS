@@ -172,6 +172,12 @@ AS $function$
         AND (ct.ends_on IS NULL OR ct.ends_on >= CURRENT_DATE)
         AND au.auth_subject = current_setting('app.auth_subject', true)
         AND au.status = 'active'
+        AND EXISTS (
+          SELECT 1 FROM public.students AS st
+          WHERE st.school_id = p_school_id
+            AND st.id = p_student_id
+            AND st.status = 'active'
+        )
         AND public.is_school_member(p_school_id, ARRAY['teacher']::text[])
     )
 $function$;
@@ -183,10 +189,12 @@ STABLE
 SECURITY DEFINER
 SET search_path = pg_catalog, public
 AS $function$
-  SELECT EXISTS (
-    SELECT 1 FROM public.students AS st
-    WHERE st.school_id = p_school_id AND st.id = p_student_id AND st.status = 'active'
-  )
+  SELECT
+    public.can_access_student_class(p_school_id, p_student_id)
+    AND EXISTS (
+      SELECT 1 FROM public.students AS st
+      WHERE st.school_id = p_school_id AND st.id = p_student_id AND st.status = 'active'
+    )
 $function$;
 
 REVOKE ALL ON FUNCTION public.can_manage_school_class(uuid, uuid) FROM PUBLIC;
