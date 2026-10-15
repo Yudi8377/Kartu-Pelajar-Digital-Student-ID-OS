@@ -57,7 +57,7 @@ export function validateCardClaims(
   }
 
   for (const field of type.fields) {
-    if (!field.required) continue;
+    if (!field.required || field.id === "issuer_name") continue;
     const value = field.privateByDefault ? privateClaims[field.id] : publicClaims[field.id];
     if (!value) errors.push("Field wajib belum diisi: " + field.id + ".");
   }
