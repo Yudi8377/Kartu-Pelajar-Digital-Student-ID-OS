@@ -48,3 +48,11 @@ For each checked item, record the test or review artifact, date, reviewer, and c
 ## Release rule
 
 Do not mark a control complete without evidence. No real student personal data or operational school onboarding until every P0 gate has been independently verified and the responsible operator has approved the exact release.
+
+
+## Card lifecycle API baseline (2026-10-15)
+
+- Student-card issuance and revocation endpoints now exist in code at `/api/cards/issue` and `/api/cards/{cardId}/revoke`. Both require authentication, an active school-scoped `school_admin` or `operator` membership, bounded JSON parsing, and transactional audit events.
+- QR tokens are generated with Node.js cryptographic randomness; only SHA-256 hashes are stored in the card table. The raw token is returned once with no-store response headers.
+- `CARD_LIFECYCLE_API_ENABLED` defaults to false. Do not enable these routes until the backend is hosted, runtime DB privileges/RLS are verified, a shared QR-verification rate limiter and public verification endpoint are implemented, and all P0 release gates pass.
+- These code changes are not evidence of production readiness. GitHub Pages does not execute the Next.js API routes; no real card can be issued from the static preview.
