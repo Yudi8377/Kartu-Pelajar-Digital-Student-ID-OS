@@ -71,7 +71,8 @@ This is the operational release plan for Student ID OS. A feature is commerciall
 - CI run #57 passed typecheck, lint, automated tests, and build on commit bf90111f85e7fde867172bf5ffc26ae201267259.
 - Production Neon migrations 0001–0003 are applied and catalog-verified; 12 application tables and 31 RLS policies exist, and all application tables are empty.
 - The runtime database role exists with restricted role attributes but has no password; production application connectivity is not configured.
-- Authentication/session integration, operational APIs/UI, QR issuance and verification endpoints, behavioral cross-tenant integration tests, deployment host configuration, privacy/legal review, monitoring, and recovery rehearsal remain incomplete.
+- The Indonesian sign-in page and Neon Auth proxy scaffold are in the feature branch, but production authentication is not enabled or end-to-end verified.
+- Session-to-app-user mapping, secure school membership provisioning, operational APIs/UI, QR issuance and verification endpoints, behavioral cross-tenant integration tests, deployment host configuration, privacy/legal review, monitoring, and recovery rehearsal remain incomplete.
 
 ## Release decision
 
