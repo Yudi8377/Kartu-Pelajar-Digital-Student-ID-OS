@@ -139,6 +139,7 @@ AS $function$
         WHERE ct.school_id = p_school_id
           AND ct.class_id = p_class_id
           AND ct.status = 'active'
+          AND ct.starts_on <= CURRENT_DATE
           AND (ct.ends_on IS NULL OR ct.ends_on >= CURRENT_DATE)
           AND au.auth_subject = current_setting('app.auth_subject', true)
           AND au.status = 'active'
@@ -164,6 +165,7 @@ AS $function$
       WHERE cs.school_id = p_school_id
         AND cs.student_id = p_student_id
         AND cs.status = 'active'
+        AND cs.starts_on <= CURRENT_DATE
         AND (cs.ends_on IS NULL OR cs.ends_on >= CURRENT_DATE)
         AND ct.status = 'active'
         AND (ct.ends_on IS NULL OR ct.ends_on >= CURRENT_DATE)
@@ -268,6 +270,11 @@ CREATE POLICY attendance_sessions_insert_assigned ON public.attendance_sessions
   WITH CHECK (
     created_by = public.current_app_user_id()
     AND public.can_manage_school_class(school_id, class_id)
+    AND EXISTS (
+      SELECT 1 FROM public.school_classes AS c
+      WHERE c.school_id = attendance_sessions.school_id
+        AND c.id = attendance_sessions.class_id AND c.status = 'active'
+    )
   );
 
 DROP POLICY IF EXISTS attendance_sessions_update_admin ON public.attendance_sessions;
@@ -297,6 +304,7 @@ CREATE POLICY attendance_events_insert_assigned ON public.attendance_events
       WHERE s.school_id = attendance_events.school_id AND s.id = attendance_events.session_id
         AND s.status = 'open'
         AND statement_timestamp() BETWEEN s.starts_at AND s.ends_at
+        AND attendance_events.occurred_at BETWEEN s.starts_at AND s.ends_at
     ))
     AND EXISTS (
       SELECT 1 FROM public.school_class_students AS cs
