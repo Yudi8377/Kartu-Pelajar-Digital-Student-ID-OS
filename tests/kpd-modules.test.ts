@@ -31,6 +31,7 @@ describe("KPD modular product registry", () => {
   it("keeps project worker identity separate and planned", () => {
     const worker = KPD_MODULES.find((module) => module.id === "workforce-project");
     expect(worker?.status).toBe("planned");
+    expect(worker?.sensitivity).toBe("organization-confidential");
     expect(worker?.guardrail).toMatch(/tenant sekolah/);
   });
 
