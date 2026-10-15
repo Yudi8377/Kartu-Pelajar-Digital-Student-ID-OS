@@ -42,12 +42,13 @@ The `/api/ready` response only confirms that the server can execute `SELECT 1`; 
 3. Copy `.env.example` to `.env.local`.
 4. Configure a development-only Neon `DATABASE_URL`, the matching branch `NEON_AUTH_BASE_URL`, and a unique `NEON_AUTH_COOKIE_SECRET` of at least 32 characters.
 5. Run `npm run dev`.
-6. Check `/api/health`, `/api/ready`, and after signing in `/api/me`.
+6. Check `/health`, `/api/ready`, and after signing in `/api/me`.
 
 ## References
 
 - `docs/DEPLOYMENT.md` — current host/CI status and release gates.
 - `docs/AUTH-INTEGRATION.md` — auth setup and environment requirements.
+- `docs/FIRST-ADMIN-BOOTSTRAP.md` — controlled first-school administrator setup; manual operational procedure only.
 - `docs/DB-STATUS.md` — production schema and runtime-role status.
 - `docs/SECURITY-READINESS.md` — mandatory gates before real student data.
 - `docs/QR-VERIFICATION-CONTRACT.md` — privacy-preserving QR design.
