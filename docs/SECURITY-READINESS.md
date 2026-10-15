@@ -38,10 +38,10 @@ For each checked item, record the test or review artifact, date, reviewer, and c
 
 - The branch has authentication integration routes, a protected admin entry point, and a self-profile endpoint that does not grant school roles.
 - The branch has transaction-local authenticated DB context and database RLS policies in checked-in migrations.
-- The admin card designer is still a UI prototype: no database-backed school/student CRUD, settings persistence, or real card issuance.
+- A first database-backed school-scoped student list/create API now exists at `/api/students`; it is not yet covered by recorded integration/E2E evidence and is not connected to a completed admin workflow. The card designer remains a UI prototype: settings persistence and real card issuance are incomplete.
 - The QR API contract and SQL verification function are present as design/schema components; a deployed, rate-limited end-to-end verification API and issuance/revocation flow are not verified.
 - Neon production schema/RLS was inspected read-only; the 12 business tables were empty at the time. Runtime credential verification and the migration-history reconciliation remain pending.
-- GitHub Actions run #118 passed for commit `12cf49d7099e4efa6291968a893e9a2cf3888fea`, but CI success does not establish hosted auth, tenant-isolation, backup/restore, or security-review completion.
+- GitHub Actions run #119 passed for docs commit `f66190c32f85463d17edeac5a6ad6f78721bedd2`. Student API commits after that SHA still require CI evidence on the exact latest head. CI success does not establish hosted auth, tenant-isolation, backup/restore, or security-review completion.
 - Hatchable has no connected Student ID OS project and is not approved as a free-tier paid-customer production host under its current policy.
 - Therefore the product is not approved for real student data or production launch.
 
