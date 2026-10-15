@@ -1,103 +1,73 @@
 <!doctype html>
 <html lang="id">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#102a43">
-  <meta name="description" content="Digital Card OS — platform untuk berbagai jenis kartu identitas digital dengan fungsi, aturan akses, dan verifikasi sesuai tujuan penggunaan.">
-  <title>Digital Card OS — Kartu Identitas Digital</title>
-  <style>
-    :root { color-scheme:light; --ink:#102a43; --muted:#526579; --line:#d7e0e8; --paper:#f4f7fa; --blue:#155eef; --mint:#c8f7e5; }
-    * { box-sizing:border-box; }
-    body { margin:0; font:16px/1.6 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; background:var(--paper); color:var(--ink); }
-    a { color:inherit; }
-    .wrap { width:min(1120px,calc(100% - 36px)); margin:auto; }
-    header { padding:20px 0; background:#fff; border-bottom:1px solid var(--line); }
-    .nav { display:flex; align-items:center; justify-content:space-between; gap:18px; flex-wrap:wrap; }
-    .brand { font-weight:850; letter-spacing:-.03em; }
-    .tag { display:inline-flex; border:1px solid var(--line); border-radius:99px; padding:5px 12px; font-size:12px; font-weight:750; color:var(--muted); }
-    main { padding:54px 0 34px; }
-    .hero { display:grid; grid-template-columns:1.15fr .85fr; gap:34px; align-items:center; }
-    .eyebrow { color:var(--blue); text-transform:uppercase; letter-spacing:.12em; font-size:12px; font-weight:850; }
-    h1 { font-size:clamp(38px,6vw,64px); line-height:1.03; letter-spacing:-.055em; margin:14px 0 20px; max-width:760px; }
-    p { color:var(--muted); }
-    .lead { font-size:19px; max-width:690px; }
-    .actions { display:flex; flex-wrap:wrap; gap:12px; margin-top:26px; }
-    .btn { display:inline-block; padding:12px 18px; border-radius:12px; font-weight:750; text-decoration:none; border:1px solid var(--line); background:#fff; }
-    .btn.primary { background:var(--blue); color:white; border-color:var(--blue); }
-    .preview { background:var(--ink); color:white; border-radius:24px; padding:24px; box-shadow:0 18px 50px #102a4320; }
-    .preview p { color:#c5d2df; font-size:13px; }
-    .cards { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:18px; }
-    .mini { min-height:132px; background:linear-gradient(135deg,#fff,#eaf2ff); color:var(--ink); border-radius:16px; padding:17px; }
-    .mini span { font-size:11px; font-weight:850; letter-spacing:.1em; color:#526579; }
-    .mini h2 { font-size:19px; line-height:1.2; margin:8px 0; }
-    .mini p { font-size:12px; margin:0; color:#526579; }
-    .notice { background:#fff8df; border:1px solid #f0d78a; color:#654d00; padding:14px 16px; border-radius:14px; margin-top:30px; font-size:14px; }
-    .section { padding:28px 0 54px; }
-    .section h2 { font-size:clamp(26px,4vw,36px); letter-spacing:-.035em; margin:6px 0 8px; }
-    .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:22px; }
-    .tile { padding:22px; background:white; border:1px solid var(--line); border-radius:18px; }
-    .tile h3 { margin:0 0 8px; }
-    .tile p { margin:0; font-size:14px; }
-    .step { display:flex; gap:12px; align-items:flex-start; margin-top:16px; }
-    .num { flex:0 0 32px; height:32px; display:grid; place-items:center; border-radius:10px; background:#e7efff; color:var(--blue); font-weight:850; }
-    footer { border-top:1px solid var(--line); background:white; padding:22px 0; font-size:13px; color:var(--muted); }
-    @media(max-width:760px) { .hero { grid-template-columns:1fr; } main { padding-top:36px; } .grid { grid-template-columns:1fr; } .preview { max-width:560px; } }
-    @media(max-width:390px) { .cards { grid-template-columns:1fr; } }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#102a43">
+<meta name="description" content="Digital Card OS — rancang berbagai kartu digital sesuai tujuan, fungsi, dan kebijakan privasi.">
+<title>Digital Card OS — Kartu Identitas Digital</title>
+<style>
+:root{color-scheme:light;--ink:#102a43;--muted:#526579;--line:#d7e0e8;--paper:#f4f7fa;--blue:#155eef;--pale:#eaf2ff;--green:#087f5b}
+*{box-sizing:border-box}body{margin:0;font:16px/1.6 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--paper);color:var(--ink)}a{color:inherit}.wrap{width:min(1120px,calc(100% - 36px));margin:auto}header{padding:18px 0;background:#fff;border-bottom:1px solid var(--line)}.nav{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}.brand{font-weight:850;letter-spacing:-.03em}.tag{display:inline-flex;border:1px solid var(--line);border-radius:99px;padding:5px 12px;font-size:12px;font-weight:750;color:var(--muted)}main{padding:46px 0 34px}.hero{display:grid;grid-template-columns:1.05fr .95fr;gap:30px;align-items:center}.eyebrow{color:var(--blue);text-transform:uppercase;letter-spacing:.12em;font-size:12px;font-weight:850}h1{font-size:clamp(38px,6vw,62px);line-height:1.04;letter-spacing:-.055em;margin:14px 0 18px}h2{font-size:clamp(25px,4vw,35px);letter-spacing:-.035em;line-height:1.15;margin:8px 0}p{color:var(--muted)}.lead{font-size:18px}.actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}.btn{cursor:pointer;display:inline-block;padding:11px 16px;border-radius:11px;font:inherit;font-weight:750;text-decoration:none;border:1px solid var(--line);background:white;color:var(--ink)}.btn.primary{background:var(--blue);color:white;border-color:var(--blue)}.preview{background:var(--ink);color:white;border-radius:22px;padding:23px;box-shadow:0 18px 50px #102a4320}.preview p{color:#c5d2df;font-size:13px}.cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px}.mini{min-height:120px;background:linear-gradient(135deg,#fff,#eaf2ff);color:var(--ink);border-radius:14px;padding:15px}.mini span{font-size:10px;font-weight:850;letter-spacing:.1em;color:#526579}.mini h3{font-size:18px;line-height:1.2;margin:8px 0}.mini p{font-size:12px;margin:0;color:#526579}.notice{background:#fff8df;border:1px solid #f0d78a;color:#654d00;padding:14px 16px;border-radius:13px;margin-top:22px;font-size:14px}.section{padding:34px 0 42px}.section-intro{max-width:720px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:20px}.tile{padding:19px;background:white;border:1px solid var(--line);border-radius:16px}.tile h3{margin:0 0 7px}.tile p{margin:0;font-size:14px}.studio{display:grid;grid-template-columns:.95fr 1.05fr;gap:18px;margin-top:20px;align-items:start}.panel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px;min-width:0}.field{display:grid;gap:6px;margin:14px 0}.field label,.field legend{font-weight:750;font-size:14px}.field input,.field select{width:100%;padding:11px 12px;border:1px solid #bccbd8;border-radius:10px;background:white;color:var(--ink);font:inherit}.field small{color:var(--muted)}fieldset{border:1px solid var(--line);border-radius:12px;margin:14px 0;padding:12px}.checks{display:grid;grid-template-columns:1fr 1fr;gap:9px}.checks label{font-size:14px;font-weight:500;display:flex;gap:8px;align-items:flex-start}.checks input{width:auto;margin-top:5px}.sample-card{background:linear-gradient(135deg,#102a43,#174b70);border-radius:18px;color:white;padding:22px;min-height:235px;position:relative;overflow:hidden}.sample-card:after{content:"";position:absolute;width:170px;height:170px;border:1px solid #ffffff25;border-radius:50%;right:-40px;top:-50px;box-shadow:0 0 0 22px #ffffff08,0 0 0 46px #ffffff06}.sample-card .kicker{font-size:10px;letter-spacing:.15em;color:#b7d7ff;font-weight:850}.sample-card h3{font-size:26px;line-height:1.1;margin:15px 0 7px;overflow-wrap:anywhere}.sample-card p{color:#d4e3f2;margin:5px 0;font-size:13px}.sample-card .foot{border-top:1px solid #ffffff30;padding-top:12px;margin-top:18px;font-size:11px;color:#b7d7ff}.capabilities{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}.cap{font-size:12px;padding:5px 9px;border-radius:99px;background:#eaf2ff;color:#174b70;font-weight:700}.config{white-space:pre-wrap;overflow-wrap:anywhere;background:#f4f7fa;border:1px solid var(--line);padding:12px;border-radius:10px;font:12px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace;max-height:260px;overflow:auto}.hidden{display:none!important}.step{display:flex;gap:12px;align-items:flex-start;margin-top:15px}.num{flex:0 0 32px;height:32px;display:grid;place-items:center;border-radius:10px;background:#e7efff;color:var(--blue);font-weight:850}footer{border-top:1px solid var(--line);background:white;padding:22px 0;font-size:13px;color:var(--muted)}@media(max-width:760px){.hero,.studio{grid-template-columns:1fr}main{padding-top:30px}.grid{grid-template-columns:1fr}.preview{max-width:560px}.panel{padding:16px}}@media(max-width:390px){.cards,.checks{grid-template-columns:1fr}}
+</style>
 </head>
 <body>
-  <header>
-    <div class="wrap nav">
-      <div class="brand">Digital Card OS <span aria-hidden="true">/</span> Kartu Identitas Digital</div>
-      <span class="tag">Pratinjau GitHub</span>
-    </div>
-  </header>
-  <main class="wrap">
-    <section class="hero" aria-labelledby="hero-title">
-      <div>
-        <div class="eyebrow">Satu platform · Banyak tujuan</div>
-        <h1>Kartu digital yang dirancang sesuai kebutuhan.</h1>
-        <p class="lead">Platform untuk merancang dan mengelola berbagai jenis kartu identitas digital—mulai dari kartu pelajar, identitas proyek, kartu nama digital, keanggotaan, hingga kartu layanan khusus—dengan fungsi, akses, dan aturan verifikasi sesuai tujuan.</p>
-        <div class="actions">
-          <a class="btn primary" href="#jenis-kartu">Jelajahi jenis kartu</a>
-          <a class="btn" href="https://github.com/Yudi8377/Kartu-Pelajar-Digital-Student-ID-OS">Lihat repositori</a>
-        </div>
-        <div class="notice"><strong>Mode demo statis.</strong> Halaman ini belum menyediakan login, penerbitan kartu resmi, penyimpanan data, atau verifikasi QR operasional. Gunakan data fiktif saja. Kartu digital tidak otomatis menjadi dokumen identitas resmi pemerintah.</div>
-      </div>
-      <aside class="preview" aria-label="Contoh jenis kartu fiktif">
-        <span class="tag" style="border-color:#486177;color:#d8e4ef">KONSEP · DATA FIKTIF</span>
-        <p>PILIH TUJUAN KARTU</p>
-        <div class="cards">
-          <article class="mini"><span>01 / PENDIDIKAN</span><h2>Student ID</h2><p>Identitas siswa dan layanan sekolah</p></article>
-          <article class="mini"><span>02 / PROYEK</span><h2>Project ID</h2><p>Peran tim dan masa penugasan</p></article>
-          <article class="mini"><span>03 / PERSONAL</span><h2>Digital Name Card</h2><p>Berbagi kontak sesuai pilihan</p></article>
-          <article class="mini"><span>04 / KEGIATAN</span><h2>Event & Member</h2><p>Peserta, anggota, dan akses</p></article>
-        </div>
-        <p>Setiap jenis kartu direncanakan memiliki aturan penerbitan, data, masa berlaku, dan verifikasi tersendiri.</p>
-      </aside>
-    </section>
-    <section id="jenis-kartu" class="section">
-      <div class="eyebrow">Modul yang direncanakan</div>
-      <h2>Mulai dari kebutuhan, lalu pilih fungsinya.</h2>
-      <p>Student ID OS tetap menjadi modul pertama. Jenis kartu lain ditambahkan bertahap setelah fondasi keamanan dan penerbitan terbukti.</p>
-      <div class="grid">
-        <article class="tile"><h3>Pelajar & pendidikan</h3><p>Identitas sekolah, keanggotaan kelas, kartu pelajar, serta kehadiran yang diotorisasi.</p></article>
-        <article class="tile"><h3>Proyek & organisasi</h3><p>Identitas tim, peran proyek, masa tugas, keanggotaan, dan akses sesuai izin.</p></article>
-        <article class="tile"><h3>Kartu nama digital</h3><p>Profil kontak yang bisa dibagikan dengan kontrol atas informasi yang ditampilkan.</p></article>
-        <article class="tile"><h3>Event & sertifikat</h3><p>Registrasi peserta, akses sesi, kehadiran kegiatan, dan kredensial pencapaian.</p></article>
-        <article class="tile"><h3>Layanan khusus</h3><p>Termasuk kemungkinan kartu layanan Haji/Umrah oleh penyelenggara berwenang, setelah validasi dan persetujuan yang diperlukan.</p></article>
-        <article class="tile"><h3>Keanggotaan</h3><p>Status anggota, peran, masa aktif, perpanjangan, serta verifikasi oleh penerbit yang sah.</p></article>
-      </div>
-    </section>
-    <section class="section">
-      <div class="eyebrow">Cara kerja yang dituju</div>
-      <h2>Satu fondasi, aturan khusus untuk tiap penggunaan.</h2>
-      <div class="step"><div class="num">1</div><div><strong>Pilih tujuan kartu</strong><p>Tentukan siapa penerbitnya, siapa pemegangnya, dan masalah apa yang hendak diselesaikan.</p></div></div>
-      <div class="step"><div class="num">2</div><div><strong>Atur data dan fungsi</strong><p>Pilih field yang benar-benar diperlukan, hak akses, masa berlaku, dan tindakan yang diizinkan.</p></div></div>
-      <div class="step"><div class="num">3</div><div><strong>Verifikasi sesuai kebijakan</strong><p>QR atau kredensial dirancang agar tidak membocorkan data pribadi; status berlaku, kedaluwarsa, atau dicabut harus jelas.</p></div></div>
-    </section>
-  </main>
-  <footer><div class="wrap">Digital Card OS · Pratinjau statis · Student ID OS tetap menjadi modul awal · Belum untuk penggunaan operasional.</div></footer>
+<header><div class="wrap nav"><div class="brand">Digital Card OS <span aria-hidden="true">/</span> Kartu Identitas Digital</div><span class="tag">Public preview · v0.1</span></div></header>
+<main class="wrap">
+<section class="hero" aria-labelledby="hero-title">
+<div><div class="eyebrow">Satu platform · Banyak tujuan</div><h1>Kartu digital yang mengikuti kebutuhanmu.</h1><p class="lead">Pilih jenis kartu, tentukan data dan fungsi, lalu lihat pratinjau konfigurasi. Student ID OS tetap menjadi modul pertama di atas fondasi Digital Card OS.</p><div class="actions"><a class="btn primary" href="#studio">Buka Card Studio</a><a class="btn" href="https://github.com/Yudi8377/Kartu-Pelajar-Digital-Student-ID-OS">Repositori GitHub</a></div><div class="notice"><strong>Mode pratinjau statis.</strong> Card Studio ini hanya membuat konfigurasi di browser. Tidak ada login, penyimpanan ke server, penerbitan kartu, QR verifikasi operasional, atau data pengguna yang disimpan. Gunakan data fiktif saja.</div></div>
+<aside class="preview" aria-label="Contoh jenis kartu digital"><span class="tag" style="border-color:#486177;color:#d8e4ef">KONSEP · DATA FIKTIF</span><p>PILIH TUJUAN KARTU</p><div class="cards"><article class="mini"><span>01 / PENDIDIKAN</span><h3>Student ID</h3><p>Identitas siswa dan layanan sekolah</p></article><article class="mini"><span>02 / PROYEK</span><h3>Project ID</h3><p>Peran tim dan masa penugasan</p></article><article class="mini"><span>03 / PERSONAL</span><h3>Digital Name Card</h3><p>Berbagi kontak sesuai pilihan</p></article><article class="mini"><span>04 / KEGIATAN</span><h3>Event & Member</h3><p>Peserta, anggota, dan akses</p></article></div><p>Setiap jenis kartu memiliki rancangan field, fungsi, penerbit, dan aturan privasi tersendiri.</p></aside>
+</section>
+<section id="jenis-kartu" class="section"><div class="eyebrow">Ekosistem modul</div><h2>Mulai dari tujuan, bukan dari template.</h2><p class="section-intro">Pilih skenario pemakaian. Penerbit dan kewenangan harus jelas sebelum kartu dipakai untuk keperluan nyata.</p><div class="grid">
+<article class="tile"><h3>Pelajar & pendidikan</h3><p>Identitas sekolah, kelas, serta kehadiran yang diotorisasi.</p></article><article class="tile"><h3>Proyek & organisasi</h3><p>Identitas tim, peran proyek, masa tugas, dan keanggotaan.</p></article><article class="tile"><h3>Kartu nama digital</h3><p>Profil profesional dengan kontrol atas informasi kontak yang dibagikan.</p></article><article class="tile"><h3>Event & sertifikat</h3><p>Registrasi peserta, akses acara, kehadiran, dan pencapaian.</p></article><article class="tile"><h3>Layanan Haji/Umrah</h3><p>Konsep layanan bagi penyelenggara yang berwenang; bukan dokumen perjalanan resmi dan tidak aktif untuk penerbitan.</p></article><article class="tile"><h3>Keanggotaan</h3><p>Status anggota, peran, masa aktif, dan verifikasi oleh penerbit yang sah.</p></article>
+</div></section>
+<section id="studio" class="section"><div class="eyebrow">Card Studio · Demo interaktif</div><h2>Rancang jenis kartu</h2><p class="section-intro">Ubah tujuan, field, dan fungsi untuk melihat hasil konfigurasi. Pratinjau tidak menerbitkan kartu dan tidak menyimpan input.</p>
+<div class="studio">
+<div class="panel"><div class="field"><label for="cardType">1. Tujuan kartu</label><select id="cardType"><option value="student_id">Kartu Pelajar Digital</option><option value="project_identity">Identitas Proyek</option><option value="digital_name_card">Kartu Nama Digital</option><option value="event_participant">Kartu Peserta Kegiatan</option><option value="organization_membership">Kartu Keanggotaan</option><option value="achievement_certificate">Kartu Prestasi & Sertifikat</option><option value="hajj_umrah_service">Kartu Layanan Haji/Umrah (prototipe)</option></select><small id="typeDescription">Identitas pendidikan yang dikelola sekolah atau lembaga berwenang.</small></div>
+<div class="field"><label for="cardTitle">2. Nama pada template</label><input id="cardTitle" value="Contoh Pengguna" maxlength="80" autocomplete="off"><small>Gunakan nama fiktif; ini hanya untuk pratinjau di perangkat.</small></div>
+<fieldset><legend>3. Field yang ditampilkan</legend><div id="fieldChecks" class="checks"></div><small>Field privat secara default tidak dicentang untuk tampilan publik.</small></fieldset>
+<fieldset><legend>4. Fungsi kartu</legend><div id="capChecks" class="checks"></div></fieldset>
+<div class="field"><label for="issuer">Penerbit (contoh fiktif)</label><input id="issuer" value="Contoh Organisasi" maxlength="80" autocomplete="off"></div>
+<div class="actions"><button id="showConfig" class="btn primary" type="button">Lihat konfigurasi</button><button id="reset" class="btn" type="button">Atur ulang</button></div><p id="validation" role="status" aria-live="polite"></p><pre id="config" class="config hidden"></pre></div>
+<div class="panel"><span class="tag">PRATINJAU · BUKAN KARTU SAH</span><div style="margin-top:15px" class="sample-card"><div class="kicker" id="previewKicker">DIGITAL CARD OS · STUDENT ID</div><h3 id="previewName">Contoh Pengguna</h3><div id="previewFields"><p>Contoh Organisasi</p><p>Kartu Pelajar Digital</p></div><div class="foot">DEMO LOKAL · TIDAK DAPAT DIGUNAKAN UNTUK VERIFIKASI</div></div><div id="previewCaps" class="capabilities"></div><div class="notice" id="safetyNotice">Penerbitan dinonaktifkan sampai backend produksi, otorisasi penerbit, dan tinjauan keamanan terverifikasi.</div></div>
+</div></section>
+<section class="section"><div class="eyebrow">Alur yang dituju</div><h2>Satu fondasi, kebijakan khusus per kartu.</h2><div class="step"><div class="num">1</div><div><strong>Pilih tujuan dan penerbit</strong><p>Tentukan kebutuhan, pemegang, dan pihak yang berwenang menerbitkan.</p></div></div><div class="step"><div class="num">2</div><div><strong>Atur field dan fungsi</strong><p>Gunakan data minimum, akses terbatas, masa berlaku, dan aturan penyimpanan yang jelas.</p></div></div><div class="step"><div class="num">3</div><div><strong>Verifikasi dan pencabutan</strong><p>QR produksi harus mengarah ke referensi acak yang dapat dicabut, bukan memuat seluruh data pribadi.</p></div></div></section>
+</main>
+<footer><div class="wrap">Digital Card OS · Pratinjau statis · Student ID OS tetap menjadi modul awal · Belum untuk penggunaan operasional.</div></footer>
+<script>
+(function(){
+"use strict";
+const types={
+student_id:{name:"Kartu Pelajar Digital",desc:"Identitas pendidikan yang dikelola sekolah atau lembaga berwenang.",fields:[["full_name","Nama pemegang",false],["issuer_name","Penerbit",false],["institution_name","Sekolah/lembaga",false],["member_number","Nomor siswa",true],["valid_until","Berlaku sampai",false]],caps:["Tampilkan identitas","Catat kehadiran"]},
+project_identity:{name:"Identitas Proyek",desc:"Identitas anggota tim, peran, dan masa penugasan.",fields:[["full_name","Nama pemegang",false],["issuer_name","Penerbit",false],["project_name","Nama proyek",false],["role","Peran",false],["valid_until","Berlaku sampai",false]],caps:["Tampilkan identitas"]},
+digital_name_card:{name:"Kartu Nama Digital",desc:"Profil profesional dengan berbagi kontak secara sadar dan terbatas.",fields:[["full_name","Nama pemegang",false],["issuer_name","Penerbit",false],["role","Profesi/peran",false],["contact_email","Email (privat)",true],["contact_phone","Telepon (privat)",true]],caps:["Tampilkan identitas","Berbagi kontak"]},
+event_participant:{name:"Kartu Peserta Kegiatan",desc:"Identitas peserta, akses acara, dan kehadiran sesuai izin penyelenggara.",fields:[["full_name","Nama pemegang",false],["issuer_name","Penerbit",false],["event_name","Nama kegiatan",false],["member_number","ID peserta (privat)",true],["valid_until","Berlaku sampai",false]],caps:["Tampilkan identitas","Akses acara","Catat kehadiran"]},
+organization_membership:{name:"Kartu Keanggotaan",desc:"Status keanggotaan, peran, dan masa aktif oleh organisasi penerbit.",fields:[["full_name","Nama pemegang",false],["issuer_name","Penerbit",false],["institution_name","Organisasi",false],["member_number","Nomor anggota (privat)",true],["role","Peran anggota",false],["valid_until","Berlaku sampai",false]],caps:["Tampilkan identitas","Cek keanggotaan"]},
+achievement_certificate:{name:"Kartu Prestasi & Sertifikat",desc:"Ringkasan pencapaian yang dapat diverifikasi kepada penerbitnya.",fields:[["full_name","Nama pemegang",false],["issuer_name","Penerbit",false],["achievement_title","Nama pencapaian",false],["institution_name","Pemberi penghargaan",false],["valid_until","Berlaku sampai",false]],caps:["Tampilkan identitas","Verifikasi prestasi"]},
+hajj_umrah_service:{name:"Kartu Layanan Haji/Umrah",desc:"Prototipe untuk penyelenggara berwenang; bukan dokumen resmi atau pengganti dokumen perjalanan.",fields:[["full_name","Nama pemegang",false],["issuer_name","Penerbit",false],["service_reference","Referensi layanan (privat)",true],["valid_until","Berlaku sampai",false]],caps:["Tampilkan identitas","Alur layanan"]}
+};
+const labels={"Tampilkan identitas":"identity_display","Berbagi kontak":"contact_share","Cek keanggotaan":"membership_check","Catat kehadiran":"attendance_check_in","Akses acara":"event_access","Verifikasi prestasi":"achievement_verify","Alur layanan":"service_workflow"};
+const privateIds=new Set(["member_number","contact_email","contact_phone","service_reference"]);
+const typeSelect=document.getElementById("cardType"),fieldChecks=document.getElementById("fieldChecks"),capChecks=document.getElementById("capChecks");
+const byId=id=>document.getElementById(id);
+function makeCheck(name,label,checked,group,value){const wrapper=document.createElement("label"),input=document.createElement("input"),span=document.createElement("span");input.type="checkbox";input.name=group;input.value=value;input.checked=checked;span.textContent=label;wrapper.append(input,span);return wrapper}
+function renderType(){const type=types[typeSelect.value];byId("typeDescription").textContent=type.desc;fieldChecks.replaceChildren();capChecks.replaceChildren();
+type.fields.forEach(([id,label,isPrivate])=>fieldChecks.append(makeCheck(id,label,!isPrivate, "field",id)));
+type.caps.forEach(label=>capChecks.append(makeCheck(labels[label],label,true,"capability",labels[label])));
+byId("safetyNotice").textContent=typeSelect.value==="hajj_umrah_service"?"Jenis ini prototipe saja. Penerbitan diblokir; perlu otorisasi penyelenggara serta tinjauan hukum, privasi, dan keamanan.":"Penerbitan dinonaktifkan sampai backend produksi, otorisasi penerbit yang diperlukan, dan tinjauan keamanan terverifikasi.";
+renderPreview()}
+function selected(group){return Array.from(document.querySelectorAll('input[name="'+group+'"]:checked')).map(input=>input.value)}
+function renderPreview(){const type=types[typeSelect.value],name=byId("cardTitle").value.trim()||"Nama Fiktif",issuer=byId("issuer").value.trim()||"Penerbit";byId("previewName").textContent=name;byId("previewKicker").textContent="DIGITAL CARD OS · "+typeSelect.value.toUpperCase().replaceAll("_"," ");const fields=selected("field"),display=[];type.fields.forEach(([id,label])=>{if(!fields.includes(id))return;let value=label;if(id==="full_name")return;if(id==="issuer_name")value=issuer;else if(id==="institution_name")value="Contoh Institusi";else if(id==="project_name")value="Proyek Contoh";else if(id==="event_name")value="Kegiatan Contoh";else if(id==="role")value="Anggota / Peserta";else if(id==="achievement_title")value="Prestasi Contoh";else if(id==="valid_until")value="Contoh masa berlaku";else if(privateIds.has(id))value="Data privat tidak ditampilkan";display.push(value)});
+byId("previewFields").replaceChildren();const issuerLine=document.createElement("p");issuerLine.textContent=issuer;byId("previewFields").append(issuerLine);display.filter(v=>v!==issuer).slice(0,3).forEach(value=>{const p=document.createElement("p");p.textContent=value;byId("previewFields").append(p)});
+byId("previewCaps").replaceChildren();selected("capability").forEach(cap=>{const span=document.createElement("span");span.className="cap";span.textContent=Object.keys(labels).find(k=>labels[k]===cap)||cap;byId("previewCaps").append(span)});
+}
+typeSelect.addEventListener("change",renderType);byId("cardTitle").addEventListener("input",renderPreview);byId("issuer").addEventListener("input",renderPreview);fieldChecks.addEventListener("change",renderPreview);capChecks.addEventListener("change",renderPreview);
+byId("showConfig").addEventListener("click",()=>{const type=types[typeSelect.value],fields=selected("field"),caps=selected("capability"),errors=[];if(!byId("cardTitle").value.trim())errors.push("Nama contoh wajib diisi.");if(!fields.includes("full_name"))errors.push("Untuk pratinjau, pertahankan nama pemegang.");if(caps.length===0)errors.push("Pilih minimal satu fungsi.");
+byId("validation").textContent=errors.length?errors.join(" "):"Konfigurasi pratinjau berhasil dibuat. Belum disimpan atau diterbitkan.";if(errors.length){byId("config").classList.add("hidden");return}
+const config={schemaVersion:1,id:typeSelect.value,name:type.name,displayName:byId("cardTitle").value.trim(),issuerExample:byId("issuer").value.trim(),selectedFields:fields,selectedCapabilities:caps,publicPreviewOnly:true,issuanceEnabled:false,productionBackendReady:false,officialGovernmentCredential:false};byId("config").textContent=JSON.stringify(config,null,2);byId("config").classList.remove("hidden")});
+byId("reset").addEventListener("click",()=>{typeSelect.value="student_id";byId("cardTitle").value="Contoh Pengguna";byId("issuer").value="Contoh Organisasi";byId("config").classList.add("hidden");byId("validation").textContent="";renderType()});
+renderType();
+})();
+</script>
 </body>
 </html>
