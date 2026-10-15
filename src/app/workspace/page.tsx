@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { authClient } from "@/lib/auth/client";
 import { FormEvent, useCallback, useEffect, useState } from "react";
 
 type Membership = { school_id: string; school_name: string; role: string };
@@ -112,6 +113,16 @@ export default function WorkspacePage() {
     }
   }
 
+  async function handleSignOut() {
+    setError("");
+    try {
+      await authClient.signOut();
+      window.location.assign("/");
+    } catch {
+      setError("Tidak dapat keluar dengan aman. Coba muat ulang halaman.");
+    }
+  }
+
   const selectedMembership = profile?.memberships.find((item) => item.school_id === schoolId);
   const canCreate = selectedMembership && ["school_admin", "operator"].includes(selectedMembership.role);
 
@@ -120,7 +131,7 @@ export default function WorkspacePage() {
       <header className="topbar">
         <span className="brand-mark">KPD</span>
         <div><p className="eyebrow">STUDENT ID OS</p><strong>Ruang Institusi</strong></div>
-        <Link className="topbar-signin" href="/">Halaman utama</Link>
+        <div className="topbar-actions"><Link className="topbar-signin" href="/">Halaman utama</Link><button className="topbar-signin" type="button" onClick={() => void handleSignOut()}>Keluar</button></div>
       </header>
 
       <section className="workspace-heading">
