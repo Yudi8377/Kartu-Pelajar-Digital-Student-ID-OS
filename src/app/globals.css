@@ -12,3 +12,18 @@
 .domains-section{margin:44px 0 34px}.domain-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.domain-card{min-width:0;border:1px solid var(--line);background:#fff;border-radius:18px;padding:20px}.domain-card h3{font:700 18px Manrope,sans-serif;margin:17px 0 9px}.domain-module-list{margin-top:15px;padding-top:12px;border-top:1px solid #edf1f5}.domain-module-list strong{font-size:11px;color:#173d63}.domain-module-list p{font-size:11px;line-height:1.7;color:#53677e;overflow-wrap:anywhere;margin:7px 0 0}
 @media(max-width:850px){.domain-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:700px){.domain-grid{grid-template-columns:1fr}.domain-card{padding:17px}}
+
+.topbar-signin {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.35rem;
+  padding: .5rem .9rem;
+  border: 1px solid var(--line, #cbd5e1);
+  border-radius: .65rem;
+  color: var(--brand, #155eef);
+  background: white;
+  text-decoration: none;
+  font-weight: 700;
+  white-space: nowrap;
+}
