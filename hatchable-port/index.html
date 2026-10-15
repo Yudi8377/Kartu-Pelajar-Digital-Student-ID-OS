@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Prototipe lokal pengaturan kartu pelajar digital Student ID OS.">
+  <title>Student ID OS — Card Admin Prototype</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand">ID</div>
+      <div><p class="eyebrow">STUDENT ID OS · PROTOTIPE</p><h1>Pengaturan Kartu Digital</h1></div>
+      <span class="demo-pill">DATA FIKTIF</span>
+    </header>
+    <section class="intro">
+      <p class="eyebrow">IDENTITAS SEKOLAH</p>
+      <h2>Satu identitas. Pengelolaan yang aman.</h2>
+      <p>Ubah desain kartu dan lihat pratinjau secara langsung. Paket ini berjalan di browser tanpa backend, tanpa login, dan tanpa menyimpan data ke server.</p>
+    </section>
+    <div class="layout">
+      <section class="panel">
+        <h3>01 · Pengaturan sekolah</h3>
+        <label>Nama sekolah<input id="schoolName" value="SMA Nusantara" maxlength="100"></label>
+        <div class="two">
+          <label>Kode sekolah<input id="schoolCode" value="NUSA" maxlength="8"></label>
+          <label>Tema kartu<select id="theme"><option value="ocean">Biru samudra</option><option value="emerald">Hijau zamrud</option><option value="violet">Ungu modern</option></select></label>
+        </div>
+        <h3>02 · Contoh kartu</h3>
+        <label>Nama siswa<input id="studentName" value="Contoh Siswa" maxlength="100"></label>
+        <div class="two">
+          <label>Nomor induk<input id="studentNumber" value="2026001" maxlength="32"></label>
+          <label>Kelas<input id="studentClass" value="X-A" maxlength="30"></label>
+        </div>
+        <p class="hint">ID gabungan di bawah hanya label pratinjau, bukan kredensial atau bukti kehadiran. Produksi wajib memakai ID internal dan constraint unik per sekolah.</p>
+        <div class="preview-id"><span>ID PRATINJAU</span><strong id="previewId">NUSA-2026001</strong></div>
+      </section>
+      <section class="preview-column">
+        <article id="studentCard" class="student-card ocean">
+          <div class="card-head"><div><span>KARTU PELAJAR DIGITAL</span><h3 id="cardSchool">SMA Nusantara</h3></div><div class="seal">ID</div></div>
+          <div class="card-content"><div class="photo">FOTO</div><div><span>CONTOH IDENTITAS</span><h4 id="cardStudent">Contoh Siswa</h4><p id="cardClass">Kelas X-A</p><strong id="cardId">NUSA-2026001</strong></div></div>
+          <div class="card-footer"><span>STUDENT ID OS</span><span>BUKAN KARTU VALID</span></div>
+        </article>
+        <section class="panel credential">
+          <div class="section-line"><h3>03 · QR / barcode</h3><span class="pending">BELUM AKTIF</span></div>
+          <div class="qr-placeholder"><div class="qr-fake" aria-hidden="true">QR</div><p>Token QR belum diterbitkan. Penerbitan produksi harus dilakukan server menggunakan token acak dan penyimpanan hash.</p></div>
+          <button id="issueButton" disabled title="Backend belum tersedia">Terbitkan kartu · belum tersedia</button>
+        </section>
+      </section>
+    </div>
+    <section class="panel attendance">
+      <h3>04 · Metode absensi yang direncanakan</h3>
+      <div class="method-grid">
+        <article><b>QR / barcode</b><p>Paling cocok untuk tahap pilot karena bisa memakai kamera HP petugas.</p></article>
+        <article><b>NFC</b><p>Memerlukan dukungan perangkat dan alur tap yang kompatibel.</p></article>
+        <article><b>Bluetooth / BLE</b><p>Perlu izin eksplisit, perangkat yang kompatibel, dan mitigasi pemalsuan sinyal.</p></article>
+      </div>
+      <p class="warning"><strong>Batasan penting:</strong> HP biasa tidak bisa otomatis membaca identitas semua HP di dekatnya. Wi-Fi tidak membuktikan identitas atau lokasi presisi; hilangnya sinyal tidak membuktikan siswa telah pulang.</p>
+    </section>
+    <footer>Prototipe Hatchable-port · Lokal saja · Jangan masukkan data siswa asli</footer>
+  </main>
+  <script src="./app.js"></script>
+</body>
+</html>

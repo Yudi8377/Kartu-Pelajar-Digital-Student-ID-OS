@@ -13,6 +13,10 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
+      - name: Validate GitHub-only static site
+        run: |
+          test -s site/index.html
+          ! grep -Eiq 'DATABASE_URL|NEON_AUTH_COOKIE_SECRET|OPENAI_API_KEY|student_number|guardian_phone' site/index.html
       - uses: actions/setup-node@v4
         with:
           node-version: 22

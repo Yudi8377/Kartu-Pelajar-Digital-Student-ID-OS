@@ -25,3 +25,15 @@
 - Import/export is authorized and auditable.
 - Backup restoration is tested in an isolated environment.
 - PWA layout remains usable on mobile and keyboard; offline mode does not falsely claim live verification.
+
+
+## Student API (before release)
+- `GET /api/students` rejects anonymous requests and missing/invalid school IDs.
+- A signed-in user without a provisioned profile or active membership cannot list or create students.
+- A student/parent/verifier membership cannot use the student-management API.
+- School A operator cannot read or create students in school B by changing `schoolId`.
+- `POST /api/students` rejects non-JSON, malformed JSON, malformed UTF-8, oversized streamed bodies, invalid UUIDs, empty/oversized fields, and control characters.
+- Same-school student-number duplicates return a safe conflict; the same normalized number is allowed in another school.
+- A failed audit insert rolls back the student insert in the same transaction.
+- Error responses do not disclose database errors, credentials, stack traces, or student data.
+- Runtime RLS and role behavior are exercised against a rehearsal DB using the restricted runtime role, not an owner connection.

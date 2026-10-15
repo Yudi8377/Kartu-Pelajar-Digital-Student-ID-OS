@@ -1,44 +1,49 @@
 # Kartu Pelajar Digital — Student ID OS
 
-PWA-first digital student identity platform for Indonesian schools. The repository is the application source foundation; it is not yet the operational production system and must not be used with real student data.
+PWA-first digital student identity platform for Indonesian schools. The repository is the application source foundation; it is not yet an operational production system and must not be used with real student data.
 
-## Public preview
+## Hosting direction
 
-A public, interactive UI preview is available at https://kartu-pelajar-digital-student-id-os-n0ar6x.v2.appdeploy.ai/. It uses fictional demo identity details only. It is a separate static hosting snapshot, not automatically synchronized with this repository, and it does not connect to Neon, authenticate users, issue QR credentials, or verify real cards.
+The current decision is **GitHub only** for source, review, CI, and a possible static GitHub Pages site. Do not add Hatchable, AppDeploy, Vercel, Cloudflare, Supabase, Neon-hosted production services, or another provider unless the owner explicitly revises this constraint.
+
+**Important:** GitHub Pages serves static files; it does not run Next.js server routes or provide a private transactional database, managed school authentication, or server-side secrets. GitHub-only can deliver a public website and a static demo using fictional data. It cannot alone operate the intended multi-school production SaaS with real student records.
+
+## Approved product direction
+
+The approved target is a national multi-school student identity platform, delivered in stages, with official cross-school transfer and location tracking limited to explicitly authorized, disclosed, time-bounded sessions. See `docs/PRODUCT-BLUEPRINT.md` for product domains and release gates.
 
 ## Current scope
-- Indonesian-language PWA shell in the source repository
-- Neon PostgreSQL schema foundation
-- Server-only database connectivity check at `GET /api/ready`
-- CI checks and scenario-test catalogue
-- Security-first multi-tenant architecture notes
 
-## Development status
-The `/health` endpoint is a lightweight liveness check. `/api/ready` runs a trivial database query and returns 200 only when `DATABASE_URL` is configured and reachable; it returns a generic 503 otherwise. It does not create, read, or update student records.
+- Indonesian-language Next.js/PWA source foundation.
+- GitHub repository, reviewable pull request, and GitHub Actions quality workflow.
+- Neon-related database/auth code and schema remain in the branch as legacy integration work; they are not part of a verified GitHub-only runtime and must not be exposed or represented as operational.
+- First school-scoped student list/create API slice exists in source, but hosted integration, tenant-isolation tests, and full UI integration are not yet verified.
+- Static preview is allowed only with fictional data and without operational identity/attendance claims.
 
-Authentication, server-side authorization, school/tenant isolation, QR issuance/verification, and student workflow integration are not yet implemented in the source application. The demo card is placeholder UI only. Do not enter real student personal data.
+## Security principles
 
-## Principles
-- Keep database credentials server-side only.
-- Enforce school/tenant authorization on every protected server request.
-- QR codes must contain opaque random tokens, never student details; store only token hashes.
-- Require human review for production migrations and releases.
-- Use a separate Neon development branch and synthetic test data.
+- Never put secrets in public browser code, static exports, or Git history.
+- Every private server request must enforce authentication and school-scoped authorization.
+- QR tokens must be opaque, cryptographically random, revocable, and stored only as one-way hashes.
+- Never enter real student personal data into static demos.
+- Require human review for releases and migrations.
 
-## Getting started
+## Development
+
 1. Install Node.js 22+ and npm.
 2. Run `npm install`.
-3. Copy `.env.example` to `.env.local`.
-4. Set `DATABASE_URL` to a development-only Neon connection string. Never commit `.env.local` or expose the value with a `NEXT_PUBLIC_` prefix.
-5. Run `npm run dev`.
-6. Open `/api/ready` to check server-to-database connectivity.
+3. Copy `.env.example` to `.env.local` only if working on the legacy server/database integration branch.
+4. Use a development-only database, never real student data, for local experiments.
+5. Run `npm run dev`, `npm run typecheck`, `npm run lint`, `npm test`, and `npm run build`.
 
-A successful readiness response confirms only that the server can execute `SELECT 1`; it does not prove authorization, schema correctness, or production readiness.
+A successful local build or CI run is not proof of production readiness.
 
-## Security and deployment references
-- `docs/DEPLOYMENT.md` — public preview, CI evidence, and production launch gates.
-- `docs/SECURITY-READINESS.md` — mandatory release gates before real student data.
-- `docs/QR-VERIFICATION-CONTRACT.md` — planned privacy-preserving QR API behavior.
-- `docs/DB-STATUS.md` — verified database migration status.
-- `docs/ARCHITECTURE.md` and `docs/ROADMAP.md` — architecture and phases.
-- `tests/scenarios.md` — test scenarios.
+## Key documents
+
+- `docs/PRODUCT-BLUEPRINT.md` — product domains and staged roadmap.
+- `docs/DEPLOYMENT.md` — GitHub-only deployment decision and limits.
+- `docs/SECURITY-READINESS.md` — release gates before real student data.
+- `docs/STUDENT-API.md` — first API slice and verification contract.
+- `docs/ATTENDANCE-AND-SAFETY.md` — attendance and location privacy rules.
+- `docs/HATCHABLE-PORT.md` — archived hosting exploration.
+- `tests/scenarios.md` — required security and behavior scenarios.
