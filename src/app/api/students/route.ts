@@ -80,12 +80,18 @@ export async function POST(request: Request) {
     const contentType = request.headers.get("content-type")?.toLowerCase() ?? "";
     if (!contentType.includes("application/json")) return jsonError("Content-Type harus application/json", 415);
 
-    const rawLength = Number(request.headers.get("content-length") ?? "0");
-    if (Number.isFinite(rawLength) && rawLength > 8_192) return jsonError("Ukuran permintaan terlalu besar", 413);
+    let rawBody: string;
+    try {
+      rawBody = await request.text();
+    } catch {
+      return jsonError("JSON tidak valid", 400);
+    }
+    // Enforce a limit on the actual body, not just the optional Content-Length header.
+    if (new TextEncoder().encode(rawBody).byteLength > 8_192) return jsonError("Ukuran permintaan terlalu besar", 413);
 
     let body: unknown;
     try {
-      body = await request.json();
+      body = JSON.parse(rawBody);
     } catch {
       return jsonError("JSON tidak valid", 400);
     }
