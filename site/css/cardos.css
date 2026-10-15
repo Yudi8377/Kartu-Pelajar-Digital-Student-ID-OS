@@ -18,3 +18,62 @@
 .image-card .card-footer{margin-top:auto}
 @media(max-width:575.98px){.showcase-image{height:210px}.image-showcase .container{padding-left:1.25rem;padding-right:1.25rem}}
 @media(prefers-reduced-motion:reduce){.image-card{transition:none}.image-card:hover{transform:none}}
+
+
+/* Digital Card OS visual refresh — Modern Business layout + image-led hero */
+:root{--cardos-navy:#0b1f36;--cardos-blue:#1769e0;--cardos-ice:#eff6ff;--cardos-ink:#172b4d}
+html{scroll-behavior:smooth;scroll-padding-top:5rem}
+body{color:var(--cardos-ink);background:#fff}
+.navbar{box-shadow:0 6px 24px #06182a20}
+.navbar-brand{font-size:1.08rem}
+.navbar .nav-link{font-weight:600;opacity:.88;transition:opacity .18s ease}
+.navbar .nav-link:hover,.navbar .nav-link:focus{opacity:1}
+.hero{position:relative;isolation:isolate;overflow:hidden;background:radial-gradient(ellipse at 12% 0%,#1d4f91 0,transparent 48%),linear-gradient(125deg,#081a30 0%,#102d4c 60%,#164c80 100%)!important}
+.hero:after{content:"";position:absolute;z-index:-1;width:440px;height:440px;border:1px solid #ffffff12;border-radius:50%;right:-180px;bottom:-260px;box-shadow:0 0 0 42px #ffffff08,0 0 0 84px #ffffff05}
+.hero .badge{letter-spacing:.12em;font-size:.68rem;padding:.65rem .85rem}
+.hero h1{letter-spacing:-.045em;line-height:1.08}
+.hero .lead{max-width:39rem;line-height:1.75}
+.hero-visual-frame{position:relative;min-height:430px;border-radius:26px;overflow:hidden;border:1px solid #ffffff38;background:#0e2740;box-shadow:0 30px 70px #0005}
+.hero-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 40%;opacity:.91}
+.hero-photo-shade{position:absolute;inset:0;background:linear-gradient(180deg,#06182a12 0%,#06182a15 38%,#06182ac9 100%),linear-gradient(90deg,#06182a22,transparent 70%)}
+.hero-floating-label{position:absolute;top:18px;left:18px;display:flex;align-items:center;gap:9px;padding:9px 12px;border:1px solid #ffffff60;border-radius:999px;background:#06182a9c;color:#fff;font-size:.67rem;font-weight:800;letter-spacing:.09em;backdrop-filter:blur(10px)}
+.hero-live-dot{width:8px;height:8px;border-radius:50%;background:#62e5b4;box-shadow:0 0 0 4px #62e5b42b}
+.hero-id-card{position:absolute;right:22px;bottom:22px;width:min(360px,calc(100% - 44px));padding:19px 20px 16px;border:1px solid #ffffff55;border-radius:18px;background:linear-gradient(135deg,#0b2b4df2,#1267b9eF);box-shadow:0 18px 50px #0005;color:#fff;backdrop-filter:blur(14px)}
+.hero-id-top,.hero-id-bottom{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.hero-id-top{font-size:.7rem;font-weight:800;letter-spacing:.1em;color:#dcecff}
+.hero-id-content{display:flex;align-items:center;gap:14px;margin:24px 0 22px}
+.hero-id-avatar{display:grid;place-items:center;width:58px;height:58px;flex:0 0 58px;border:1px solid #ffffff55;border-radius:15px;background:#ffffff20;font-size:2rem;color:#fff}
+.hero-id-content>div:last-child{display:flex;flex-direction:column;gap:4px;min-width:0}
+.hero-id-label{font-size:.59rem;letter-spacing:.13em;color:#c3dcf8;font-weight:800}
+.hero-id-content strong{font-size:1.22rem;line-height:1.25;overflow-wrap:anywhere}
+.hero-id-sub{font-size:.78rem;color:#d1e4f8}
+.hero-id-bottom{padding-top:13px;border-top:1px solid #ffffff30;color:#d9eaff;font-size:.72rem}
+.hero-id-qr{display:grid;place-items:center;width:35px;height:35px;border-radius:7px;background:#fff;color:#123c68;font-size:1.45rem}
+section[id]{scroll-margin-top:5rem}
+#modul,#cara-kerja,#keamanan{position:relative}
+#modul h2,#visual h2,#studio h2,#cara-kerja h2,#keamanan h2{letter-spacing:-.035em}
+#modul .feature{box-shadow:0 8px 20px #1769e018}
+.card{border-radius:16px;transition:box-shadow .2s ease,border-color .2s ease}
+.card.shadow-sm{box-shadow:0 10px 32px #0b25400c!important}
+.image-card{border:1px solid #e7edf5!important}
+.image-card:hover{border-color:#c4d9f7!important}
+.showcase-image{height:230px}
+#studio{background:linear-gradient(180deg,#f5f8fc 0%,#fff 100%)}
+#studio .card{border:1px solid #e7edf5!important}
+#studio .card-body{border-radius:16px}
+.form-control,.form-select{min-height:46px;border-color:#d8e2ee;border-radius:10px}
+.form-control:focus,.form-select:focus{border-color:#80b2f5;box-shadow:0 0 0 .22rem #1769e01c}
+.field-check{border-color:#dce6f1;background:#fff;transition:border-color .15s ease,background .15s ease}
+.field-check:has(input:checked){border-color:#8ab8f4;background:#f2f7ff}
+.sample-card{background:linear-gradient(140deg,#09223d,#155d9c 65%,#1769e0)}
+.step-icon{box-shadow:0 8px 20px #1769e02b}
+.security-point{height:100%;box-shadow:0 4px 14px #0b254008}
+.btn{border-radius:10px;transition:transform .15s ease,box-shadow .15s ease}
+.btn:hover{transform:translateY(-1px)}
+.btn-primary{box-shadow:0 7px 18px #1769e02b}
+footer{border-top:1px solid #ffffff18}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #8ab8f4;outline-offset:3px}
+@media(max-width:1199.98px){.hero-visual-frame{min-height:390px}}
+@media(max-width:767.98px){.hero-visual-frame{min-height:350px;border-radius:20px}.hero-id-card{right:14px;bottom:14px;width:calc(100% - 28px);padding:16px}.hero-id-content{margin:18px 0}.hero .container{padding-left:1.25rem;padding-right:1.25rem}.showcase-image{height:215px}}
+@media(max-width:420px){.hero-visual-frame{min-height:310px}.hero-id-card{padding:13px}.hero-id-content{gap:10px}.hero-id-avatar{width:48px;height:48px;flex-basis:48px;font-size:1.7rem}.hero-id-content strong{font-size:1.05rem}.hero-id-top{font-size:.61rem}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.navbar .nav-link,.card,.image-card,.btn{transition:none}.btn:hover{transform:none}}
