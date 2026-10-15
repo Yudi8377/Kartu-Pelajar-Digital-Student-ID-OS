@@ -26,7 +26,7 @@ The production branch has migrations 0001, 0002, and 0003 applied. See DB-STATUS
 
 1. Select and configure a supported server host that deploys from the GitHub source branch and supports Next.js server routes.
 2. Configure a restricted runtime database credential in the host secret manager; never use owner credentials for routine app requests.
-3. Implement trusted authentication, tenant-scoped authorization, membership provisioning, and a controlled first-admin bootstrap.
+3. Configure and verify Neon Auth on the intended production branch, then implement trusted session-to-user mapping, tenant-scoped authorization, membership provisioning, and a controlled first-admin bootstrap.
 4. Implement real school/student CRUD, class/teacher assignment, attendance session/event workflows, and append-only corrections.
 5. Implement secure QR issuance, rotation, revocation, minimal verification responses, and abuse/rate limiting.
 6. Add behavioral integration tests proving cross-school isolation and role boundaries using the runtime role and synthetic data.
