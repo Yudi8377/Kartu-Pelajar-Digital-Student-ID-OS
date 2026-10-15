@@ -86,6 +86,17 @@ export const KPD_MODULES: readonly KpdModule[] = [
     guardrail: "Tidak ada pelacakan lokasi terus-menerus; aktivitas hanya dicatat bila diperlukan dan diberitahukan."
   },
   {
+    id: "emergency-guardian",
+    name: "Emergency Guardian",
+    tagline: "Deteksi indikasi insiden dan bantuan darurat",
+    description: "Rancangan fitur Android untuk menilai indikasi jatuh atau benturan, menyediakan tombol SOS, memberi peringatan kepada wali, dan membagikan lokasi terakhir yang tersedia dengan tautan Google Maps.",
+    status: "planned",
+    sensitivity: "sensitive-restricted",
+    phase: 2,
+    access: "Siswa/pemegang KPD mengatur kontak dan izin; wali terverifikasi menerima alarm; akses petugas hanya sesuai kewenangan dan kebutuhan insiden.",
+    guardrail: "Deteksi sensor bukan diagnosis dan dapat salah. Minta konfirmasi bila memungkinkan; jangan menghubungi layanan publik otomatis tanpa mekanisme yang disetujui. Lokasi hanya saat mode darurat aktif, dengan indikator, retensi singkat, dan akses terbatas."
+  },
+  {
     id: "trust-center",
     name: "Trust, Privacy & Audit Center",
     tagline: "Kontrol data dan jejak akses",
