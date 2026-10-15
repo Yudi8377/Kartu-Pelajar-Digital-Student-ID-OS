@@ -11,6 +11,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@neondatabase/auth": "0.6.0-beta",
+    "@neondatabase/auth-ui": "0.3.0-beta",
     "next": "^15.5.0",
     "pg": "^8.16.3",
     "react": "^19.1.0",
