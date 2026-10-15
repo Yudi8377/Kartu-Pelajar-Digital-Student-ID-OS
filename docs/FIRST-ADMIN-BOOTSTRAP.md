@@ -19,14 +19,21 @@ This is a controlled, one-time operational procedure. Do not expose it as a publ
 ```sql
 BEGIN;
 
-WITH new_school AS (
+WITH eligible_user AS (
+  SELECT id
+  FROM public.app_users
+  WHERE id = '<APP_USER_UUID>'::uuid AND status = 'active'
+),
+new_school AS (
   INSERT INTO public.schools (name, code, status)
-  VALUES ('<APPROVED SCHOOL NAME>', '<UNIQUE SCHOOL CODE>', 'active')
+  SELECT '<APPROVED SCHOOL NAME>', '<UNIQUE SCHOOL CODE>', 'active'
+  FROM eligible_user
   RETURNING id
 )
 INSERT INTO public.school_memberships (school_id, user_id, role, status)
-SELECT new_school.id, '<APP_USER_UUID>'::uuid, 'school_admin', 'active'
+SELECT new_school.id, eligible_user.id, 'school_admin', 'active'
 FROM new_school
+CROSS JOIN eligible_user
 RETURNING school_id, user_id, role;
 
 COMMIT;
