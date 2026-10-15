@@ -57,7 +57,22 @@ export default function HomePage() {
         <span className="gated-note">Belum terhubung ke DTSEN atau sistem bantuan pemerintah.</span>
       </section>
 
-      <section className="principles">
+
+      <section className="emergency-section">
+        <div className="emergency-copy">
+          <p className="eyebrow">INOVASI KESELAMATAN · ANDROID</p>
+          <h2>Emergency Guardian</h2>
+          <p>Jika perangkat mendeteksi pola sensor yang mungkin menunjukkan insiden, KPD dapat memulai alur pemeriksaan keselamatan, memberi waktu konfirmasi, lalu mengirim peringatan dan lokasi terakhir kepada kontak yang telah disetujui.</p>
+          <span className="gated-note">Konsep produk — belum aktif di aplikasi ini</span>
+        </div>
+        <div className="emergency-steps">
+          <div><span>01</span><p><strong>Deteksi indikasi</strong><br />Sensor gerak dan konteks aktivitas memberi sinyal, bukan memastikan kecelakaan.</p></div>
+          <div><span>02</span><p><strong>Konfirmasi keselamatan</strong><br />Peringatan berbunyi/getar dan hitung mundur untuk membatalkan alarm palsu bila pengguna mampu.</p></div>
+          <div><span>03</span><p><strong>Hubungi wali</strong><br />Kirim notifikasi/SMS melalui mekanisme yang didukung, termasuk waktu kejadian dan lokasi yang tersedia.</p></div>
+          <div><span>04</span><p><strong>Buka Google Maps</strong><br />Penerima mendapat tautan peta ke koordinat terakhir beserta usia data dan akurasi bila tersedia.</p></div>
+        </div>
+      </section>
+\n      <section className="principles">
         <div><span>01</span><h3>Privasi sejak desain</h3><p>Data minimum, akses terbatas, permintaan koreksi, masa retensi, dan jejak audit.</p></div>
         <div><span>02</span><h3>QR tanpa data pribadi</h3><p>Token acak dan hasil verifikasi minimum; bukan nama, NISN, atau data keluarga.</p></div>
         <div><span>03</span><h3>Modular dan dapat di-upgrade</h3><p>Layanan baru diaktifkan setelah uji keamanan, dasar hukum, dan izin integrasi terpenuhi.</p></div>
