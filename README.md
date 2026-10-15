@@ -39,6 +39,9 @@ A successful readiness response confirms only that the server can execute `SELEC
 - `docs/DEPLOYMENT.md` — public preview, CI evidence, and production launch gates.
 - `docs/SECURITY-READINESS.md` — mandatory release gates before real student data.
 - `docs/QR-VERIFICATION-CONTRACT.md` — planned privacy-preserving QR API behavior.
+- `docs/ATTENDANCE-AND-SAFETY.md` — school-scoped identity, attendance methods, study-tour safety mode, location privacy, and release gates.
+- `docs/HATCHABLE-PORT.md` and `hatchable-port/` — framework-free UI prototype for a separate Hatchable compatibility test (not deployed).
+- `/admin` — card designer UI prototype; not yet connected to authentication or persistence.
 - `docs/DB-STATUS.md` — verified database migration status.
 - `docs/ARCHITECTURE.md` and `docs/ROADMAP.md` — architecture and phases.
 - `tests/scenarios.md` — test scenarios.
