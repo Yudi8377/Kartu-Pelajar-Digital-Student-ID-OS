@@ -4,45 +4,39 @@ Last verified: 2026-10-15
 
 ## Production database
 
-- Neon project: `young-band-21857293`
-- Branch: `production` (`br-late-meadow-b3vj6rqi`)
-- Database: `neondb`
-- Schema: `public`
+- Neon project: young-band-21857293
+- Branch: production (br-late-meadow-b3vj6rqi)
+- Database: neondb
+- Schema: public
 - PostgreSQL: 18.6
-- Initial migration source: `db/migrations/0001_initial.sql`
-- Pending security migration source: `db/migrations/0002_runtime_security.sql`
+- Migration sources: db/migrations/0001_initial.sql, 0002_runtime_security.sql, and 0003_student_attendance.sql
 
-## Applied schema
+## Applied and verified schema
 
-The initial schema migration was applied to the production branch after being prepared and tested on an isolated temporary branch. The temporary branch was then removed by the migration workflow.
+All three migrations have now been applied to the production branch in order. Read-only catalog verification after migration confirmed 12 application tables, 31 row-level security policies, and six expected authorization/verification helper functions.
 
-Expected application tables:
+Tables present:
+- Core identity: schools, app_users, school_memberships, students, student_cards, audit_events
+- Student attendance: school_classes, school_class_students, school_class_teachers, attendance_sessions, attendance_events, attendance_corrections
 
-- `schools`
-- `app_users`
-- `school_memberships`
-- `students`
-- `student_cards`
-- `audit_events`
+RLS is enabled on all 12 tables. The runtime role student_id_os_runtime has no UPDATE or DELETE privilege on attendance_events or attendance_corrections, preserving the append-only correction model at the grant layer.
 
-A read-only verification after initial application found all six tables in `public`. No sample or real student records were inserted. Recheck production row counts before onboarding.
+## Data and runtime credentials
 
-## Runtime database role and pending security migration
+Read-only row counts verified that all 12 application tables are empty. No student, guardian, worker, school, or attendance records have been inserted.
 
-A dedicated role named `student_id_os_runtime` has been created on the production branch using SQL with `NOBYPASSRLS`, `NOCREATEDB`, and `NOCREATEROLE`. It currently has no password, so it cannot authenticate as an application connection. Do not use the database owner role as a substitute for routine app traffic.
-
-The migration in `db/migrations/0002_runtime_security.sql` was prepared and tested on an isolated temporary branch (`br-hidden-tree-b35m3xvr`). Verification confirmed row-level security is enabled on all six application tables, the runtime role lacks DELETE and audit UPDATE privileges, it is neither superuser nor RLS-bypass, and an unknown QR hash returns a generic invalid result without personal data. The migration has **not** been applied to production. Production application of this security migration requires explicit approval.
-
-Before the application can connect, set a password for `student_id_os_runtime` through the Neon Console, then store its connection string only in the hosting platform's secret manager. Do not paste the password or connection string into chat, GitHub, source files, or public environment variables.
+The dedicated role student_id_os_runtime exists with NOBYPASSRLS, NOCREATEDB, and NOCREATEROLE. The role has no password at the time of verification, so the application must not connect using it until an administrator sets its credential through the Neon Console and stores the connection string only in the production host's secret manager. Do not paste credentials into chat, GitHub, source files, or public environment variables. Do not substitute the database owner role for routine application traffic.
 
 ## Connectivity readiness endpoint
 
-The source repository's `GET /api/ready` checks that a server can connect using its server-side `DATABASE_URL` and execute `SELECT 1`. It returns a generic 503 when configuration is absent or the database cannot be reached. It does not inspect table existence, perform student CRUD, validate tenant permissions, or establish production readiness. The existing `GET /health` remains a lightweight liveness response.
+The source repository's GET /api/ready checks whether the server can connect using its server-side DATABASE_URL and execute SELECT 1. It does not prove that authentication, authorization, tenant isolation, attendance operations, or QR issuance work.
 
-## Important limitations
+## Remaining production blockers
 
-- Authentication and server-side school-scoped authorization are not implemented in the source application.
-- The public UI preview is a separate static hosting snapshot and is not connected to the database.
-- QR issuance and live verification are not yet exposed by the application.
-- Do not enter real student personal data until server-side authorization, tenant-isolation tests, privacy review, backup/recovery procedures, and a real deployment check are complete.
-- Use temporary Neon branches for migration rehearsal and require human approval before applying production security/schema changes.
+- Trusted authentication/session integration and secure user provisioning are not implemented.
+- Server API routes for school, student, card lifecycle, attendance sessions/events/corrections are not implemented.
+- QR issuance/rotation and a public rate-limited verification API are not implemented in the application.
+- Behavioral RLS tests with two synthetic schools and multiple roles have not yet been run against the production runtime role.
+- Production host, secret configuration, backup/restore rehearsal, monitoring, incident response, retention/deletion, privacy notices, and legal review remain release gates.
+
+Use synthetic data only until all required security and operational gates are verified. Production migrations are applied; this does not mean the application is ready to onboard real students.
