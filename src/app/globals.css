@@ -57,3 +57,7 @@
 .workspace-success{padding:10px 12px;background:#eaf7ef;border:1px solid #c7e8d3;border-radius:9px;color:#21613c!important}
 .workspace-muted{padding:18px;background:#f8fbff;border-radius:10px}
 @media(max-width:700px){.workspace-panel,.workspace-profile{padding:18px}.workspace-profile{align-items:flex-start;flex-direction:column}.workspace-status{text-align:left}.workspace-metrics,.workspace-form{grid-template-columns:1fr}.workspace-form .auth-submit{width:100%}.workspace-select-label,.workspace-select-label select{width:100%}.workspace-heading{padding-top:30px}}
+
+.topbar-actions{display:flex;align-items:center;gap:8px;margin-left:auto;flex-wrap:wrap}
+.topbar-actions .topbar-signin{font:inherit;cursor:pointer}
+@media(max-width:700px){.topbar-actions{gap:6px}.topbar-actions .topbar-signin{padding:.45rem .65rem;font-size:12px}}
