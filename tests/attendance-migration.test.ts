@@ -15,6 +15,7 @@ describe("student attendance migration guardrails", () => {
     expect(migration).toMatch(/CREATE TABLE IF NOT EXISTS public\.attendance_sessions/);
     expect(migration).toMatch(/CREATE TABLE IF NOT EXISTS public\.attendance_events/);
     expect(migration).toMatch(/CREATE TABLE IF NOT EXISTS public\.attendance_corrections/);
+    expect(migration).toMatch(/UNIQUE \(school_id, id\)/);
     expect(migration).toMatch(/UNIQUE \(session_id, student_id, event_type\)/);
   });
 
