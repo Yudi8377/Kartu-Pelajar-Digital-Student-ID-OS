@@ -14,7 +14,7 @@ describe("KPD modular product registry", () => {
     expect(welfare?.guardrail).toMatch(/DTSEN/);
   });
 
-  it("labels roadmap status without implying all modules are live", () => {
+  it("keeps emergency guardian planned and restricted until native Android safeguards exist", () => {\n    const emergency = KPD_MODULES.find((module) => module.id === "emergency-guardian");\n    expect(emergency?.status).toBe("planned");\n    expect(emergency?.sensitivity).toBe("sensitive-restricted");\n    expect(emergency?.guardrail).toMatch(/salah/);\n  });\n\n  it("labels roadmap status without implying all modules are live", () => {
     expect(getKpdModuleStatusLabel("foundation")).toBe("Fondasi");
     expect(getKpdModuleStatusLabel("planned")).toBe("Tahap berikutnya");
     expect(getKpdModuleStatusLabel("gated")).toBe("Menunggu izin resmi");
