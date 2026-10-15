@@ -14,7 +14,7 @@ GitHub Pages serves static files. It does not execute the Next.js server runtime
 - Default branch: `main`.
 - PR #4 was merged on 2026-10-15; merge commit: `ccf9c3eb863d6cf4cf43b9bd436158ecb20d7d71`.
 - CI passed on the exact PR head before merge. A fresh successful CI run on the current main commit must still be checked independently.
-- GitHub Pages deployment is **not yet confirmed**. Configure repository Settings → Pages → Build and deployment → Source = GitHub Actions, then verify the workflow completes successfully and reports a deployment URL.
+- GitHub Pages workflow completed successfully on 2026-10-15 for commit `3f7a5bbdcd9f9dacfb59ea15bf175ec7e648f831` (run [#3](https://github.com/Yudi8377/Kartu-Pelajar-Digital-Student-ID-OS/actions/runs/38716368371)). Expected Pages URL: https://yudi8377.github.io/Kartu-Pelajar-Digital-Student-ID-OS/. The external page could not be independently fetched by the verification tool in this check, so a human browser smoke test remains required.
 - The previous AppDeploy preview is a separate static snapshot and is not the selected deployment direction. Hatchable compatibility work is archived and not selected.
 
 ## Static preview
