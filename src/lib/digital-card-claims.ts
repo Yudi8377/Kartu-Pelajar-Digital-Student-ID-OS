@@ -1,4 +1,4 @@
-import { getCardType, type CardFieldId, type CardTypeDefinition } from "@/lib/card-types/registry";
+import { getCardType, type CardFieldId, type CardTypeDefinition } from "./card-types/registry";
 
 export type CardClaims = Record<string, string>;
 
