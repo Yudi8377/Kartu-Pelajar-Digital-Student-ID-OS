@@ -1,53 +1,55 @@
-# Deployment status
+# Deployment status and GitHub-only direction
 
 Last checked: 2026-10-15
 
-## Public UI preview
-
-- URL: https://kartu-pelajar-digital-student-id-os-n0ar6x.v2.appdeploy.ai/
-- Scope: static, interactive UI preview with synthetic example identity only.
-- The preview is a separate hosting snapshot, not automatically synchronized with this GitHub repository.
-- It does not authenticate users against the source app, read/write Neon student records, issue QR tokens, or verify real cards.
-- Do not enter real student data or present this preview as an operational identity service.
-
-## Source repository and CI
-
-- Repository: https://github.com/Yudi8377/Kartu-Pelajar-Digital-Student-ID-OS
-- Production source branch: `main`
-- Active review branch: `feat/card-admin-attendance-safety`
-- PR #4: https://github.com/Yudi8377/Kartu-Pelajar-Digital-Student-ID-OS/pull/4 (open, draft; not merged)
-- Latest checked commit: `12cf49d7099e4efa6291968a893e9a2cf3888fea`
-- GitHub Actions run #118: https://github.com/Yudi8377/Kartu-Pelajar-Digital-Student-ID-OS/actions/runs/38709296736
-- Result: success for typecheck/lint/tests/build in the repository CI workflow. This is code-quality evidence, not proof of production security or end-to-end readiness.
-
-## Application and database
-
-- The branch includes a Next.js application foundation, Neon Managed Auth integration, a profile endpoint, guarded bootstrap script, and security-oriented database policies.
-- Authentication and profile code are not equivalent to completed school-scoped application authorization.
-- The admin card designer remains a UI prototype; settings are not persisted and no valid card is issued.
-- The QR verification contract and security SQL function are not proof that a live, rate-limited QR API has been deployed.
-- The production database was inspected read-only; all 12 business tables were empty at that time and RLS was enabled.
-- The restricted runtime DB credential was not verified. Do not use an owner-level connection string as a workaround.
-- Do not reapply migrations without reconciling migration history and current live schema first.
-
 ## Hosting decision
 
-- Hatchable connector returned no projects; Student ID OS has not been imported or deployed there.
-- Hatchable Free is not approved as production infrastructure for paying customers under the currently documented policy, and the existing Next.js/TSX project is not directly deployable there unchanged.
-- Hatchable account management must comply with the provider's minimum-age terms.
-- A production host remains unselected. Do not silently move to a different paid provider or claim zero-cost commercial hosting without verifying terms and limits.
+The product owner has chosen **GitHub as the only third-party platform** for the current phase. Do not create or migrate to Hatchable, AppDeploy, Vercel, Cloudflare, Supabase, Neon, or another hosted provider as part of this direction without a new explicit decision.
 
-## Required gates before operational launch
+GitHub is the source repository, code review, CI, and (for static content only) a possible GitHub Pages host. GitHub Pages does **not** execute the Next.js server runtime or provide a private transactional database, managed school authentication, or server-side secrets. Therefore GitHub Pages alone cannot operate the intended multi-school SaaS with private student data.
 
-1. Choose a commercially compliant production host that supports Next.js server routes, encrypted secrets, TLS, and required operational controls.
-2. Configure and verify a restricted database role; deliver its connection string only through the host secret manager. Never use the database owner role for routine app traffic.
-3. Reconcile and rehearse migrations against an isolated branch; prove backup and restore.
-4. Verify complete sign-up/sign-in/sign-out/session flows on a hosted rehearsal, with exact trusted origins and separate preview credentials.
-5. Implement and verify school-scoped authorization, user provisioning, and auditable first-admin bootstrap.
-6. Implement student/card CRUD, QR token issuance/rotation/revocation, verification, abuse controls, and safe audit events.
-7. Add automated negative integration tests for cross-school isolation, role boundaries, expiry/revocation, and generic invalid-token responses.
-8. Complete privacy notice, retention/deletion/export, incident response, monitoring, dependency/secret scanning, accessibility, mobile/offline tests, and applicable Indonesian personal-data/child-data review.
-9. Re-run CI and smoke tests against the exact release commit and production deployment SHA.
-10. Record the responsible operator's written approval and a rollback target before launch.
+## What can be delivered with GitHub alone
 
-No production launch, merge, real-student-data onboarding, or operational claim until the release gates are evidenced and approved.
+- Public product website and static, fictional-data UI demonstration via GitHub Pages.
+- Repository-hosted source, issues/PR review, and GitHub Actions quality checks.
+- Static/offline prototype with no real student records, no real QR credentials, and no claims of live attendance or identity verification.
+- Documented, reproducible build artifacts and release checklist.
+
+## What cannot honestly be claimed with GitHub Pages alone
+
+- Secure server-side sign-in/session management for school operators.
+- Private multi-tenant student database and server-enforced role/tenant authorization.
+- Card issuance/revocation, trusted QR verification, or attendance writes backed by a private database.
+- Production monitoring, backups/restores, or operational SLA for a live school SaaS.
+
+The existing Next.js project contains server routes and Neon Auth/database integration. Those routes will not run on GitHub Pages. Do not publish a static export as though it were the full application, and do not place credentials or student records in the browser bundle or Git repository.
+
+## Current source status
+
+- Repository: https://github.com/Yudi8377/Kartu-Pelajar-Digital-Student-ID-OS
+- Active review branch: `feat/card-admin-attendance-safety`
+- PR #4: https://github.com/Yudi8377/Kartu-Pelajar-Digital-Student-ID-OS/pull/4 (open, draft; not merged)
+- The latest reviewed branch has an initial `/api/students` list/create API slice, but its integration tests and exact-head CI still need verification.
+- Existing AppDeploy preview is a separate static snapshot and is no longer the selected deployment direction. Do not rely on it for release status.
+- Hatchable prototype/docs are legacy exploration only and are not the chosen host.
+
+## GitHub-only release stages
+
+1. Keep the current application source and reviewable branch in GitHub.
+2. Make the public website/static demo build reproducibly as static assets with fictional data only.
+3. Run typecheck, lint, automated tests, build, dependency checks, and secret scanning in GitHub Actions on the exact release commit.
+4. Keep all server-only API routes disabled from any static deployment; never ship environment secrets.
+5. Before real school use, the owner must either approve a self-managed server/database operated under their control or explicitly revise the no-third-party constraint. GitHub Pages alone is not a viable production backend.
+6. If self-managed infrastructure is not available, keep the release as a static demo and do not onboard schools or enter real student data.
+
+## Mandatory gates before operational launch
+
+- Authentication and session lifecycle E2E, including account recovery and revocation.
+- Restricted runtime database role and independently tested RLS/tenant isolation.
+- Student CRUD, card issuance/rotation/revocation, QR verification and shared abuse controls.
+- Negative integration tests for school A vs school B, roles, expired/revoked tokens, and transaction rollback.
+- Backups and restore drills, monitoring, incident response, retention/export/deletion, privacy and applicable Indonesian child-data review.
+- Accessibility/mobile/offline verification, rollback plan, named responsible operator, and written approval.
+- Exact release commit and deployed artifact verified before any operational claim.
+
+No production launch, real-student-data onboarding, or live-service claim until the hosting model and mandatory controls are evidenced.
