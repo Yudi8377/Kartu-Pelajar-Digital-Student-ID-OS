@@ -41,8 +41,8 @@ For each checked item, record the test or review artifact, date, reviewer, and c
 - A first database-backed school-scoped student list/create API now exists at `/api/students`; it is not yet covered by recorded integration/E2E evidence and is not connected to a completed admin workflow. The card designer remains a UI prototype: settings persistence and real card issuance are incomplete.
 - The QR API contract and SQL verification function are present as design/schema components; a deployed, rate-limited end-to-end verification API and issuance/revocation flow are not verified.
 - Neon production schema/RLS was inspected read-only; the 12 business tables were empty at the time. Runtime credential verification and the migration-history reconciliation remain pending.
-- GitHub Actions run #119 passed for docs commit `f66190c32f85463d17edeac5a6ad6f78721bedd2`. Student API commits after that SHA still require CI evidence on the exact latest head. CI success does not establish hosted auth, tenant-isolation, backup/restore, or security-review completion.
-- Hatchable has no connected Student ID OS project and is not approved as a free-tier paid-customer production host under its current policy.
+- GitHub Actions run #119 passed for docs commit `f66190c32f85463d17edeac5a6ad6f78721bedd2`. Later student API and GitHub Pages commits are at head `a4fb1bcf81c397089de8a045f671d4d73c2c9391`; the available workflow/status lookup has not returned a CI result for that exact head. Do not infer success. CI success would not establish hosted auth, tenant-isolation, backup/restore, or security-review completion.
+- Hosting decision is now GitHub-only for the current phase. A static public site and Pages workflow have been added under `site/` and `.github/workflows/pages.yml`; the Pages workflow has not yet been confirmed deployed. GitHub Pages cannot run the Next.js server routes or supply the private transactional backend required for production school records.
 - Therefore the product is not approved for real student data or production launch.
 
 ## Release rule
