@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState } from "react";
 
 type CardTheme = "ocean" | "emerald" | "violet";
@@ -31,7 +32,7 @@ export default function AdminPage() {
   return (
     <main className="admin-shell">
       <header className="admin-topbar">
-        <a className="admin-brand" href="/" aria-label="Kembali ke halaman utama">ID</a>
+        <Link className="admin-brand" href="/" aria-label="Kembali ke halaman utama">ID</Link>
         <div>
           <p className="admin-eyebrow">STUDENT ID OS / ADMIN</p>
           <h1>Pengaturan Kartu Digital</h1>
