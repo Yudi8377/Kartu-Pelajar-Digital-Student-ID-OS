@@ -13,7 +13,7 @@
 ## Not yet implemented or verified
 
 - The migration has **not** been applied to the production Neon database.
-- The schema migration has not yet been confirmed against a live PostgreSQL instance. CI static tests do not replace a database migration rehearsal.
+- Migration 0003 has been applied successfully to the existing isolated Neon rehearsal branch `br-hidden-tree-b35m3xvr`; catalog inspection confirmed RLS is enabled on all six new tables and their policies are present. This rehearsal branch is not production. CI static tests and catalog inspection still do not replace behavioral authorization tests.
 - The application still lacks verified authentication/session integration for the attendance workflow, so there is no safe attendance API or live attendance UI.
 - Verified guardian relationships and student/guardian attendance read-only views are not modeled yet.
 - Notifications, reports/exports, offline synchronization, device management and school-specific attendance policies are not operational.
@@ -21,7 +21,7 @@
 
 ## Migration dependencies and review
 
-Migration 0003 depends on `0001_initial.sql` and `0002_runtime_security.sql`, including the `student_id_os_runtime` role and helper functions. First apply and test it on a temporary Neon branch using the least-privileged runtime role. Validate teacher/class scoping, cross-school denial, closed/out-of-window sessions, inactive or unenrolled students, duplicate events and correction history. Production changes require explicit approval, a rollback/restore plan and passing CI.
+Migration 0003 depends on `0001_initial.sql` and `0002_runtime_security.sql`, including the `student_id_os_runtime` role and helper functions. The first schema rehearsal succeeded on the isolated Neon branch using the database owner for migration DDL; next, validate behavior using the least-privileged runtime role and synthetic fixtures. Validate teacher/class scoping, cross-school denial, closed/out-of-window sessions, inactive or unenrolled students, duplicate events and correction history. Production changes require explicit approval, a rollback/restore plan and passing CI.
 
 ## Next implementation sequence
 
