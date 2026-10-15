@@ -4,86 +4,100 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#102a43">
-  <meta name="description" content="Kartu Pelajar Digital — Student ID OS. Pratinjau statis untuk identitas pelajar digital, kartu sekolah, dan kehadiran yang mengutamakan privasi.">
-  <title>Kartu Pelajar Digital — Student ID OS</title>
+  <meta name="description" content="Digital Card OS — platform untuk berbagai jenis kartu identitas digital dengan fungsi, aturan akses, dan verifikasi sesuai tujuan penggunaan.">
+  <title>Digital Card OS — Kartu Identitas Digital</title>
   <style>
-    :root { color-scheme: light; --ink:#102a43; --muted:#526579; --line:#d7e0e8; --paper:#f4f7fa; --blue:#155eef; --mint:#c8f7e5; }
+    :root { color-scheme:light; --ink:#102a43; --muted:#526579; --line:#d7e0e8; --paper:#f4f7fa; --blue:#155eef; --mint:#c8f7e5; }
     * { box-sizing:border-box; }
     body { margin:0; font:16px/1.6 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; background:var(--paper); color:var(--ink); }
     a { color:inherit; }
-    .wrap { width:min(1080px,calc(100% - 36px)); margin:auto; }
-    header { padding:22px 0; background:#fff; border-bottom:1px solid var(--line); }
+    .wrap { width:min(1120px,calc(100% - 36px)); margin:auto; }
+    header { padding:20px 0; background:#fff; border-bottom:1px solid var(--line); }
     .nav { display:flex; align-items:center; justify-content:space-between; gap:18px; flex-wrap:wrap; }
-    .brand { font-weight:800; letter-spacing:-.03em; }
-    .tag { display:inline-flex; border:1px solid var(--line); border-radius:99px; padding:5px 12px; font-size:12px; font-weight:700; color:var(--muted); }
-    main { padding:58px 0 36px; }
-    .hero { display:grid; grid-template-columns:1.2fr .8fr; gap:30px; align-items:center; }
-    .eyebrow { color:var(--blue); text-transform:uppercase; letter-spacing:.12em; font-size:12px; font-weight:800; }
-    h1 { font-size:clamp(38px,6vw,64px); line-height:1.03; letter-spacing:-.055em; margin:14px 0 20px; max-width:720px; }
+    .brand { font-weight:850; letter-spacing:-.03em; }
+    .tag { display:inline-flex; border:1px solid var(--line); border-radius:99px; padding:5px 12px; font-size:12px; font-weight:750; color:var(--muted); }
+    main { padding:54px 0 34px; }
+    .hero { display:grid; grid-template-columns:1.15fr .85fr; gap:34px; align-items:center; }
+    .eyebrow { color:var(--blue); text-transform:uppercase; letter-spacing:.12em; font-size:12px; font-weight:850; }
+    h1 { font-size:clamp(38px,6vw,64px); line-height:1.03; letter-spacing:-.055em; margin:14px 0 20px; max-width:760px; }
     p { color:var(--muted); }
-    .lead { font-size:19px; max-width:660px; }
+    .lead { font-size:19px; max-width:690px; }
     .actions { display:flex; flex-wrap:wrap; gap:12px; margin-top:26px; }
     .btn { display:inline-block; padding:12px 18px; border-radius:12px; font-weight:750; text-decoration:none; border:1px solid var(--line); background:#fff; }
     .btn.primary { background:var(--blue); color:white; border-color:var(--blue); }
     .preview { background:var(--ink); color:white; border-radius:24px; padding:24px; box-shadow:0 18px 50px #102a4320; }
     .preview p { color:#c5d2df; font-size:13px; }
-    .student-card { background:linear-gradient(135deg,#fff,#eaf2ff); color:var(--ink); border-radius:18px; padding:22px; margin-top:18px; }
-    .student-card h2 { margin:0; font-size:24px; }
-    .student-card .row { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:18px; font-size:13px; color:var(--muted); }
-    .qr { width:70px; height:70px; border:7px solid white; outline:1px solid var(--line); background:repeating-conic-gradient(#102a43 0 25%,white 0 50%) 0/12px 12px; }
+    .cards { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:18px; }
+    .mini { min-height:132px; background:linear-gradient(135deg,#fff,#eaf2ff); color:var(--ink); border-radius:16px; padding:17px; }
+    .mini span { font-size:11px; font-weight:850; letter-spacing:.1em; color:#526579; }
+    .mini h2 { font-size:19px; line-height:1.2; margin:8px 0; }
+    .mini p { font-size:12px; margin:0; color:#526579; }
     .notice { background:#fff8df; border:1px solid #f0d78a; color:#654d00; padding:14px 16px; border-radius:14px; margin-top:30px; font-size:14px; }
-    .section { padding:28px 0 56px; }
-    .section h2 { font-size:clamp(26px,4vw,36px); letter-spacing:-.035em; margin-bottom:8px; }
+    .section { padding:28px 0 54px; }
+    .section h2 { font-size:clamp(26px,4vw,36px); letter-spacing:-.035em; margin:6px 0 8px; }
     .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; margin-top:22px; }
     .tile { padding:22px; background:white; border:1px solid var(--line); border-radius:18px; }
     .tile h3 { margin:0 0 8px; }
     .tile p { margin:0; font-size:14px; }
+    .step { display:flex; gap:12px; align-items:flex-start; margin-top:16px; }
+    .num { flex:0 0 32px; height:32px; display:grid; place-items:center; border-radius:10px; background:#e7efff; color:var(--blue); font-weight:850; }
     footer { border-top:1px solid var(--line); background:white; padding:22px 0; font-size:13px; color:var(--muted); }
-    @media(max-width:760px) { .hero { grid-template-columns:1fr; } main { padding-top:38px; } .grid { grid-template-columns:1fr; } .preview { max-width:520px; } }
+    @media(max-width:760px) { .hero { grid-template-columns:1fr; } main { padding-top:36px; } .grid { grid-template-columns:1fr; } .preview { max-width:560px; } }
+    @media(max-width:390px) { .cards { grid-template-columns:1fr; } }
   </style>
 </head>
 <body>
   <header>
     <div class="wrap nav">
-      <div class="brand">Kartu Pelajar Digital <span aria-hidden="true">/</span> Student ID OS</div>
+      <div class="brand">Digital Card OS <span aria-hidden="true">/</span> Kartu Identitas Digital</div>
       <span class="tag">Pratinjau GitHub</span>
     </div>
   </header>
   <main class="wrap">
     <section class="hero" aria-labelledby="hero-title">
       <div>
-        <div class="eyebrow">Identitas pelajar · Privasi sejak awal</div>
-        <h1 id="hero-title">Satu identitas digital. Ekosistem sekolah yang lebih terhubung.</h1>
-        <p class="lead">Konsep platform untuk membantu sekolah mengelola identitas pelajar, kartu digital, dan alur kehadiran dengan kontrol akses yang jelas serta perlindungan data.</p>
+        <div class="eyebrow">Satu platform · Banyak tujuan</div>
+        <h1>Kartu digital yang dirancang sesuai kebutuhan.</h1>
+        <p class="lead">Platform untuk merancang dan mengelola berbagai jenis kartu identitas digital—mulai dari kartu pelajar, identitas proyek, kartu nama digital, keanggotaan, hingga kartu layanan khusus—dengan fungsi, akses, dan aturan verifikasi sesuai tujuan.</p>
         <div class="actions">
-          <a class="btn primary" href="#fitur">Jelajahi konsep</a>
+          <a class="btn primary" href="#jenis-kartu">Jelajahi jenis kartu</a>
           <a class="btn" href="https://github.com/Yudi8377/Kartu-Pelajar-Digital-Student-ID-OS">Lihat repositori</a>
         </div>
-        <div class="notice"><strong>Mode demo statis.</strong> Halaman ini tidak menyediakan login, menyimpan data, menerbitkan kartu resmi, memverifikasi QR, atau mencatat kehadiran. Jangan masukkan data pribadi siswa.</div>
+        <div class="notice"><strong>Mode demo statis.</strong> Halaman ini belum menyediakan login, penerbitan kartu resmi, penyimpanan data, atau verifikasi QR operasional. Gunakan data fiktif saja. Kartu digital tidak otomatis menjadi dokumen identitas resmi pemerintah.</div>
       </div>
-      <aside class="preview" aria-label="Contoh kartu fiktif">
-        <span class="tag" style="border-color:#486177;color:#d8e4ef">CONTOH FIKTIF</span>
-        <p>KARTU PELAJAR DIGITAL</p>
-        <div class="student-card">
-          <div style="font-size:11px;font-weight:800;letter-spacing:.12em">STUDENT ID OS</div>
-          <h2>Nama Contoh</h2>
-          <div style="color:#526579;font-size:13px">Siswa Demo · Kelas XI</div>
-          <div class="row"><div><strong>ID DEMO-0001</strong><br><span>Data ilustrasi saja</span></div><div class="qr" role="img" aria-label="Pola ilustrasi, bukan QR yang dapat dipindai"></div></div>
+      <aside class="preview" aria-label="Contoh jenis kartu fiktif">
+        <span class="tag" style="border-color:#486177;color:#d8e4ef">KONSEP · DATA FIKTIF</span>
+        <p>PILIH TUJUAN KARTU</p>
+        <div class="cards">
+          <article class="mini"><span>01 / PENDIDIKAN</span><h2>Student ID</h2><p>Identitas siswa dan layanan sekolah</p></article>
+          <article class="mini"><span>02 / PROYEK</span><h2>Project ID</h2><p>Peran tim dan masa penugasan</p></article>
+          <article class="mini"><span>03 / PERSONAL</span><h2>Digital Name Card</h2><p>Berbagi kontak sesuai pilihan</p></article>
+          <article class="mini"><span>04 / KEGIATAN</span><h2>Event & Member</h2><p>Peserta, anggota, dan akses</p></article>
         </div>
-        <p>Pola pada kartu hanyalah ilustrasi dan bukan kode verifikasi.</p>
+        <p>Setiap jenis kartu direncanakan memiliki aturan penerbitan, data, masa berlaku, dan verifikasi tersendiri.</p>
       </aside>
     </section>
-    <section id="fitur" class="section">
-      <div class="eyebrow">Arah pengembangan</div>
-      <h2>Dibangun bertahap, dengan keamanan sebagai gerbang rilis.</h2>
-      <p>Fitur produksi hanya diaktifkan setelah alur autentikasi, otorisasi sekolah, audit, pemulihan, dan perlindungan data benar-benar diuji.</p>
+    <section id="jenis-kartu" class="section">
+      <div class="eyebrow">Modul yang direncanakan</div>
+      <h2>Mulai dari kebutuhan, lalu pilih fungsinya.</h2>
+      <p>Student ID OS tetap menjadi modul pertama. Jenis kartu lain ditambahkan bertahap setelah fondasi keamanan dan penerbitan terbukti.</p>
       <div class="grid">
-        <article class="tile"><h3>Identitas pelajar</h3><p>Profil terkelola oleh sekolah yang berwenang, dengan pembatasan akses berbasis peran dan sekolah.</p></article>
-        <article class="tile"><h3>Kartu digital</h3><p>Rencana penerbitan, pembaruan, dan pencabutan kartu dengan token QR yang tidak memuat data pribadi.</p></article>
-        <article class="tile"><h3>Kehadiran aman</h3><p>Alur kehadiran yang dapat diaudit, transparan, dan tidak mengaktifkan pelacakan lokasi secara diam-diam.</p></article>
+        <article class="tile"><h3>Pelajar & pendidikan</h3><p>Identitas sekolah, keanggotaan kelas, kartu pelajar, serta kehadiran yang diotorisasi.</p></article>
+        <article class="tile"><h3>Proyek & organisasi</h3><p>Identitas tim, peran proyek, masa tugas, keanggotaan, dan akses sesuai izin.</p></article>
+        <article class="tile"><h3>Kartu nama digital</h3><p>Profil kontak yang bisa dibagikan dengan kontrol atas informasi yang ditampilkan.</p></article>
+        <article class="tile"><h3>Event & sertifikat</h3><p>Registrasi peserta, akses sesi, kehadiran kegiatan, dan kredensial pencapaian.</p></article>
+        <article class="tile"><h3>Layanan khusus</h3><p>Termasuk kemungkinan kartu layanan Haji/Umrah oleh penyelenggara berwenang, setelah validasi dan persetujuan yang diperlukan.</p></article>
+        <article class="tile"><h3>Keanggotaan</h3><p>Status anggota, peran, masa aktif, perpanjangan, serta verifikasi oleh penerbit yang sah.</p></article>
       </div>
     </section>
+    <section class="section">
+      <div class="eyebrow">Cara kerja yang dituju</div>
+      <h2>Satu fondasi, aturan khusus untuk tiap penggunaan.</h2>
+      <div class="step"><div class="num">1</div><div><strong>Pilih tujuan kartu</strong><p>Tentukan siapa penerbitnya, siapa pemegangnya, dan masalah apa yang hendak diselesaikan.</p></div></div>
+      <div class="step"><div class="num">2</div><div><strong>Atur data dan fungsi</strong><p>Pilih field yang benar-benar diperlukan, hak akses, masa berlaku, dan tindakan yang diizinkan.</p></div></div>
+      <div class="step"><div class="num">3</div><div><strong>Verifikasi sesuai kebijakan</strong><p>QR atau kredensial dirancang agar tidak membocorkan data pribadi; status berlaku, kedaluwarsa, atau dicabut harus jelas.</p></div></div>
+    </section>
   </main>
-  <footer><div class="wrap">Student ID OS · Prototipe statis · Belum untuk penggunaan operasional sekolah.</div></footer>
+  <footer><div class="wrap">Digital Card OS · Pratinjau statis · Student ID OS tetap menjadi modul awal · Belum untuk penggunaan operasional.</div></footer>
 </body>
 </html>
