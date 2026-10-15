@@ -18,6 +18,20 @@ describe("generic digital card claims", () => {
     }
   });
 
+  it("lets the server supply the authoritative issuer name", () => {
+    const result = validateCardClaims("project_identity", {
+      full_name: "Contoh Fiktif",
+      project_name: "Proyek Contoh",
+      role: "Anggota",
+    }, {});
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      const bound = bindIssuerName(getCardType("project_identity")!, result, "Penerbit Tepercaya");
+      expect(bound.ok).toBe(true);
+      if (bound.ok) expect(bound.publicClaims.issuer_name).toBe("Penerbit Tepercaya");
+    }
+  });
+
   it("rejects private fields in public claims", () => {
     const result = validateCardClaims("student_id", {
       full_name: "Contoh Fiktif",
