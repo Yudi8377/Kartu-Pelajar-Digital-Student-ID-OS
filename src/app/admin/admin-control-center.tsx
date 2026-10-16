@@ -9,7 +9,7 @@ type Membership = { school_id: string; school_name: string; role: string };
 type Student = { id: string; student_number: string; full_name: string; class_label: string | null; status: string; created_at: string };
 type Issuer = { id: string; issuer_key: string; display_name: string; issuer_type: string; status: string; role: string; created_at: string };
 type DigitalCard = { id: string; card_number: string; card_type_id: string; status: string; issued_at: string | null; expires_at: string | null; created_at: string; revoked_at: string | null };
-type AuditEvent = { id: number; action: string; entity_type: string; entity_id: string | null; request_id: string | null; metadata: Record<string, unknown>; created_at: string };
+type AuditEvent = { id: number; action: string; entity_type: string; entity_id: string | null; request_id: string | null; created_at: string };
 type Profile = { user: { id: string; displayName: string; email: string | null }; memberships: Membership[] };
 type CardType = { id: string; name: string; description: string; status: string; issuer: string; fields: string };
 
@@ -106,6 +106,57 @@ export default function AdminControlCenter() {
 
   useEffect(() => { const timer = window.setTimeout(() => { void loadProfile(); }, 0); return () => window.clearTimeout(timer); }, [loadProfile]);
   useEffect(() => { const timer = window.setTimeout(() => { if (schoolId) void loadStudents(schoolId); }, 0); return () => window.clearTimeout(timer); }, [schoolId, loadStudents]);
+
+  const loadIssuers = useCallback(async () => {
+    try {
+      const response = await fetch("/api/digital-card-issuers", { cache: "no-store" });
+      const body = await response.json();
+      if (!response.ok) throw new Error(body.error || "Daftar penerbit belum tersedia.");
+      const items = Array.isArray(body.issuers) ? body.issuers as Issuer[] : [];
+      setIssuers(items);
+      setIssuerId((current) => current || items[0]?.id || "");
+    } catch (cause) {
+      setIssuers([]);
+      setError(cause instanceof Error ? cause.message : "Layanan penerbit belum tersedia.");
+    }
+  }, []);
+
+  const loadCards = useCallback(async (id: string) => {
+    if (!id) { setDigitalCards([]); return; }
+    try {
+      const response = await fetch("/api/digital-cards?issuerId=" + encodeURIComponent(id), { cache: "no-store" });
+      const body = await response.json();
+      if (!response.ok) throw new Error(body.error || "Daftar kartu belum tersedia.");
+      setDigitalCards(Array.isArray(body.cards) ? body.cards as DigitalCard[] : []);
+    } catch (cause) {
+      setDigitalCards([]);
+      setError(cause instanceof Error ? cause.message : "Daftar kartu belum tersedia.");
+    }
+  }, []);
+
+  const loadAudit = useCallback(async (id: string) => {
+    if (!id) { setAuditEvents([]); return; }
+    try {
+      const response = await fetch("/api/digital-card-audit?issuerId=" + encodeURIComponent(id), { cache: "no-store" });
+      const body = await response.json();
+      if (!response.ok) throw new Error(body.error || "Audit tidak dapat dimuat.");
+      setAuditEvents(Array.isArray(body.events) ? body.events as AuditEvent[] : []);
+    } catch (cause) {
+      setAuditEvents([]);
+      setError(cause instanceof Error ? cause.message : "Audit belum tersedia.");
+    }
+  }, []);
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => { void loadIssuers(); }, 0);
+    return () => window.clearTimeout(timer);
+  }, [loadIssuers]);
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      if (issuerId) { void loadCards(issuerId); void loadAudit(issuerId); }
+    }, 0);
+    return () => window.clearTimeout(timer);
+  }, [issuerId, loadCards, loadAudit]);
 
   const filteredStudents = useMemo(() => {
     const term = query.trim().toLocaleLowerCase("id");
