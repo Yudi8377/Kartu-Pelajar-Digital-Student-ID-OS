@@ -20,3 +20,13 @@ The public marketing page uses three education-themed photos as illustrative ima
 - Fajar Herlambang STUDIO, “Students are taking a test in a classroom”: https://unsplash.com/photos/students-are-taking-a-test-in-a-classroom-TmdrCRVDOnQ
 
 The images are loaded from images.unsplash.com with responsive sizing and lazy loading. They are not part of the MIT-licensed template code. Review each photo page and the current Unsplash License before any future redistribution or changes to use.
+
+
+## Hero photography — Pexels
+
+- Photo: “Student Using His Smartphone Inside the Classroom”
+- Creator: RDNE Stock project
+- Source page: https://www.pexels.com/photo/student-using-his-smartphone-inside-the-classroom-7092370/
+- Display asset: https://images.pexels.com/photos/7092370/pexels-photo-7092370.jpeg
+- License information: https://www.pexels.com/license/
+- Pexels states that photos may be used for free, including for commercial projects, subject to its license and restrictions. The photo is illustrative only and does not imply endorsement by the person depicted.

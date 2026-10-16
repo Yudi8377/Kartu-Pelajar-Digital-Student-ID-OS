@@ -25,3 +25,14 @@ The page references the Modern Business theme stylesheet and Bootstrap dependenc
 ## Release status
 
 The site is a static design preview. Production identity workflows require a secure backend, authentication, tenant isolation, issuer permissions, audit logs, revocation, and security/privacy review.
+
+
+## Visual refresh (October 2026)
+
+The Modern Business-inspired page now uses an image-led, responsive hero with a fictional student-card overlay, and a refined navy/blue visual system for navigation, sections, cards, forms, and focus states. The original module registry, Card Studio field/capability controls, local JSON preview, safety notice, workflow explanation, privacy section, and repository links remain integrated.
+
+The hero photo is served from Pexels and documented in `THIRD-PARTY-NOTICES.md`; the three showcase photos remain linked to their Unsplash source pages. The visual identity mockup and QR icon are decorative only: they do not represent an issued credential or working verification code.
+
+## Validation boundary
+
+This change refreshes the public static UI only. It does not activate production login, issuance, QR verification, or database writes. The page still depends on CDN-hosted Bootstrap, Modern Business theme CSS, Bootstrap Icons, and the Bootstrap JavaScript bundle.
