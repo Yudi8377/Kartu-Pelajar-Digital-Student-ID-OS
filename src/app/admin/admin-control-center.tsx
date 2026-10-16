@@ -96,8 +96,8 @@ export default function AdminControlCenter() {
     }
   }, []);
 
-  useEffect(() => { void loadProfile(); }, [loadProfile]);
-  useEffect(() => { if (schoolId) void loadStudents(schoolId); }, [schoolId, loadStudents]);
+  useEffect(() => { const timer = window.setTimeout(() => { void loadProfile(); }, 0); return () => window.clearTimeout(timer); }, [loadProfile]);
+  useEffect(() => { const timer = window.setTimeout(() => { if (schoolId) void loadStudents(schoolId); }, 0); return () => window.clearTimeout(timer); }, [schoolId, loadStudents]);
 
   const filteredStudents = useMemo(() => {
     const term = query.trim().toLocaleLowerCase("id");
