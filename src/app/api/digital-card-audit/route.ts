@@ -22,12 +22,12 @@ export async function GET(request: Request) {
       if (membership.rowCount !== 1) return null;
       const result = await client.query<{
         id: string; action: string; entity_type: string; entity_id: string | null;
-        request_id: string | null; metadata: Record<string, unknown>; created_at: Date;
+        request_id: string | null; created_at: Date;
       }>(
-        "SELECT id, action, entity_type, entity_id, request_id, metadata, created_at FROM public.digital_card_audit_events WHERE issuer_id = $1 ORDER BY created_at DESC LIMIT 100",
+        "SELECT id, action, entity_type, entity_id, request_id, created_at FROM public.digital_card_audit_events WHERE issuer_id = $1 ORDER BY created_at DESC LIMIT 100",
         [issuerId],
       );
-      return result.rows.map((event) => ({ ...event, metadata: safeMetadata(event.metadata) }));
+      return result.rows;
     });
     if (events === null) return NextResponse.json({ error: "Akses audit hanya untuk admin penerbit" }, { status: 403, headers: NO_STORE });
     return NextResponse.json({ events }, { headers: NO_STORE });
@@ -36,8 +36,3 @@ export async function GET(request: Request) {
   }
 }
 
-function safeMetadata(value: Record<string, unknown> | null | undefined) {
-  if (!value || typeof value !== "object" || Array.isArray(value)) return {};
-  const blocked = /token|credential|secret|password|email|phone|student|subject|claim|personal|address/i;
-  return Object.fromEntries(Object.entries(value).filter(([key]) => !blocked.test(key)));
-}
