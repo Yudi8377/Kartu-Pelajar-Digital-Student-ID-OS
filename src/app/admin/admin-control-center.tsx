@@ -6,7 +6,10 @@ import "./admin-control-center.css";
 
 type SectionId = "overview" | "issuers" | "card-types" | "holders" | "credentials" | "verification" | "plans" | "users" | "audit" | "settings";
 type Membership = { school_id: string; school_name: string; role: string };
-type Student = { id: string; student_number: string; full_name: string; class_label: string | null; status: string; created_at: string };\ntype Issuer = { id: string; issuer_key: string; display_name: string; issuer_type: string; status: string; role: string; created_at: string };\ntype DigitalCard = { id: string; card_number: string; card_type_id: string; status: string; issued_at: string | null; expires_at: string | null; created_at: string; revoked_at: string | null };\ntype AuditEvent = { id: number; action: string; entity_type: string; entity_id: string | null; request_id: string | null; metadata: Record<string, unknown>; created_at: string };
+type Student = { id: string; student_number: string; full_name: string; class_label: string | null; status: string; created_at: string };
+type Issuer = { id: string; issuer_key: string; display_name: string; issuer_type: string; status: string; role: string; created_at: string };
+type DigitalCard = { id: string; card_number: string; card_type_id: string; status: string; issued_at: string | null; expires_at: string | null; created_at: string; revoked_at: string | null };
+type AuditEvent = { id: number; action: string; entity_type: string; entity_id: string | null; request_id: string | null; metadata: Record<string, unknown>; created_at: string };
 type Profile = { user: { id: string; displayName: string; email: string | null }; memberships: Membership[] };
 type CardType = { id: string; name: string; description: string; status: string; issuer: string; fields: string };
 
@@ -44,7 +47,12 @@ const readiness = [
 
 export default function AdminControlCenter() {
   const [active, setActive] = useState<SectionId>("overview");
-  const [profile, setProfile] = useState<Profile | null>(null);\n  const [issuers, setIssuers] = useState<Issuer[]>([]);\n  const [issuerId, setIssuerId] = useState("");\n  const [digitalCards, setDigitalCards] = useState<DigitalCard[]>([]);\n  const [auditEvents, setAuditEvents] = useState<AuditEvent[]>([]);\n  const [cardActionBusy, setCardActionBusy] = useState("");
+  const [profile, setProfile] = useState<Profile | null>(null);
+  const [issuers, setIssuers] = useState<Issuer[]>([]);
+  const [issuerId, setIssuerId] = useState("");
+  const [digitalCards, setDigitalCards] = useState<DigitalCard[]>([]);
+  const [auditEvents, setAuditEvents] = useState<AuditEvent[]>([]);
+  const [cardActionBusy, setCardActionBusy] = useState("");
   const [schoolId, setSchoolId] = useState("");
   const [students, setStudents] = useState<Student[]>([]);
   const [loading, setLoading] = useState(true);
