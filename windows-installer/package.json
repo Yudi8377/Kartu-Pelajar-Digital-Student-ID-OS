@@ -1,7 +1,7 @@
 {
-  "name": "digital-card-os-desktop",
-  "version": "0.1.0",
-  "description": "Digital Card OS desktop shell",
+  "name": "digital-card-os-admin-desktop",
+  "version": "0.2.0",
+  "description": "Digital Card OS Admin Control Center desktop shell",
   "main": "main.cjs",
   "private": true,
   "scripts": {
@@ -14,10 +14,10 @@
   },
   "build": {
     "appId": "id.digitalcard.os",
-    "productName": "Digital Card OS",
+    "productName": "Digital Card OS Admin Control Center",
     "directories": { "output": "dist" },
     "files": ["main.cjs", "offline.html", "package.json"],
-    "win": { "target": ["nsis"], "artifactName": "Digital-Card-OS-Setup-${version}.${ext}" },
+    "win": { "target": ["nsis"], "artifactName": "Digital-Card-OS-Admin-Control-Center-Setup-${version}.${ext}" },
     "nsis": { "oneClick": false, "allowToChangeInstallationDirectory": true, "createDesktopShortcut": true, "createStartMenuShortcut": true }
   }
 }
