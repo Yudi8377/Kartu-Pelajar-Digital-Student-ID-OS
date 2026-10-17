@@ -95,5 +95,7 @@ class MainActivity : Activity() {
     companion object {
         const val WALLET_URL = "https://digital-card-os.hatchable.site/wallet/"
         const val CAMERA_PERMISSION_REQUEST = 410
+        const val ACTION_IMPACT_SAFE = "id.digitalcard.safety.IMPACT_SAFE"
+        const val ACTION_IMPACT_HELP = "id.digitalcard.safety.IMPACT_HELP"
     }
 }
