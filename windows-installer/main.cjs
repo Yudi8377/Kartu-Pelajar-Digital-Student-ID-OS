@@ -1,4 +1,6 @@
-const { app, BrowserWindow, shell, net } = require("electron");
+/* Electron's documented desktop entry point uses CommonJS. */
+/* eslint-disable @typescript-eslint/no-require-imports */
+const { app, BrowserWindow, shell } = require("electron");
 const path = require("node:path");
 const ONLINE_URL = "https://digital-card-os.hatchable.site/wallet/";
 function createWindow() {
