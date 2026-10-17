@@ -1,17 +1,16 @@
 # Digital Card OS installers
 
-## Android
-The Android safety companion has a GitHub Actions workflow at `.github/workflows/android-safety-companion.yml`. On a successful run, download the `digital-card-safety-debug-apk` artifact from the workflow run. This is a debug APK for controlled testing, not a signed production release.
+## Android — Digital Card Wallet
+The Android workflow `.github/workflows/android-safety-companion.yml` builds the Wallet APK. On a successful run, download the `digital-card-wallet-debug-apk` artifact from the workflow run. This is an unsigned debug APK for controlled testing, not a signed production release.
 
-## Windows
-The Windows desktop shell is built by `.github/workflows/windows-installer.yml`. On a successful run, download the `digital-card-os-windows-installer` artifact from the workflow run. GitHub Actions artifacts are temporary (14-day retention), not a permanent public release.
+## Windows — Admin Control Center
+The Windows workflow `.github/workflows/windows-installer.yml` builds the Admin Control Center installer. On a successful run, download the `digital-card-os-windows-installer` artifact from the workflow run. The desktop shell opens `/app/?view=overview`, not the Wallet. GitHub Actions artifacts are temporary (14-day retention), not a permanent public release.
 
 ## Offline boundary
-The Windows installer includes a local offline/error page, but the Wallet itself currently loads from the hosted service. Login, issuer data, QR verification, OCR library download, maps, and synchronization are not guaranteed offline. This is an online-first desktop shell with offline fallback, **not a complete offline identity system**. Do not present a stale card state as verified. A fully offline build requires packaging the actual static UI and dependencies locally and separately designing safe local storage/sync.
+Both packages are installable shells, but they are not complete offline applications. The Android Wallet loads the hosted Wallet UI; the Windows Admin Control Center loads the hosted admin UI. Login, organization data, synchronization, official verification, and some external libraries require internet. The Windows package includes a local offline/error page. Do not present stale data as verified. A complete offline version requires bundling the UI and its dependencies locally and designing secure local storage/synchronization separately.
 
 ## Release checklist
-- Test installer on a clean Windows device.
-- Confirm network failure shows the offline page and reconnect button works.
-- Verify all external links open outside the app.
+- Test the Windows installer on a clean Windows device and confirm network failure shows the offline page.
+- Test the Android APK on real devices and confirm the card-first screen, hamburger menu, and permission prompts.
 - Do not enter real student or government ID data in test builds.
-- Before public distribution, create a signed production Android build and a signed Windows release, publish versioned release notes, and test on real devices.
+- Before public distribution, create signed production builds for Android and Windows, publish versioned release notes, and test update/recovery flows.
