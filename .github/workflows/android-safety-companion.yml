@@ -8,6 +8,8 @@ on:
       - feat/android-safety-companion
     paths:
       - "android-safety-companion/**"
+      - "windows-installer/**"
+      - "docs/OFFLINE-INSTALLERS.md"
       - ".github/workflows/android-safety-companion.yml"
 
 permissions:
