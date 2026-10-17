@@ -96,6 +96,12 @@ class MainActivity : Activity() {
     }
 
     private fun startMonitoring() {
+        if (Build.VERSION.SDK_INT >= 33 &&
+            checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            status.text = "Izin notifikasi diperlukan agar peringatan sensor terlihat. Izinkan notifikasi lalu tekan Aktifkan sensor lagi."
+            requestNotificationPermission()
+            return
+        }
         val sensor = packageManager.hasSystemFeature(PackageManager.FEATURE_SENSOR_ACCELEROMETER)
         if (!sensor) {
             status.text = "Perangkat ini tidak melaporkan dukungan akselerometer."
@@ -125,6 +131,13 @@ class MainActivity : Activity() {
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == NOTIFICATION_PERMISSION_REQUEST) {
+            status.text = if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                "Izin notifikasi diberikan. Tekan Aktifkan sensor untuk mulai."
+            } else {
+                "Izin notifikasi ditolak. Pemantauan tidak akan dimulai tanpa notifikasi yang terlihat."
+            }
+        }
         if (requestCode == CAMERA_PERMISSION_REQUEST) {
             val request = pendingWebPermission
             pendingWebPermission = null
