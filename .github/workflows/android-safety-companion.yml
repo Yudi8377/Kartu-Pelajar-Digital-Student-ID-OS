@@ -1,4 +1,4 @@
-name: Android Safety Companion
+name: Android Digital Card Wallet
 
 on:
   workflow_dispatch:
@@ -30,12 +30,12 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: "8.9"
-      - name: Build debug APK
+      - name: Build Digital Card Wallet APK
         run: gradle --no-daemon -p android-safety-companion assembleDebug
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: digital-card-safety-debug-apk
+          name: digital-card-wallet-debug-apk
           path: android-safety-companion/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           retention-days: 14
