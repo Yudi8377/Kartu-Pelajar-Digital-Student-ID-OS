@@ -10,7 +10,7 @@
 
     <application
         android:allowBackup="false"
-        android:label="Digital Card Safety"
+        android:label="Dompet Kartu Digital"
         android:theme="@android:style/Theme.Material.Light.NoActionBar"
         android:usesCleartextTraffic="false">
         <activity
