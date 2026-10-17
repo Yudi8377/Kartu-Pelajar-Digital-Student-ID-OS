@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 const { app, BrowserWindow, shell } = require("electron");
 const path = require("node:path");
-const ONLINE_URL = "https://digital-card-os.hatchable.site/wallet/";
+const ONLINE_URL = "https://digital-card-os.hatchable.site/app/?view=overview";
 function createWindow() {
   const win = new BrowserWindow({
     width: 1180, height: 820, minWidth: 360, minHeight: 600,
