@@ -25,7 +25,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
       - name: Install dependencies for audit
         run: npm install --no-audit --no-fund --legacy-peer-deps
       - name: Fail on high or critical npm advisories
