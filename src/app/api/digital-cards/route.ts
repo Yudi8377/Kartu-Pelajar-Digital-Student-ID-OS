@@ -1,4 +1,5 @@
-import { createHash, randomBytes } from "node:crypto";
+import { createHash } from "node:crypto";
+import { createQrCredential, parseFutureExpiry } from "@/lib/card-credentials";
 import { NextResponse } from "next/server";
 import { getAuth } from "@/lib/auth/server";
 import { withAuthenticatedDb } from "@/lib/db";
@@ -116,15 +117,16 @@ export async function POST(request: Request) {
   if (!CARD_TYPES.has(cardTypeId)) return jsonError("Jenis kartu tidak didukung", 400);
   if (subjectRef.length < 1 || subjectRef.length > 160 || /[\u0000-\u001f\u007f]/.test(subjectRef)) return jsonError("Referensi subjek tidak valid", 400);
   if (expiresAtRaw !== null && typeof expiresAtRaw !== "string") return jsonError("Tanggal kedaluwarsa tidak valid", 400);
-  const expiresAt = typeof expiresAtRaw === "string" ? new Date(expiresAtRaw) : null;
-  if (expiresAt && (!Number.isFinite(expiresAt.getTime()) || expiresAt.getTime() <= Date.now())) return jsonError("Tanggal kedaluwarsa harus di masa depan", 400);
+  const expiresAt = parseFutureExpiry(expiresAtRaw);
+  if (expiresAt === undefined) return jsonError("Tanggal kedaluwarsa harus berupa waktu ISO dengan zona waktu dan berada di masa depan", 400);
 
   try {
     const authSubject = await getAuthSubject();
     if (!authSubject) return jsonError("Unauthorized", 401);
 
-    const rawToken = randomBytes(32).toString("base64url");
-    const tokenHash = createHash("sha256").update(rawToken, "utf8").digest();
+    const credential = createQrCredential();
+    const rawToken = credential.token;
+    const tokenHash = credential.tokenHash;
     const rateBucket = createHash("sha256").update("issue:" + authSubject + ":" + issuerId, "utf8").digest("hex");
 
     const card = await withAuthenticatedDb(authSubject, async (client) => {
