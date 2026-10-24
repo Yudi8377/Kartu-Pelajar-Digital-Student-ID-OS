@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { createQrCredential, parseFutureExpiry } from "@/lib/card-credentials";
+import { createQrCredential, parseFutureExpiry } from "../../../lib/card-credentials";
 import { NextResponse } from "next/server";
 import { getAuth } from "@/lib/auth/server";
 import { withAuthenticatedDb } from "@/lib/db";
