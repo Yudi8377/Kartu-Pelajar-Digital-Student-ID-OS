@@ -62,7 +62,7 @@ export async function PATCH(request: Request, context: { params: Promise<{ cardI
   }
   if (!body || typeof body !== "object" || Array.isArray(body)) return jsonError("Data permintaan tidak valid", 400);
   const issuerId = (body as Record<string, unknown>).issuerId;
-  const reason = (body as Record<string, unknown>).reason;
+  const reasonCode = (body as Record<string, unknown>).reasonCode;
   if (typeof issuerId !== "string" || !UUID_PATTERN.test(issuerId)) return jsonError("issuerId tidak valid", 400);
   if (reason != null && (typeof reason !== "string" || reason.trim().length > 240 || /[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/.test(reason))) {
     return jsonError("Alasan pencabutan tidak valid", 400);
@@ -97,7 +97,7 @@ export async function PATCH(request: Request, context: { params: Promise<{ cardI
 
       await client.query(
         "INSERT INTO public.digital_card_audit_events (issuer_id, actor_user_id, action, entity_type, entity_id, metadata) VALUES ($1, $2, 'credential_revoked', 'digital_card', $3, $4::jsonb)",
-        [issuerId, actor.user_id, card.id, JSON.stringify({ reason: typeof reason === "string" ? reason.trim() : null })],
+        [issuerId, actor.user_id, card.id, JSON.stringify({ reasonCode: typeof reasonCode === "string" ? reasonCode : null })],
       );
       return { kind: "revoked" as const, card };
     });
