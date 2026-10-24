@@ -31,11 +31,11 @@ The server generates a 256-bit random opaque token, stores only its SHA-256 hash
 ```json
 {
   "issuerId": "<issuer-uuid>",
-  "reason": "Replaced after issuer review"
+  "reasonCode": "replaced"
 }
 ```
 
-Only an active or pending card in the explicitly selected issuer can be revoked by an authorized issuer operator. Revocation and its audit event share a transaction. The endpoint applies a database-backed per-user/per-issuer rate limit and bounded request body.
+Only an active or pending card in the explicitly selected issuer can be revoked by an authorized issuer operator. Use one of the non-sensitive reason codes: replaced, lost, incorrect_data, issuer_request, or security_concern. Free-form reason text is not accepted to reduce the chance of storing personal data in audit metadata. Revocation and its audit event share a transaction. The endpoint applies a database-backed per-user/per-issuer rate limit and bounded request body.
 
 ## Current limitations and required gates
 
