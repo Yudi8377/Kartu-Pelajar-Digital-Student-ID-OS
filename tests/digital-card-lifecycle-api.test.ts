@@ -77,6 +77,19 @@ describe("digital card lifecycle API", () => {
     expect(mockWithAuthenticatedDb).not.toHaveBeenCalled();
   });
 
+  it("rejects an expiry without an explicit timezone before database access", async () => {
+    const response = await issueCard(jsonRequest("https://example.test/api/digital-cards", "POST", {
+      issuerId,
+      cardNumber: "TEST-EXPIRY",
+      cardTypeId: "student_id",
+      subjectRef: "opaque-reference",
+      expiresAt: "2027-06-30T23:59:59",
+    }));
+
+    expect(response.status).toBe(400);
+    expect(mockWithAuthenticatedDb).not.toHaveBeenCalled();
+  });
+
   it("does not issue a card to an unauthenticated caller", async () => {
     mockGetAuth.mockReturnValue({
       getSession: vi.fn().mockResolvedValue({ data: { user: null } }),
