@@ -115,7 +115,7 @@ describe("digital card lifecycle API", () => {
     ]);
 
     const response = await revokeCard(
-      jsonRequest("https://example.test/api/digital-cards/" + cardId, "PATCH", { issuerId, reason: "replaced" }),
+      jsonRequest("https://example.test/api/digital-cards/" + cardId, "PATCH", { issuerId, reasonCode: "replaced" }),
       { params: Promise.resolve({ cardId }) },
     );
     const body = await response.json();
