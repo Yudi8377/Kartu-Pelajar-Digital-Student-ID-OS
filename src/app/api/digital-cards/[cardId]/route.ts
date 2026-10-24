@@ -64,8 +64,9 @@ export async function PATCH(request: Request, context: { params: Promise<{ cardI
   const issuerId = (body as Record<string, unknown>).issuerId;
   const reasonCode = (body as Record<string, unknown>).reasonCode;
   if (typeof issuerId !== "string" || !UUID_PATTERN.test(issuerId)) return jsonError("issuerId tidak valid", 400);
-  if (reason != null && (typeof reason !== "string" || reason.trim().length > 240 || /[\u0000-\u0008\u000b\u000c\u000e-\u001f\u007f]/.test(reason))) {
-    return jsonError("Alasan pencabutan tidak valid", 400);
+  const allowedReasonCodes = new Set(["replaced", "lost", "incorrect_data", "issuer_request", "security_concern"]);
+  if (reasonCode != null && (typeof reasonCode !== "string" || !allowedReasonCodes.has(reasonCode))) {
+    return jsonError("Kode alasan pencabutan tidak valid", 400);
   }
 
   try {
