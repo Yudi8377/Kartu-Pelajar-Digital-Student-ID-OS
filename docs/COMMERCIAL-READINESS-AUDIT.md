@@ -31,6 +31,12 @@ This audit records the verified repository-level baseline. It does not claim tha
 - `.github/workflows/security-audit.yml` runs npm audit on pull requests and weekly, failing for high/critical advisories.
 - These checks improve dependency hygiene but do not prove the runtime is secure or production-ready.
 
+## Existing database rehearsal finding (2026-10-24)
+
+- Read-only schema inspection of the existing Neon project branch named `production` found the legacy Student ID OS tables (including `schools`, `students`, and `student_cards`) but did not find the generic `digital_cards`, `digital_card_issuers`, or `digital_card_rate_limits` tables from migrations 0003 and 0004.
+- No production rows were queried and no production database changes were made during this inspection.
+- The disposable PostgreSQL CI migration rehearsal passes, but that does not mean the existing hosted database has received those migrations. Do not deploy the new lifecycle API against the current database until a protected rehearsal branch is created, the migration is applied and tested there, and a reviewed migration/rollback plan is approved.
+
 ## Release policy
 
 Do not merge this audit branch automatically. Review its checks first. Do not deploy or onboard real schools until all P0 gates are implemented and independently evidenced. If the owner retains GitHub-only hosting, the approved release scope is a static preview with fictional data only.
