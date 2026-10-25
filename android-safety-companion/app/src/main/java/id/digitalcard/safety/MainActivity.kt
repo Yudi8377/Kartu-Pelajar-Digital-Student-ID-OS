@@ -44,7 +44,7 @@ class MainActivity : Activity() {
             private var offlineShown = false
             override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
                 val uri = request.url
-                return uri.scheme != "https" || uri.host != "digital-card-os.hatchable.site"
+                return uri.scheme != "https" || uri.host != "yudi8377.github.io"
             }
             override fun onReceivedError(view: WebView, request: WebResourceRequest, error: WebResourceError) {
                 super.onReceivedError(view, request, error)
@@ -61,7 +61,7 @@ class MainActivity : Activity() {
         webView.webChromeClient = object : WebChromeClient() {
             override fun onPermissionRequest(request: PermissionRequest) {
                 val cameraOnly = request.resources.all { it == PermissionRequest.RESOURCE_VIDEO_CAPTURE }
-                if (!cameraOnly || request.origin.host != "digital-card-os.hatchable.site") {
+                if (!cameraOnly || request.origin.host != "yudi8377.github.io") {
                     request.deny()
                     return
                 }
@@ -116,14 +116,14 @@ class MainActivity : Activity() {
         .eyebrow{font-size:11px;letter-spacing:2px;color:#8debd9}.name{font-size:28px;font-weight:800;margin:10px 0}.muted{color:#b8ccd7;font-size:13px}.foot{border-top:1px solid #ffffff33;padding-top:18px}
         </style></head><body>
         <button class="menu" onclick="let m=document.getElementById('items');m.style.display=m.style.display==='block'?'none':'block'" aria-label="Menu">☰</button>
-        <nav id="items"><p>Scan e-KTP — perlu koneksi untuk fitur online</p><p>QR & Presensi — data demo offline</p><p>Simpan Kontak — belum tersedia offline</p><p>Safety Center & Peta — perlu koneksi</p><p>Mode offline: kartu contoh saja, belum terverifikasi</p><button onclick="location.href='https://digital-card-os.hatchable.site/wallet/'">Coba sambungkan kembali</button></nav>
+        <nav id="items"><p>Scan e-KTP — perlu koneksi untuk fitur online</p><p>QR & Presensi — data demo offline</p><p>Simpan Kontak — belum tersedia offline</p><p>Safety Center & Peta — perlu koneksi</p><p>Mode offline: kartu contoh saja, belum terverifikasi</p><button onclick="location.href='https://yudi8377.github.io/Kartu-Pelajar-Digital-Student-ID-OS/wallet/'">Coba sambungkan kembali</button></nav>
         <main class="card"><div><div class="eyebrow">DIGITAL IDENTITY · DEMO</div><div class="name">Dompet Kartu Digital</div><div class="muted">Kartu contoh offline</div></div>
         <div class="foot"><div style="font-size:18px;font-weight:700">Kartu tersimpan lokal</div><p class="muted">Data asli tidak dimuat saat offline. Ini bukan kartu identitas resmi atau bukti verifikasi.</p><div class="eyebrow">DIGITAL CARD OS</div></div></main>
         </body></html>
     """.trimIndent()
 
     companion object {
-        const val WALLET_URL = "https://digital-card-os.hatchable.site/wallet/"
+        const val WALLET_URL = "https://yudi8377.github.io/Kartu-Pelajar-Digital-Student-ID-OS/wallet/"
         const val CAMERA_PERMISSION_REQUEST = 410
         const val ACTION_IMPACT_SAFE = "id.digitalcard.safety.IMPACT_SAFE"
         const val ACTION_IMPACT_HELP = "id.digitalcard.safety.IMPACT_HELP"
