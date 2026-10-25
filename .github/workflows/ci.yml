@@ -39,7 +39,7 @@ jobs:
 
           grep -Eiq 'data fiktif|data simulasi' site/index.html
           grep -Eiq 'belum menerbitkan kartu resmi|tidak menerbitkan kartu resmi' site/index.html
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v7
         with:
           node-version: 22
       - name: Install dependencies
