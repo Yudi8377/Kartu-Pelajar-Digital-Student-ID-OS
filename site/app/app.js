@@ -268,7 +268,7 @@ $("forgotForm").addEventListener("submit", async (event) => {
   setStatus("forgotStatus", "");
   try {
     const redirectTo = new URL("./reset-password/", window.location.href).href;
-    const response = await fetch(AUTH_URL.replace(/\\/$/, "") + "/request-password-reset", {
+    const response = await fetch(AUTH_URL + "/request-password-reset", {
       method: "POST",
       headers: { "Content-Type": "application/json", "Accept": "application/json" },
       body: JSON.stringify({ email, redirectTo }),
