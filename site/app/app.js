@@ -283,9 +283,17 @@ $("magicLinkForm").addEventListener("submit", async (event) => {
     let result = null;
     try { result = await response.json(); } catch { /* response may be empty */ }
     if (!response.ok || result?.error) {
-      throw new Error(response.status === 429
-        ? "Terlalu banyak permintaan. Tunggu beberapa menit lalu coba lagi."
-        : "Magic Link belum dapat dikirim. Periksa konfigurasi plugin Magic Link dan penyedia email Neon Auth.");
+      if (response.status === 429) {
+        throw new Error("Terlalu banyak permintaan. Tunggu beberapa menit lalu coba lagi.");
+      }
+      const serverMessage = typeof result?.message === "string" ? result.message
+        : typeof result?.error?.message === "string" ? result.error.message
+        : typeof result?.code === "string" ? result.code
+        : typeof result?.error === "string" ? result.error
+        : "";
+      const detail = serverMessage.replace(/[\\r\\n\\t]+/g, " ").slice(0, 180);
+      throw new Error("Neon Auth menolak permintaan Magic Link (HTTP " + response.status + ")."
+        + (detail ? " Detail: " + detail : " Periksa apakah plugin Magic Link aktif pada branch production dan penyedia email Neon Auth siap."));
     }
     state.email = email;
     setStatus("magicStatus", "Jika email dapat digunakan, tautan masuk akan dikirim. Periksa kotak masuk dan folder spam. Buka tautan pada perangkat dan browser yang sama.", "success");
