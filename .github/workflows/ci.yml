@@ -67,6 +67,19 @@ jobs:
             -H 'Access-Control-Request-Method: GET' \
             https://br-calm-mountain-azgavkou-cardosapi.compute.c-3.ap-southeast-1.aws.neon.tech/health)"
           printf '%s' "$headers" | grep -Fqi 'Access-Control-Allow-Origin: https://yudi8377.github.io'
+
+      - name: Verify anonymous clients cannot issue cards or read card tables
+        shell: bash
+        run: |
+          set -euo pipefail
+          api='https://ep-flat-surf-az2loe9u.apirest.c-3.ap-southeast-1.aws.neon.tech/digital_card_os/rest/v1'
+          code="$(curl --silent --show-error --max-time 15 -o /tmp/anonymous-rpc.json -w '%{http_code}' \
+            -X POST "$api/rpc/register_digital_card_issuer" \
+            -H 'Content-Type: application/json' \
+            -d '{"p_issuer_key":"ci-anonymous-test","p_display_name":"CI Anonymous Test","p_issuer_type":"school"}')"
+          case "$code" in 401|403|404) ;; *) echo "::error::Anonymous issuer RPC returned HTTP $code"; cat /tmp/anonymous-rpc.json; exit 1;; esac
+          code="$(curl --silent --show-error --max-time 15 -o /tmp/anonymous-table.json -w '%{http_code}' "$api/digital_cards")"
+          case "$code" in 401|403|404) ;; *) echo "::error::Anonymous card-table request returned HTTP $code"; cat /tmp/anonymous-table.json; exit 1;; esac
   database-migrations:
     runs-on: ubuntu-latest
     timeout-minutes: 10
