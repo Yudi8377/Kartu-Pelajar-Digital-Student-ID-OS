@@ -13,12 +13,26 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
-      - name: Validate GitHub-only static site
+      - name: Validate GitHub-only static site publication boundary
+        shell: bash
         run: |
+          set -euo pipefail
           test -s site/index.html
           test -s site/css/cardos.css
           test -s site/js/card-studio.js
-          ! grep -Eiq 'DATABASE_URL|NEON_AUTH_COOKIE_SECRET|OPENAI_API_KEY|student_number|guardian_phone' site/index.html
+
+          if find site -type f \\( -name '.env' -o -name '.env.*' -o -name '*.map' -o -iname '*private*key*' \\) -print -quit | grep -q .; then
+            echo "::error::Static site contains a forbidden environment, source-map, or private-key file."
+            exit 1
+          fi
+
+          if grep -RIEq 'DATABASE_URL|NEON_AUTH_COOKIE_SECRET|OPENAI_API_KEY|SUPABASE_SERVICE_ROLE_KEY|-----BEGIN ([A-Z ]+ )?PRIVATE KEY-----|student_number|guardian_phone|national_id|date_of_birth' site/; then
+            echo "::error::Static site matched a backend-secret or sensitive-record marker."
+            exit 1
+          fi
+
+          grep -Eiq 'data fiktif|data simulasi' site/index.html
+          grep -Eiq 'belum menerbitkan kartu resmi|tidak menerbitkan kartu resmi' site/index.html
       - uses: actions/setup-node@v4
         with:
           node-version: 22
