@@ -21,6 +21,18 @@ jobs:
           test -s site/css/cardos.css
           test -s site/js/card-studio.js
           node --check site/js/card-studio.js
+          test -s site/wallet/index.html
+          grep -Fq 'id="walletCard"' site/wallet/index.html
+          python - <<'PY'
+          from pathlib import Path
+          import re
+          html = Path("site/wallet/index.html").read_text(encoding="utf-8")
+          scripts = re.findall(r"<script>(.*?)</script>", html, flags=re.S)
+          if not scripts:
+              raise SystemExit("Wallet inline JavaScript not found")
+          Path("/tmp/wallet-inline.js").write_text("\n".join(scripts), encoding="utf-8")
+          PY
+          node --check /tmp/wallet-inline.js
           test -s site/app/index.html
           test -s site/app/app.js
           node --input-type=module --check < site/app/app.js
