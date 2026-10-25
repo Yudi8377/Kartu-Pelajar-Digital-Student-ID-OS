@@ -39,9 +39,7 @@ jobs:
         with:
           node-version: 22
       - name: Install dependencies
-        run: |
-          npm cache clean --force
-          npm install --no-audit --no-fund --legacy-peer-deps
+        run: npm ci --no-audit --no-fund --legacy-peer-deps
       - run: npm run typecheck
       - run: npm run lint
       - run: npm run test --if-present
