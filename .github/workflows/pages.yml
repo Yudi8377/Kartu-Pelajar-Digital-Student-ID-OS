@@ -20,10 +20,27 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
-      - name: Validate static preview
+      - name: Validate static-only publication boundary
+        shell: bash
         run: |
+          set -euo pipefail
           test -s site/index.html
-          ! grep -Eiq 'DATABASE_URL|NEON_AUTH_COOKIE_SECRET|OPENAI_API_KEY|student_number|guardian_phone' site/index.html
+
+          # Never publish environment files, source maps, or private-key files.
+          if find site -type f \\( -name '.env' -o -name '.env.*' -o -name '*.map' -o -iname '*private*key*' \\) -print -quit | grep -q .; then
+            echo "::error::Static artifact contains a forbidden environment, source-map, or private-key file."
+            exit 1
+          fi
+
+          # Public Pages must contain no backend credentials or real-data field names.
+          if grep -RIEq 'DATABASE_URL|NEON_AUTH_COOKIE_SECRET|OPENAI_API_KEY|SUPABASE_SERVICE_ROLE_KEY|-----BEGIN ([A-Z ]+ )?PRIVATE KEY-----|student_number|guardian_phone|national_id|date_of_birth' site/; then
+            echo "::error::Static artifact matched a backend-secret or sensitive-record marker."
+            exit 1
+          fi
+
+          # Keep the demo's no-production-capability disclaimer present in the shipped HTML.
+          grep -Eiq 'data fiktif|data simulasi' site/index.html
+          grep -Eiq 'belum menerbitkan kartu resmi|tidak menerbitkan kartu resmi' site/index.html
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
