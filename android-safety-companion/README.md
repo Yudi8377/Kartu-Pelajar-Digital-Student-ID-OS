@@ -1,6 +1,6 @@
 # Digital Card Wallet (Android)
 
-Native Android full-screen shell for the Digital Card OS Wallet at `https://digital-card-os.hatchable.site/wallet/`.
+Native Android full-screen shell for the Digital Card OS Wallet at `https://yudi8377.github.io/Kartu-Pelajar-Digital-Student-ID-OS/wallet/`.
 
 ## Current behavior
 
@@ -12,7 +12,7 @@ Native Android full-screen shell for the Digital Card OS Wallet at `https://digi
 
 ## Build
 
-The GitHub Actions workflow `.github/workflows/android-safety-companion.yml` builds the debug APK. Download the artifact named `digital-card-wallet-debug-apk` from a successful workflow run. This is an unsigned debug build for controlled testing, not a Play Store release.
+The GitHub Pages Wallet is the intended home for the public card-first UI. The GitHub Actions workflow `.github/workflows/android-safety-companion.yml` builds the debug APK. Download the artifact named `digital-card-wallet-debug-apk` from a successful workflow run. This is an unsigned debug build for controlled testing, not a Play Store release.
 
 Local build (JDK 17 + Gradle 8.9):
 ```bash
