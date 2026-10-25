@@ -237,6 +237,55 @@ async function revokeCard(cardId, button) {
   }
 }
 
+$("togglePassword").addEventListener("click", () => {
+  const visible = $("password").type === "password";
+  $("password").type = visible ? "text" : "password";
+  $("togglePassword").setAttribute("aria-pressed", String(visible));
+  $("togglePassword").setAttribute("aria-label", visible ? "Sembunyikan kata sandi" : "Tampilkan kata sandi");
+  $("togglePassword").title = visible ? "Sembunyikan kata sandi" : "Tampilkan kata sandi";
+});
+$("forgotPassword").addEventListener("click", () => {
+  const email = $("email").value.trim().toLowerCase();
+  if (email) $("resetEmail").value = email;
+  $("authForm").classList.add("hidden");
+  $("verifyForm").classList.add("hidden");
+  $("forgotForm").classList.remove("hidden");
+  $("authLinks").classList.add("hidden");
+  setStatus("forgotStatus", "");
+  $("resetEmail").focus();
+});
+$("backToLogin").addEventListener("click", () => {
+  $("forgotForm").classList.add("hidden");
+  $("authForm").classList.remove("hidden");
+  $("authLinks").classList.toggle("hidden", state.mode === "signUp");
+  setStatus("forgotStatus", "");
+});
+$("forgotForm").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const email = $("resetEmail").value.trim().toLowerCase();
+  const button = $("sendResetLink");
+  busy(button, true, "Mengirim tautan…");
+  setStatus("forgotStatus", "");
+  try {
+    const redirectTo = new URL("./reset-password/", window.location.href).href;
+    let result;
+    if (typeof authClient.requestPasswordReset === "function") {
+      result = await authClient.requestPasswordReset({ email, redirectTo });
+    } else if (typeof authClient.auth?.requestPasswordReset === "function") {
+      result = await authClient.auth.requestPasswordReset({ email, redirectTo });
+    } else if (typeof authClient.forgetPassword === "function") {
+      result = await authClient.forgetPassword({ email, redirectTo });
+    } else {
+      throw new Error("Fungsi reset password tidak tersedia pada SDK autentikasi yang dimuat.");
+    }
+    if (result?.error) throw result.error;
+    setStatus("forgotStatus", "Jika email tersebut terdaftar, tautan reset akan segera dikirim. Periksa kotak masuk dan folder spam. Tautan berlaku 15 menit.", "success");
+  } catch (error) {
+    setStatus("forgotStatus", normalizeError(error), "error");
+  } finally {
+    busy(button, false);
+  }
+});
 $("signInTab").addEventListener("click", () => setMode("signIn"));
 $("signUpTab").addEventListener("click", () => setMode("signUp"));
 $("authForm").addEventListener("submit", async (event) => {
