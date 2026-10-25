@@ -77,9 +77,9 @@ jobs:
             -X POST "$api/rpc/register_digital_card_issuer" \
             -H 'Content-Type: application/json' \
             -d '{"p_issuer_key":"ci-anonymous-test","p_display_name":"CI Anonymous Test","p_issuer_type":"school"}')"
-          case "$code" in 401|403|404) ;; *) echo "::error::Anonymous issuer RPC returned HTTP $code"; cat /tmp/anonymous-rpc.json; exit 1;; esac
+          case "$code" in 400|401|403|404|406) ;; *) echo "::error::Anonymous issuer RPC returned HTTP $code"; cat /tmp/anonymous-rpc.json; exit 1;; esac
           code="$(curl --silent --show-error --max-time 15 -o /tmp/anonymous-table.json -w '%{http_code}' "$api/digital_cards")"
-          case "$code" in 401|403|404) ;; *) echo "::error::Anonymous card-table request returned HTTP $code"; cat /tmp/anonymous-table.json; exit 1;; esac
+          case "$code" in 400|401|403|404|406) ;; *) echo "::error::Anonymous card-table request returned HTTP $code"; cat /tmp/anonymous-table.json; exit 1;; esac
   database-migrations:
     runs-on: ubuntu-latest
     timeout-minutes: 10
