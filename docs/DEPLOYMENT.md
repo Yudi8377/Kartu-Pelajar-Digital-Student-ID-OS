@@ -1,10 +1,10 @@
 # Deployment status and GitHub-only direction
 
-Last checked: 2026-10-15
+Last checked: 2026-10-25
 
 ## Hosting decision
 
-The selected direction is **GitHub only** for source control, code review, CI, and a possible static GitHub Pages site. Do not add Hatchable, AppDeploy, Vercel, Cloudflare, Supabase, Neon-hosted production services, or another provider unless the owner explicitly revises this constraint.
+The selected direction is **GitHub Pages + Neon** (no Vercel, no Cloudflare): GitHub for source control, code review, CI and static frontend; Neon Postgres, Neon Auth and Neon Functions for the backend. This supersedes the earlier GitHub-only restriction following the owner's request to proceed autonomously toward commercial readiness. See [Commercial backend architecture](COMMERCIAL-BACKEND-ARCHITECTURE.md).
 
 GitHub Pages serves static files. It does not execute the Next.js server runtime or provide a private transactional database, managed school authentication, or server-side secrets. GitHub Pages alone cannot operate the intended multi-school SaaS with private student data.
 
@@ -47,7 +47,7 @@ The repository still contains Next.js server routes and legacy Neon auth/databas
 2. Configure GitHub Pages to use GitHub Actions and verify the static workflow on `main`.
 3. Confirm the deployed URL and test the site on desktop and mobile; verify only static public assets are published.
 4. Continue local/rehearsal testing with synthetic data only.
-5. Before real school use, the owner must either provide infrastructure under their own control (server and database) or explicitly revise the no-third-party-hosting constraint. GitHub Pages alone is not a viable production backend.
+5. Before real school use, finish the Neon backend API, authentication, issuer bootstrap, tenant isolation, QR abuse controls, lockfile, backup/restore, privacy/legal review, and independent security gates. GitHub Pages alone remains a static frontend and is not a viable production backend.
 6. If self-managed infrastructure is unavailable, keep the product a static demo; do not onboard schools or enter real student data.
 
 ## Mandatory gates before operational launch

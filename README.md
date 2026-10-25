@@ -58,5 +58,7 @@ A successful local build or CI run is not proof of production readiness.
 - `docs/SECURITY-READINESS.md` — release gates before real personal data.
 - `docs/STUDENT-API.md` — first student API slice and verification contract.
 - `docs/ATTENDANCE-AND-SAFETY.md` — attendance and location privacy rules.
+- `docs/IDENTITY-VERIFICATION-INTEGRATION.md` — vendor-neutral identity document reading/authenticity integration contract and production gates; Regula is not yet licensed or integrated.
+- `docs/DIGITAL-CARD-LIFECYCLE-API.md` — current card issuance/revocation endpoints, one-time QR token behavior, and outstanding release tests.
 - `docs/HATCHABLE-PORT.md` — archived hosting exploration.
 - `tests/scenarios.md` — required security and behavior scenarios.

@@ -13,24 +13,84 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
-      - name: Validate GitHub-only static site
+      - name: Validate GitHub-only static site publication boundary
+        shell: bash
         run: |
+          set -euo pipefail
           test -s site/index.html
           test -s site/css/cardos.css
           test -s site/js/card-studio.js
-          ! grep -Eiq 'DATABASE_URL|NEON_AUTH_COOKIE_SECRET|OPENAI_API_KEY|student_number|guardian_phone' site/index.html
+          test -s site/app/index.html
+          test -s site/app/app.js
+          node --input-type=module --check < site/app/app.js
+          grep -Fq 'Konsol Penerbit' site/index.html
+
+          for pattern in '.env' '.env.*' '*.map' '*private*key*'; do
+            if find site -type f -name "$pattern" -print -quit | grep -q .; then
+              echo "::error::Static artifact contains a forbidden environment, source-map, or private-key file."
+              exit 1
+            fi
+          done
+
+          if grep -RIEq 'DATABASE_URL|NEON_AUTH_COOKIE_SECRET|OPENAI_API_KEY|SUPABASE_SERVICE_ROLE_KEY|-----BEGIN ([A-Z ]+ )?PRIVATE KEY-----|student_number|guardian_phone|national_id|date_of_birth' site/; then
+            echo "::error::Static site matched a backend-secret or sensitive-record marker."
+            exit 1
+          fi
+
+          grep -Eiq 'data fiktif|data simulasi' site/index.html
+          grep -Eiq 'belum menerbitkan kartu resmi|tidak menerbitkan kartu resmi' site/index.html
       - uses: actions/setup-node@v4
         with:
           node-version: 22
       - name: Install dependencies
-        run: |
-          npm cache clean --force
-          npm install --no-audit --no-fund --legacy-peer-deps
+        run: npm install --no-audit --no-fund --legacy-peer-deps
       - run: npm run typecheck
       - run: npm run lint
       - run: npm run test --if-present
       - run: npm run build
 
+  backend-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Verify deployed Neon API health endpoint
+        shell: bash
+        run: |
+          set -euo pipefail
+          response="$(curl --fail --silent --show-error --retry 5 --retry-delay 2 --max-time 15 \
+            https://br-calm-mountain-azgavkou-cardosapi.compute.c-3.ap-southeast-1.aws.neon.tech/health)"
+          printf '%s' "$response" | grep -Fq '"service":"digital-card-os-api"'
+          printf '%s' "$response" | grep -Fq '"readiness":"bootstrap-only"'
+      - name: Verify Neon Auth JWKS endpoint is reachable
+        shell: bash
+        run: |
+          set -euo pipefail
+          jwks='https://ep-flat-surf-az2loe9u.neonauth.c-3.ap-southeast-1.aws.neon.tech/digital_card_os/auth/.well-known/jwks.json'
+          response="$(curl --fail --silent --show-error --retry 3 --retry-delay 2 --max-time 15 "$jwks")"
+          printf '%s' "$response" | grep -Fq '"keys"'
+      - name: Verify browser preflight is limited to the GitHub Pages origin
+        shell: bash
+        run: |
+          set -euo pipefail
+          headers="$(curl --silent --show-error --max-time 15 -D - -o /dev/null \
+            -X OPTIONS \
+            -H 'Origin: https://yudi8377.github.io' \
+            -H 'Access-Control-Request-Method: GET' \
+            https://br-calm-mountain-azgavkou-cardosapi.compute.c-3.ap-southeast-1.aws.neon.tech/health)"
+          printf '%s' "$headers" | grep -Fqi 'Access-Control-Allow-Origin: https://yudi8377.github.io'
+
+      - name: Verify anonymous clients cannot issue cards or read card tables
+        shell: bash
+        run: |
+          set -euo pipefail
+          api='https://ep-flat-surf-az2loe9u.apirest.c-3.ap-southeast-1.aws.neon.tech/digital_card_os/rest/v1'
+          code="$(curl --silent --show-error --max-time 15 -o /tmp/anonymous-rpc.json -w '%{http_code}' \
+            -X POST "$api/rpc/register_digital_card_issuer" \
+            -H 'Content-Type: application/json' \
+            -d '{"p_issuer_key":"ci-anonymous-test","p_display_name":"CI Anonymous Test","p_issuer_type":"school"}')"
+          case "$code" in 400|401|403|404|406) ;; *) echo "::error::Anonymous issuer RPC returned HTTP $code"; cat /tmp/anonymous-rpc.json; exit 1;; esac
+          code="$(curl --silent --show-error --max-time 15 -o /tmp/anonymous-table.json -w '%{http_code}' "$api/digital_cards")"
+          case "$code" in 400|401|403|404|406) ;; *) echo "::error::Anonymous card-table request returned HTTP $code"; cat /tmp/anonymous-table.json; exit 1;; esac
   database-migrations:
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -49,10 +109,11 @@ jobs:
           --health-retries 5
     steps:
       - uses: actions/checkout@v4
-      - name: Create restricted runtime role for migration rehearsal
+      - name: Create restricted roles and mock Neon Auth for migration rehearsal
         env:
           PGPASSWORD: postgres
-        run: psql -h localhost -U postgres -d digital_card_os_test -v ON_ERROR_STOP=1 -c "CREATE ROLE student_id_os_runtime NOLOGIN"
+        run: |
+          psql -h localhost -U postgres -d digital_card_os_test -v ON_ERROR_STOP=1 -c "CREATE ROLE student_id_os_runtime NOLOGIN; CREATE ROLE authenticated NOLOGIN; CREATE ROLE anonymous NOLOGIN; CREATE SCHEMA auth; CREATE FUNCTION auth.user_id() RETURNS text LANGUAGE sql STABLE AS \$\$ SELECT current_setting('request.jwt.claim.sub', true) \$\$; CREATE SCHEMA neon_auth; CREATE TABLE neon_auth.\"user\" (id uuid PRIMARY KEY, name text NOT NULL, email text, \"emailVerified\" boolean NOT NULL DEFAULT false, banned boolean DEFAULT false, \"banExpires\" timestamptz)"
       - name: Apply all migrations to a disposable PostgreSQL instance
         env:
           PGPASSWORD: postgres
@@ -61,9 +122,13 @@ jobs:
           psql -h localhost -U postgres -d digital_card_os_test -v ON_ERROR_STOP=1 -f db/migrations/0002_runtime_security.sql
           psql -h localhost -U postgres -d digital_card_os_test -v ON_ERROR_STOP=1 -f db/migrations/0003_generic_digital_cards.sql
           psql -h localhost -U postgres -d digital_card_os_test -v ON_ERROR_STOP=1 -f db/migrations/0004_digital_card_rate_limits.sql
+          psql -h localhost -U postgres -d digital_card_os_test -v ON_ERROR_STOP=1 -f db/migrations/0005_authenticated_data_api_rpcs.sql
+          psql -h localhost -U postgres -d digital_card_os_test -v ON_ERROR_STOP=1 -f db/migrations/0006_list_authorized_issuers_rpc.sql
       - name: Assert generic card RLS and verification function exist
         env:
           PGPASSWORD: postgres
         run: |
           psql -h localhost -U postgres -d digital_card_os_test -v ON_ERROR_STOP=1 -c "DO \$\$ BEGIN IF NOT (SELECT relrowsecurity FROM pg_class WHERE oid = 'public.digital_cards'::regclass) THEN RAISE EXCEPTION 'digital_cards RLS is disabled'; END IF; IF NOT EXISTS (SELECT 1 FROM pg_proc WHERE oid = 'public.verify_digital_card(bytea)'::regprocedure) THEN RAISE EXCEPTION 'verification function is missing'; END IF; IF NOT EXISTS (SELECT 1 FROM pg_proc WHERE oid = 'public.consume_digital_card_rate_limit(text,integer,integer)'::regprocedure) THEN RAISE EXCEPTION 'rate-limit function is missing'; END IF; END \$\$;"
           psql -h localhost -U postgres -d digital_card_os_test -v ON_ERROR_STOP=1 -c "DO \$\$ DECLARE v_allowed boolean; v_bucket text := repeat('a', 64); BEGIN SELECT public.consume_digital_card_rate_limit(v_bucket, 60, 1) INTO v_allowed; IF NOT v_allowed THEN RAISE EXCEPTION 'first rate-limit hit should pass'; END IF; SELECT public.consume_digital_card_rate_limit(v_bucket, 60, 1) INTO v_allowed; IF v_allowed THEN RAISE EXCEPTION 'second rate-limit hit should be blocked'; END IF; END \$\$;"
+          psql -h localhost -U postgres -d digital_card_os_test -v ON_ERROR_STOP=1 -c "DO \$\$ BEGIN IF NOT has_function_privilege('authenticated','public.register_digital_card_issuer(text,text,text)','EXECUTE') THEN RAISE EXCEPTION 'authenticated issuer RPC is not granted'; END IF; IF NOT has_function_privilege('authenticated','public.list_digital_card_issuers()','EXECUTE') THEN RAISE EXCEPTION 'authenticated issuer listing RPC is not granted'; END IF; IF has_function_privilege('anonymous','public.list_digital_card_issuers()','EXECUTE') THEN RAISE EXCEPTION 'anonymous issuer listing must not be granted'; END IF; IF has_function_privilege('anonymous','public.register_digital_card_issuer(text,text,text)','EXECUTE') THEN RAISE EXCEPTION 'anonymous issuer RPC must not be granted'; END IF; IF has_table_privilege('authenticated','public.digital_cards','SELECT') OR has_table_privilege('anonymous','public.digital_cards','SELECT') THEN RAISE EXCEPTION 'browser roles must not select card table directly'; END IF; END \$\$;"
+          psql -h localhost -U postgres -d digital_card_os_test -v ON_ERROR_STOP=1 -c "DO \$\$ BEGIN PERFORM public.register_digital_card_issuer('ci-anonymous','CI Anonymous','school'); RAISE EXCEPTION 'unauthenticated issuer registration unexpectedly succeeded'; EXCEPTION WHEN SQLSTATE '28000' THEN NULL; END \$\$;"
