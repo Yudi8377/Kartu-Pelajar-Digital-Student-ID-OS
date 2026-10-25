@@ -42,6 +42,9 @@ function setMode(mode) {
   $("name").required = signup;
   $("password").autocomplete = signup ? "new-password" : "current-password";
   $("authSubmit").textContent = signup ? "Buat akun" : "Masuk";
+  $("magicLinkForm").classList.add("hidden");
+  $("authForm").classList.remove("hidden");
+  $("authLinks").classList.toggle("hidden", signup);
   setStatus("authStatus", "");
 }
 function showAuth() {
@@ -244,11 +247,61 @@ $("togglePassword").addEventListener("click", () => {
   $("togglePassword").setAttribute("aria-label", visible ? "Sembunyikan kata sandi" : "Tampilkan kata sandi");
   $("togglePassword").title = visible ? "Sembunyikan kata sandi" : "Tampilkan kata sandi";
 });
+$("showMagicLink").addEventListener("click", () => {
+  const email = $("email").value.trim().toLowerCase();
+  if (email) $("magicEmail").value = email;
+  $("authForm").classList.add("hidden");
+  $("forgotForm").classList.add("hidden");
+  $("verifyForm").classList.add("hidden");
+  $("magicLinkForm").classList.remove("hidden");
+  $("authLinks").classList.add("hidden");
+  setStatus("magicStatus", "");
+  $("magicEmail").focus();
+});
+$("backToPassword").addEventListener("click", () => {
+  $("magicLinkForm").classList.add("hidden");
+  $("authForm").classList.remove("hidden");
+  $("authLinks").classList.toggle("hidden", state.mode === "signUp");
+  setStatus("magicStatus", "");
+});
+$("magicLinkForm").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const email = $("magicEmail").value.trim().toLowerCase();
+  const button = $("sendMagicLink");
+  busy(button, true, "Mengirim tautan…");
+  setStatus("magicStatus", "");
+  try {
+    const callbackURL = new URL("./", window.location.href).href;
+    const response = await fetch(AUTH_URL + "/sign-in/magic-link", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Accept": "application/json" },
+      body: JSON.stringify({ email, callbackURL, newUserCallbackURL: callbackURL, errorCallbackURL: callbackURL }),
+      credentials: "include",
+      cache: "no-store",
+      redirect: "error"
+    });
+    let result = null;
+    try { result = await response.json(); } catch { /* response may be empty */ }
+    if (!response.ok || result?.error) {
+      throw new Error(response.status === 429
+        ? "Terlalu banyak permintaan. Tunggu beberapa menit lalu coba lagi."
+        : "Magic Link belum dapat dikirim. Periksa konfigurasi plugin Magic Link dan penyedia email Neon Auth.");
+    }
+    state.email = email;
+    setStatus("magicStatus", "Jika email dapat digunakan, tautan masuk akan dikirim. Periksa kotak masuk dan folder spam. Buka tautan pada perangkat dan browser yang sama.", "success");
+  } catch (error) {
+    setStatus("magicStatus", normalizeError(error), "error");
+  } finally {
+    busy(button, false);
+  }
+});
+
 $("forgotPassword").addEventListener("click", () => {
   const email = $("email").value.trim().toLowerCase();
   if (email) $("resetEmail").value = email;
   $("authForm").classList.add("hidden");
   $("verifyForm").classList.add("hidden");
+  $("magicLinkForm").classList.add("hidden");
   $("forgotForm").classList.remove("hidden");
   $("authLinks").classList.add("hidden");
   setStatus("forgotStatus", "");
@@ -256,6 +309,7 @@ $("forgotPassword").addEventListener("click", () => {
 });
 $("backToLogin").addEventListener("click", () => {
   $("forgotForm").classList.add("hidden");
+  $("magicLinkForm").classList.add("hidden");
   $("authForm").classList.remove("hidden");
   $("authLinks").classList.toggle("hidden", state.mode === "signUp");
   setStatus("forgotStatus", "");
