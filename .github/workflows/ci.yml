@@ -47,6 +47,28 @@ jobs:
       - run: npm run test --if-present
       - run: npm run build
 
+  backend-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - name: Verify deployed Neon API health endpoint
+        shell: bash
+        run: |
+          set -euo pipefail
+          response="$(curl --fail --silent --show-error --retry 5 --retry-delay 2 --max-time 15 \
+            https://br-calm-mountain-azgavkou-cardosapi.compute.c-3.ap-southeast-1.aws.neon.tech/health)"
+          printf '%s' "$response" | grep -Fq '"service":"digital-card-os-api"'
+          printf '%s' "$response" | grep -Fq '"readiness":"bootstrap-only"'
+      - name: Verify browser preflight is limited to the GitHub Pages origin
+        shell: bash
+        run: |
+          set -euo pipefail
+          headers="$(curl --silent --show-error --max-time 15 -D - -o /dev/null \
+            -X OPTIONS \
+            -H 'Origin: https://yudi8377.github.io' \
+            -H 'Access-Control-Request-Method: GET' \
+            https://br-calm-mountain-azgavkou-cardosapi.compute.c-3.ap-southeast-1.aws.neon.tech/health)"
+          printf '%s' "$headers" | grep -Fqi 'Access-Control-Allow-Origin: https://yudi8377.github.io'
   database-migrations:
     runs-on: ubuntu-latest
     timeout-minutes: 10
