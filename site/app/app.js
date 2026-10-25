@@ -1,7 +1,7 @@
 import { createAuthClient } from "https://esm.sh/@neondatabase/auth@0.5.0-beta";
 
-const AUTH_URL = "https://ep-flat-surf-az2loe9u.neonauth.c-3.ap-southeast-1.aws.neon.tech/digital_card_os/auth";
-const DATA_API_URL = "https://ep-flat-surf-az2loe9u.apirest.c-3.ap-southeast-1.aws.neon.tech/digital_card_os/rest/v1";
+const AUTH_URL = "https://ep-twilight-block-b38mafb2.neonauth.c-4.ap-southeast-1.aws.neon.tech/neondb/auth";
+const DATA_API_URL = "https://ep-twilight-block-b38mafb2.apirest.c-4.ap-southeast-1.aws.neon.tech/neondb/rest/v1";
 const authClient = createAuthClient(AUTH_URL);
 
 const $ = (id) => document.getElementById(id);
