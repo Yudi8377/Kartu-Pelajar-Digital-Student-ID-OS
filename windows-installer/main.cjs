@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-require-imports */
 const { app, BrowserWindow, shell } = require("electron");
 const path = require("node:path");
-const ONLINE_URL = "https://digital-card-os.hatchable.site/app/?view=overview";
+const ONLINE_URL = "https://yudi8377.github.io/Kartu-Pelajar-Digital-Student-ID-OS/app/?view=overview";
 function createWindow() {
   const win = new BrowserWindow({
     width: 1180, height: 820, minWidth: 360, minHeight: 600,
@@ -15,7 +15,7 @@ function createWindow() {
     }
   });
   win.webContents.setWindowOpenHandler(({ url }) => {
-    if (url.startsWith("https://digital-card-os.hatchable.site/")) {
+    if (url.startsWith("https://yudi8377.github.io/Kartu-Pelajar-Digital-Student-ID-OS/")) {
       void shell.openExternal(url);
     } else if (url.startsWith("https://") || url.startsWith("mailto:") || url.startsWith("tel:")) {
       void shell.openExternal(url);
