@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#071522">
+<meta name="description" content="Dompet Kartu Digital — pratinjau kartu identitas digital.">
+<title>Dompet Kartu Digital — Digital Card OS</title>
+<style>
+:root{color-scheme:dark;font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;background:#071522;color:#f3f8fb;--muted:#afc4d1;--line:#ffffff28;--teal:#72e5d0;--panel:#0d2332;--blue:#8bbcff}
+*{box-sizing:border-box}body{margin:0;min-height:100svh;background:radial-gradient(ellipse at 50% 10%,#143448 0,#071522 64%);overflow-x:hidden}button,select,input{font:inherit}button,a,select,input{outline-offset:3px}button:focus-visible,a:focus-visible,select:focus-visible{outline:3px solid #8bbcff}
+.stage{min-height:100svh;display:flex;align-items:center;justify-content:center;padding:10px 14px;position:relative}.menu-trigger{position:fixed;z-index:20;right:max(14px,env(safe-area-inset-right));top:max(14px,env(safe-area-inset-top));width:48px;height:48px;border:1px solid #8fb5c75e;border-radius:15px;background:#071522e8;color:white;box-shadow:0 8px 26px #0004;font-size:23px;cursor:pointer}.wallet-card{position:relative;width:min(100%,440px);height:80svh;max-height:850px;min-height:540px;border-radius:26px;border:1px solid #7de6d15c;overflow:hidden;isolation:isolate;background:linear-gradient(150deg,#164a5b 0%,#102f43 53%,#091a2b 100%);box-shadow:0 28px 80px #0006;display:flex;flex-direction:column;padding:clamp(18px,5vw,27px);padding-bottom:16px}.wallet-card:before{content:"";position:absolute;width:280px;height:280px;border-radius:50%;right:-110px;top:-95px;background:#ffffff0c;border:1px solid #ffffff17;box-shadow:0 0 0 25px #ffffff05,0 0 0 55px #ffffff04;z-index:-1}.identity-content{position:relative;z-index:2;display:flex;flex-direction:column;min-height:0;flex:1}.card-topline{display:flex;align-items:center;justify-content:space-between;gap:12px;color:#c2f5ec;font-size:10px;font-weight:850;letter-spacing:.16em}.secure-dot{width:8px;height:8px;border-radius:50%;background:var(--teal);display:inline-block;box-shadow:0 0 0 4px #72e5d01b;margin-right:7px}.card-type{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#c5d8e4;margin-top:30px}.person{display:flex;align-items:center;gap:16px;margin-top:16px}.avatar{width:76px;height:92px;border:1px solid #ffffff50;border-radius:15px;background:linear-gradient(145deg,#ffffff22,#ffffff08);display:grid;place-items:center;font-size:29px;color:#d5f4ef;flex:none}.person h1{font-size:clamp(23px,6vw,31px);line-height:1.05;letter-spacing:-.04em;margin:0 0 8px;overflow-wrap:anywhere}.person p{font-size:13px;color:#c0d4df;margin:0;line-height:1.45}.meta-list{display:grid;gap:9px;margin-top:22px}.meta-row{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid #ffffff17;padding-bottom:8px;font-size:12px}.meta-row span:first-child{color:#a9c2d0}.meta-row strong{text-align:right;font-weight:700}.status-chip{align-self:flex-start;margin-top:13px;border:1px solid #8ee8d45c;background:#72e5d012;color:#c9fff2;padding:6px 9px;border-radius:99px;font-size:10px;font-weight:800;letter-spacing:.06em}
+.custom-template-layout{display:none;position:absolute;inset:0 0 116px;overflow:hidden;border-radius:inherit;z-index:1}.wallet-card.custom-mode .identity-content{visibility:hidden}.wallet-card.custom-mode .custom-template-layout{display:block}.custom-el{position:absolute;box-sizing:border-box;min-height:15px;padding:4px 6px;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.15}.custom-el.qr,.custom-el.barcode{background:#fff;color:#111;border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}.qr-mark{width:min(45px,75%);aspect-ratio:1;background:repeating-conic-gradient(#111 0 25%,#fff 0 50%) 0/8px 8px;border:3px solid #fff;outline:1px solid #111}.barcode-mark{width:100%;height:24px;background:repeating-linear-gradient(90deg,#111 0 2px,#fff 2px 4px,#111 4px 5px,#fff 5px 8px)}.code-label{font-size:8px!important;color:#111;line-height:1}.photo-el{display:grid;place-items:center;text-align:center;border:1px solid #ffffffaa;background:#ffffff20;border-radius:7px;font-size:10px!important}.card-actions{position:relative;z-index:5;display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:auto;padding-top:14px;border-top:1px solid #ffffff29}.action{min-height:42px;border:1px solid #ffffff35;border-radius:11px;background:#07152266;color:#f3fbff;font-size:12px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px}.action.primary{background:#82e8d6;color:#062c35;border-color:#82e8d6}.action .ico{font-size:16px}.card-footnote{position:relative;z-index:5;font-size:9px;color:#a9c1ce;text-align:center;margin:9px 0 0;line-height:1.35}
+.drawer-backdrop{position:fixed;inset:0;background:#0009;z-index:30;display:none}.drawer-backdrop.open{display:block}.drawer{position:absolute;right:0;top:0;height:100%;height:100dvh;width:min(370px,90vw);background:#0b1e2c;border-left:1px solid #284454;padding:76px 18px 24px;overflow:auto;box-shadow:-20px 0 60px #0005}.drawer h2{font-size:15px;margin:0 0 12px}.drawer p{color:var(--muted);font-size:12px;line-height:1.5}.drawer button,.drawer a{width:100%;text-align:left;display:block;padding:13px 12px;border:1px solid #ffffff18;border-radius:11px;background:#102838;color:#f1f8fb;text-decoration:none;font-size:13px;margin:7px 0;cursor:pointer}.drawer .close{position:absolute;right:16px;top:15px;width:auto;margin:0}.drawer select{width:100%;padding:11px;border-radius:10px;background:#071522;color:white;border:1px solid #456173}.divider{height:1px;background:#ffffff1c;margin:16px 0}.notice{border:1px solid #b8873a77;background:#5c401a55;color:#f7dfb0;border-radius:11px;padding:11px 12px;font-size:11px;line-height:1.5;margin:12px 0}.modal{position:fixed;inset:0;z-index:40;display:none;place-items:center;padding:18px;background:#000b}.modal.open{display:grid}.modal-panel{width:min(100%,460px);max-height:88dvh;overflow:auto;background:#0d2332;border:1px solid #375365;border-radius:18px;padding:20px;box-shadow:0 30px 90px #0008}.modal-panel h2{font-size:19px;margin:0 0 10px}.modal-panel p{font-size:13px;color:#c2d4df;line-height:1.55}.modal-panel .action{width:100%;margin-top:10px}.modal-panel video{width:100%;border-radius:12px;background:#000;max-height:48dvh}.file-pick{display:block;border:1px dashed #456173;padding:14px;border-radius:11px;margin-top:12px;font-size:12px}.toast{position:fixed;left:50%;bottom:max(18px,env(safe-area-inset-bottom));transform:translate(-50%,20px);opacity:0;pointer-events:none;z-index:50;background:#e8fff8;color:#073b37;border-radius:12px;padding:12px 15px;box-shadow:0 10px 32px #0006;font-size:12px;font-weight:750;width:max-content;max-width:calc(100vw - 28px);transition:.2s}.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-height:680px){.wallet-card{height:86svh;min-height:500px;padding:17px}.card-type{margin-top:20px}.meta-list{margin-top:14px}.person{margin-top:10px}.avatar{height:74px;width:62px}.card-actions{gap:6px;padding-top:10px}.action{min-height:38px}}
+@media(min-width:700px){.stage{padding:24px}.wallet-card{width:440px}.menu-trigger{top:22px;right:22px}}
+</style>
+</head>
+<body>
+<button class="menu-trigger" id="menuTrigger" aria-label="Buka menu" aria-expanded="false">☰</button>
+<main class="stage">
+<section class="wallet-card" id="walletCard" aria-label="Kartu digital contoh">
+<div class="custom-template-layout" id="customLayout"></div>
+<div class="identity-content" id="identityContent">
+<div class="card-topline"><span><i class="secure-dot"></i>DIGITAL CARD OS</span><span id="cardMark">ID · DEMO</span></div>
+<div class="card-type" id="cardTypeLabel">KARTU PELAJAR DIGITAL</div>
+<div class="person"><div class="avatar" aria-hidden="true">✦</div><div><h1 id="holderName">Nama Fiktif</h1><p id="holderRole">Pelajar · Contoh</p></div></div>
+<div class="meta-list" id="metaList">
+<div class="meta-row"><span>Penerbit</span><strong id="issuerName">Institusi Contoh</strong></div>
+<div class="meta-row"><span>Status</span><strong>Pratinjau</strong></div>
+<div class="meta-row"><span>Berlaku</span><strong>Contoh masa berlaku</strong></div>
+</div>
+<span class="status-chip" id="statusChip">● DATA DEMO · BELUM TERVERIFIKASI</span>
+</div>
+<div class="card-actions">
+<button class="action" data-action="qr"><span class="ico">▦</span> QR Demo</button>
+<button class="action primary" data-action="attendance"><span class="ico">✓</span> Presensi</button>
+<button class="action" data-action="contact"><span class="ico">＋</span> Simpan Kontak</button>
+<button class="action" data-action="share"><span class="ico">↗</span> Bagikan</button>
+</div>
+<p class="card-footnote">Contoh antarmuka · bukan kartu resmi · QR belum memverifikasi identitas</p>
+</section>
+</main>
+<div class="drawer-backdrop" id="drawerBackdrop">
+<nav class="drawer" aria-label="Menu dompet kartu">
+<button class="close" id="closeMenu" aria-label="Tutup menu">✕</button>
+<h2>Dompet Kartu Digital</h2>
+<p>Pilih kartu dan buka fitur pendukung. Data pada halaman ini adalah contoh; layanan penerbitan belum aktif.</p>
+<label for="templatePicker">Jenis kartu</label>
+<select id="templatePicker">
+<option value="student_id">Kartu Pelajar Digital</option>
+<option value="project_identity">Identitas Proyek</option>
+<option value="digital_name_card">Kartu Nama Digital</option>
+<option value="organization_membership">Kartu Keanggotaan</option>
+<option value="event_participant">Kartu Peserta Kegiatan</option>
+<option value="achievement_certificate">Prestasi & Sertifikat</option>
+</select>
+<div class="divider"></div>
+<button data-action="scan">▣ Scan dokumen / e-KTP</button>
+<button data-action="documents">▤ Dokumen & surat tugas</button>
+<button data-action="qr">▦ QR & Presensi</button>
+<button data-action="contact">＋ Simpan kontak</button>
+<button data-action="share">↗ Bagikan kartu</button>
+<button data-action="safety">♧ Safety Center</button>
+<button data-action="maps">⌖ Peta & titik aman</button>
+<button data-action="privacy">♢ Privasi & izin</button>
+<div class="divider"></div>
+<p id="catalogStatus">Katalog template bersama sedang diperiksa…</p>
+<div class="notice">Mode pratinjau: jangan masukkan data pribadi asli. Fitur online dan verifikasi harus diaktifkan serta diuji secara terpisah.</div>
+</nav>
+</div>
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+<div class="modal-panel"><button class="action" id="modalClose" style="width:auto;float:right;padding:8px 12px">Tutup ✕</button><h2 id="modalTitle">Informasi</h2><div id="modalBody"><p>Fitur ini masih berupa pratinjau.</p></div></div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<input type="file" id="documentPicker" accept="image/*,application/pdf" hidden>
+<script>
+(function(){
+"use strict";
+const API="https://br-late-meadow-b3vj6rqi-cardtemplates.compute.c-4.ap-southeast-1.aws.neon.tech";
+const builtins={
+student_id:{name:"Kartu Pelajar Digital",role:"Pelajar · Contoh",issuer:"Institusi Contoh",mark:"STUDENT ID"},
+project_identity:{name:"Identitas Proyek",role:"Anggota proyek · Contoh",issuer:"Organisasi Contoh",mark:"PROJECT"},
+digital_name_card:{name:"Kartu Nama Digital",role:"Profesional · Contoh",issuer:"Profil contoh",mark:"CONTACT"},
+organization_membership:{name:"Kartu Keanggotaan",role:"Anggota · Contoh",issuer:"Organisasi Contoh",mark:"MEMBER"},
+event_participant:{name:"Kartu Peserta Kegiatan",role:"Peserta · Contoh",issuer:"Penyelenggara Contoh",mark:"EVENT"},
+achievement_certificate:{name:"Prestasi & Sertifikat",role:"Pemegang sertifikat · Contoh",issuer:"Penerbit Contoh",mark:"AWARD"}
+};
+const $=id=>document.getElementById(id);let customTemplates=[],stream=null;
+function toast(message){const t=$("toast");t.textContent=message;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2800)}
+function openMenu(){ $("drawerBackdrop").classList.add("open");$("menuTrigger").setAttribute("aria-expanded","true")}
+function closeMenu(){ $("drawerBackdrop").classList.remove("open");$("menuTrigger").setAttribute("aria-expanded","false")}
+function showModal(title,html){$("modalTitle").textContent=title;$("modalBody").innerHTML=html;$("modal").classList.add("open")}
+function closeModal(){ $("modal").classList.remove("open");stopCamera()}
+function stopCamera(){if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}const v=$("cameraVideo");if(v)v.srcObject=null}
+function applyBuiltin(key){const t=builtins[key]||builtins.student_id;$("walletCard").classList.remove("custom-mode");$("customLayout").replaceChildren();$("cardTypeLabel").textContent=t.name.toUpperCase();$("holderRole").textContent=t.role;$("issuerName").textContent=t.issuer;$("cardMark").textContent=t.mark;$("holderName").textContent="Nama Fiktif";$("statusChip").textContent="● DATA DEMO · BELUM TERVERIFIKASI"}
+function renderCustom(t){const card=$("walletCard"),layer=$("customLayout");card.classList.add("custom-mode");card.style.background=t.bgStyle==="solid"&&/^#[0-9a-f]{6}$/i.test(t.primaryColor||"")?t.primaryColor:"linear-gradient(145deg,"+(t.primaryColor||"#164a5b")+","+(t.secondaryColor||"#102f43")+")";card.style.borderRadius=Math.max(0,Math.min(28,Number(t.corner)||19)+"px");layer.replaceChildren();(Array.isArray(t.elements)?t.elements:[]).forEach(e=>{const n=document.createElement("div");n.className="custom-el"+(e.type==="qr"?" qr":e.type==="barcode"?" barcode":e.type==="photo"?" photo-el":"");n.style.left=Math.max(0,Math.min(100,Number(e.x)||0))+"%";n.style.top=Math.max(0,Math.min(100,Number(e.y)||0))+"%";n.style.width=Math.max(5,Math.min(100,Number(e.w)||30))+"%";n.style.color=/^#[0-9a-f]{6}$/i.test(e.color||"")?e.color:"#fff";n.style.fontSize=Math.max(8,Math.min(36,Number(e.size)||14))+"px";n.style.fontWeight=Number(e.weight)===800?"800":"500";if(e.type==="qr"){const q=document.createElement("span");q.className="qr-mark";const l=document.createElement("span");l.className="code-label";l.textContent="QR DEMO";n.append(q,l)}else if(e.type==="barcode"){const q=document.createElement("span");q.className="barcode-mark";const l=document.createElement("span");l.className="code-label";l.textContent="BARCODE DEMO";n.append(q,l)}else n.textContent=e.type==="name"?"Nama Fiktif":e.text||(e.type==="logo"||e.type==="shape"?"◆":"");layer.append(n)});$("cardTypeLabel").textContent=(t.name||"Template kartu").toUpperCase();$("cardMark").textContent="TEMPLATE DEMO";$("statusChip").textContent="● TEMPLATE · BELUM TERVERIFIKASI"}
+async function loadTemplates(){try{const r=await fetch(API+"/templates",{headers:{accept:"application/json"},cache:"no-store"});if(!r.ok)throw Error("HTTP "+r.status);const d=await r.json();customTemplates=Array.isArray(d.templates)?d.templates.filter(t=>t.status==="published"):[];if(customTemplates.length){const g=document.createElement("optgroup");g.label="Template katalog bersama";customTemplates.forEach(t=>{const o=document.createElement("option");o.value="custom:"+t.id;o.textContent=t.name;g.append(o)});$("templatePicker").append(g);$("catalogStatus").textContent=customTemplates.length+" template tersedia dari katalog server."}else $("catalogStatus").textContent="Belum ada template terbitan di katalog server."}catch{$("catalogStatus").textContent="Katalog online belum tersambung; kartu contoh tetap tersedia."}}
+function chooseTemplate(value){if(value.startsWith("custom:")){const t=customTemplates.find(x=>x.id===value.slice(7));if(t)renderCustom(t)}else{ $("walletCard").style.background="";$("walletCard").style.borderRadius="26px";applyBuiltin(value)}}
+function downloadContact(){const v=["BEGIN:VCARD","VERSION:3.0","FN:Nama Fiktif","ORG:Digital Card OS - Contoh","TITLE:Profil demo","NOTE:Kontak contoh, bukan data pengguna","END:VCARD"].join("\r\n");const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([v],{type:"text/vcard;charset=utf-8"}));a.download="digital-card-os-kontak-contoh.vcf";document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);toast("Kontak contoh disiapkan. Ganti dengan data yang benar setelah layanan aktif.")}
+async function shareCard(){const text="Digital Card OS — kartu contoh Nama Fiktif. Ini bukan identitas terverifikasi.";try{if(navigator.share)await navigator.share({title:"Digital Card OS",text,url:location.href});else if(navigator.clipboard){await navigator.clipboard.writeText(text+" "+location.href);toast("Ringkasan kartu disalin.");}else toast("Bagikan tidak didukung di browser ini.")}catch(e){if(e.name!=="AbortError")toast("Kartu belum dapat dibagikan di perangkat ini.")}}
+function action(name){closeMenu();if(name==="qr"){showModal("QR Demo","<p>Area QR pada versi ini adalah ilustrasi, bukan QR verifikasi yang dapat dipindai. Verifikasi server dan penerbitan kartu belum aktif.</p>");return}if(name==="attendance"){showModal("Presensi","<p>Presensi belum terhubung ke sistem kehadiran organisasi. Tidak ada kehadiran yang dicatat dari tombol demo ini.</p>");return}if(name==="contact"){downloadContact();return}if(name==="share"){shareCard();return}if(name==="scan"){showModal("Pemindai dokumen","<p>Kamera hanya menampilkan pratinjau. OCR, pembacaan e-KTP, dan verifikasi dokumen belum terhubung.</p><video id=\"cameraVideo\" autoplay playsinline></video><button class=\"action primary\" id=\"startCamera\">Aktifkan kamera</button>");$("startCamera").addEventListener("click",async()=>{try{if(!navigator.mediaDevices?.getUserMedia)throw Error("Kamera tidak tersedia di konteks ini.");stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"environment"},audio:false});$("cameraVideo").srcObject=stream;await $("cameraVideo").play();toast("Kamera aktif; gambar tidak diunggah.")}catch{toast("Izin kamera ditolak atau kamera tidak tersedia.")}});return}if(name==="documents"){showModal("Dokumen & surat tugas","<p>Document Vault online belum diaktifkan. Pilih file di bawah hanya untuk uji antarmuka; file tidak diunggah atau disimpan ke server.</p><label class=\"file-pick\">Pilih PDF atau gambar<input id=\"localDocument\" type=\"file\" accept=\"image/*,application/pdf\" style=\"display:block;margin-top:10px;max-width:100%\"></label><p id=\"localDocumentStatus\">Belum ada file dipilih.</p>");$("localDocument").addEventListener("change",e=>{$("localDocumentStatus").textContent=e.target.files?.[0]?"Dipilih di perangkat ini: "+e.target.files[0].name+" · belum diunggah atau dicadangkan.":"Belum ada file dipilih."});return}if(name==="safety"){showModal("Safety Center","<p>Ini adalah pintu masuk prototipe. SOS, pembagian lokasi, kontak darurat, dan pelaporan insiden belum terhubung ke layanan produksi. Tidak ada lokasi yang dikirim otomatis.</p>");return}if(name==="maps"){showModal("Peta & titik aman","<p>Peta belum terintegrasi. Tidak ada lokasi perangkat yang dibaca atau dikirim oleh halaman demo ini.</p>");return}if(name==="privacy"){showModal("Privasi & izin","<p>Versi demo menggunakan data fiktif. Kamera hanya diminta setelah tombol kamera dipilih. File dokumen yang dipilih tidak diunggah. Katalog template hanya dibaca dari API bila layanan tersedia.</p>");return}}
+$("menuTrigger").addEventListener("click",openMenu);$("closeMenu").addEventListener("click",closeMenu);$("drawerBackdrop").addEventListener("click",e=>{if(e.target===$("drawerBackdrop"))closeMenu()});$("modalClose").addEventListener("click",closeModal);$("modal").addEventListener("click",e=>{if(e.target===$("modal"))closeModal()});$("templatePicker").addEventListener("change",e=>chooseTemplate(e.target.value));document.querySelectorAll("[data-action]").forEach(b=>b.addEventListener("click",()=>action(b.dataset.action)));document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeMenu();closeModal()}});applyBuiltin("student_id");loadTemplates();
+})();
+</script>
+</body>
+</html>
