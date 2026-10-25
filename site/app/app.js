@@ -268,17 +268,22 @@ $("forgotForm").addEventListener("submit", async (event) => {
   setStatus("forgotStatus", "");
   try {
     const redirectTo = new URL("./reset-password/", window.location.href).href;
-    let result;
-    if (typeof authClient.requestPasswordReset === "function") {
-      result = await authClient.requestPasswordReset({ email, redirectTo });
-    } else if (typeof authClient.auth?.requestPasswordReset === "function") {
-      result = await authClient.auth.requestPasswordReset({ email, redirectTo });
-    } else if (typeof authClient.forgetPassword === "function") {
-      result = await authClient.forgetPassword({ email, redirectTo });
-    } else {
-      throw new Error("Fungsi reset password tidak tersedia pada SDK autentikasi yang dimuat.");
+    const response = await fetch(AUTH_URL.replace(/\\/$/, "") + "/request-password-reset", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Accept": "application/json" },
+      body: JSON.stringify({ email, redirectTo }),
+      credentials: "omit",
+      cache: "no-store",
+      redirect: "error"
+    });
+    let result = null;
+    try { result = await response.json(); } catch { /* response may be empty */ }
+    if (!response.ok) {
+      throw new Error(response.status === 429
+        ? "Terlalu banyak permintaan reset. Tunggu beberapa menit lalu coba lagi."
+        : "Permintaan reset ditolak layanan autentikasi (" + response.status + ").");
     }
-    if (result?.error) throw result.error;
+    if (result?.error) throw new Error(result.message || result.error.message || "Permintaan reset gagal.");
     setStatus("forgotStatus", "Jika email tersebut terdaftar, tautan reset akan segera dikirim. Periksa kotak masuk dan folder spam. Tautan berlaku 15 menit.", "success");
   } catch (error) {
     setStatus("forgotStatus", normalizeError(error), "error");
