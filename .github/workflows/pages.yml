@@ -27,7 +27,7 @@ jobs:
           test -s site/index.html
 
           # Never publish environment files, source maps, or private-key files.
-          if find site -type f \\( -name '.env' -o -name '.env.*' -o -name '*.map' -o -iname '*private*key*' \\) -print -quit | grep -q .; then
+          if find site -type f \( -name '.env' -o -name '.env.*' -o -name '*.map' -o -iname '*private*key*' \) -print -quit | grep -q .; then
             echo "::error::Static artifact contains a forbidden environment, source-map, or private-key file."
             exit 1
           fi
