@@ -9,7 +9,7 @@ on:
 permissions:
   contents: write
 concurrency:
-  group: lockfile-{{ github.ref }}
+  group: lockfile-${{ github.ref }}
   cancel-in-progress: true
 jobs:
   lockfile:
