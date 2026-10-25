@@ -14,7 +14,7 @@ This is a change from the earlier GitHub-only restriction: GitHub remains the so
 
 A new, empty Neon project was created for the commercial backend rather than cloning the existing Student ID OS production branch. The new database is isolated from any legacy student records. The four reviewed SQL migrations (0001–0004) were applied to its empty database; Neon Auth (Better Auth provider) was provisioned and the GitHub Pages origin was added as a trusted origin.
 
-This provisioning is **not equivalent to a commercial launch**. No issuer or real user was bootstrapped, no student data was copied, and no API deployment or production user flow is declared complete. Keep all public features in demo mode until backend APIs and the complete sign-in/authorization journey are deployed and tested.
+The first Neon Function is deployed at `https://br-calm-mountain-azgavkou-cardosapi.compute.c-3.ap-southeast-1.aws.neon.tech/`; its `/health` endpoint has a GitHub Actions smoke test. This is a health-only shell, not a card API. This provisioning is **not equivalent to a commercial launch**. No issuer or real user was bootstrapped, no student data was copied, and no card-operation API or production user flow is declared complete. Keep all public features in demo mode until backend APIs and the complete sign-in/authorization journey are deployed and tested.
 
 ## Trust boundaries
 
