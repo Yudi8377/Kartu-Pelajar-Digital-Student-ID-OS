@@ -14,7 +14,7 @@ This is a change from the earlier GitHub-only restriction: GitHub remains the so
 
 A new, empty Neon project was created for the commercial backend rather than cloning the existing Student ID OS production branch. The new database is isolated from any legacy student records. The four reviewed SQL migrations (0001–0004) were applied to its empty database; Neon Auth (Better Auth provider) was provisioned and the GitHub Pages origin was added as a trusted origin.
 
-The first Neon Function is deployed at `https://br-calm-mountain-azgavkou-cardosapi.compute.c-3.ap-southeast-1.aws.neon.tech/`; its `/health` endpoint has a GitHub Actions smoke test. This is a health-only shell, not a card API. This provisioning is **not equivalent to a commercial launch**. No issuer or real user was bootstrapped, no student data was copied, and no card-operation API or production user flow is declared complete. Keep all public features in demo mode until backend APIs and the complete sign-in/authorization journey are deployed and tested.
+The Neon Data API is enabled at `https://ep-flat-surf-az2loe9u.apirest.c-3.ap-southeast-1.aws.neon.tech/digital_card_os/rest/v1` with Neon Auth JWT validation, an exact GitHub Pages CORS origin, no default browser table grants, and OpenAPI documentation disabled. Migration 0005 adds authenticated RPCs for issuer registration, card listing, card issue, and card revocation. Direct browser-role access to card tables is denied; anonymous RPC/table access is checked by GitHub Actions. A separate Neon Function at `https://br-calm-mountain-azgavkou-cardosapi.compute.c-3.ap-southeast-1.aws.neon.tech/` provides a health-only endpoint and smoke test. This provisioning is **not equivalent to a commercial launch**: the static frontend is not yet integrated with Neon Auth/Data API, no real issuer/user has been bootstrapped, no student data was copied, and the authenticated end-to-end flow has not yet been tested. Keep all public features in demo mode until backend APIs and the complete sign-in/authorization journey are deployed and tested.
 
 ## Trust boundaries
 
@@ -29,7 +29,7 @@ The first Neon Function is deployed at `https://br-calm-mountain-azgavkou-cardos
 
 ## Required launch gates
 
-1. Create and test a minimal authenticated Neon Function API using Node.js 24 and the existing migrations.
+1. Integrate the static frontend with the Neon Auth SDK and Data API, then test the authenticated RPCs end to end using a verified synthetic account.
 2. Configure the Auth client for the static site; test sign-up/sign-in/session expiry/sign-out and email verification using the real Pages origin.
 3. Verify school/issuer isolation with negative cross-tenant tests, including read, issue, list, revoke, and audit access.
 4. Verify expired, revoked, malformed, replayed, and unknown QR tokens. Keep public QR lookup closed until rate-limit and abuse tests pass.
