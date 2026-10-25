@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light">
   <meta name="referrer" content="strict-origin-when-cross-origin">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://esm.sh; connect-src 'self' https://ep-flat-surf-az2loe9u.neonauth.c-3.ap-southeast-1.aws.neon.tech https://ep-flat-surf-az2loe9u.apirest.c-3.ap-southeast-1.aws.neon.tech https://esm.sh; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; base-uri 'self'; form-action 'self'; frame-ancestors 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://esm.sh; connect-src 'self' https://ep-twilight-block-b38mafb2.neonauth.c-4.ap-southeast-1.aws.neon.tech https://ep-twilight-block-b38mafb2.apirest.c-4.ap-southeast-1.aws.neon.tech https://esm.sh; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; base-uri 'self'; form-action 'self'; frame-ancestors 'none'">
   <title>Konsol Penerbit — Digital Card OS</title>
   <style>
     :root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#172033;background:#f4f7fb;font-synthesis:none}
@@ -21,6 +21,7 @@
     .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px;align-items:start}
     .panel{background:white;border:1px solid #dfe6f0;border-radius:16px;padding:22px;box-shadow:0 8px 26px rgba(20,37,67,.05);min-width:0}
     .field{display:flex;flex-direction:column;gap:7px;margin:13px 0}.field label{font-size:.88rem;font-weight:700;color:#273750}
+    .password-wrap{position:relative;display:flex;align-items:center}.password-wrap input{padding-right:54px}.eye-toggle{position:absolute;right:5px;top:5px;min-height:34px;width:40px;padding:6px;background:transparent;color:#42536e;border:0}.eye-toggle:hover{background:#eef3fa}.eye-toggle svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.auth-links{display:flex;justify-content:flex-end;margin-top:8px}.text-link{min-height:auto;padding:3px 0;background:transparent;color:#1e4e9a;border:0;text-decoration:underline;font-size:.9rem}.text-link:hover{background:transparent;color:#102e60}
     input,select{width:100%;padding:12px 13px;border:1px solid #c9d3e1;border-radius:9px;background:white;color:#15233a;min-height:44px}
     input:focus,select:focus,button:focus-visible,a:focus-visible{outline:3px solid #8fc6ff;outline-offset:2px}
     .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
@@ -59,8 +60,15 @@
         <form id="authForm">
           <div class="field hidden" id="nameField"><label for="name">Nama tampilan</label><input id="name" name="name" autocomplete="name" maxlength="120"></div>
           <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" required maxlength="254"></div>
-          <div class="field"><label for="password">Kata sandi</label><input id="password" name="password" type="password" autocomplete="current-password" required minlength="8" maxlength="128"></div>
+          <div class="field"><label for="password">Kata sandi</label><div class="password-wrap"><input id="password" name="password" type="password" autocomplete="current-password" required minlength="8" maxlength="128" aria-describedby="passwordHelp"><button class="eye-toggle" type="button" id="togglePassword" aria-label="Tampilkan kata sandi" aria-pressed="false" title="Tampilkan kata sandi"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"></path><circle cx="12" cy="12" r="3"></circle></svg></button></div><small id="passwordHelp" class="muted">Minimal 8 karakter.</small></div>
+          <div class="auth-links" id="authLinks"><button type="button" class="text-link" id="forgotPassword">Lupa password?</button></div>
           <div class="actions"><button id="authSubmit" type="submit">Masuk</button></div>
+        </form>
+        <form id="forgotForm" class="hidden">
+          <p class="muted">Masukkan email akun Anda. Jika akun terdaftar, kami akan mengirim tautan untuk membuat kata sandi baru. Tautan reset berlaku terbatas.</p>
+          <div class="field"><label for="resetEmail">Email akun</label><input id="resetEmail" type="email" autocomplete="email" required maxlength="254"></div>
+          <div class="actions"><button type="submit" id="sendResetLink">Kirim tautan reset</button><button type="button" class="secondary" id="backToLogin">Kembali ke masuk</button></div>
+          <div id="forgotStatus" class="status" role="status" aria-live="polite"></div>
         </form>
         <form id="verifyForm" class="hidden">
           <p class="muted">Akun harus memiliki email terverifikasi sebelum dapat membuat penerbit. Kirim kode verifikasi, lalu masukkan kode yang diterima melalui email.</p>
