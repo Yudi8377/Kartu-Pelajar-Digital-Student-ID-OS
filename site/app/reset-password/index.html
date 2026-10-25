@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="referrer" content="strict-origin-when-cross-origin">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://esm.sh; connect-src 'self' https://ep-twilight-block-b38mafb2.neonauth.c-4.ap-southeast-1.aws.neon.tech https://esm.sh; style-src 'self' 'unsafe-inline'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'">
+<title>Atur Ulang Kata Sandi — Digital Card OS</title>
+<style>
+:root{font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:#172033;background:#f4f7fb}*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:20px}.panel{width:min(100%,480px);background:#fff;border:1px solid #dfe6f0;border-radius:18px;padding:26px;box-shadow:0 12px 40px #14254312}h1{font-size:1.7rem;margin:0 0 10px;color:#101b32}.muted{color:#5d6b82;line-height:1.55}.field{display:flex;flex-direction:column;gap:7px;margin:16px 0}label{font-size:.9rem;font-weight:700}input{width:100%;padding:12px;border:1px solid #c9d3e1;border-radius:9px;font:inherit;min-height:45px}button{background:#1e4e9a;color:white;border:1px solid #1e4e9a;border-radius:9px;padding:12px 16px;font:inherit;font-weight:750;cursor:pointer;min-height:44px}button:disabled{opacity:.55;cursor:not-allowed}.status{min-height:24px;margin-top:14px;line-height:1.5;font-size:.92rem}.success{color:#17633b}.error{color:#8d2525}.back{display:inline-block;margin-top:16px;color:#23436f}.hidden{display:none!important}
+</style>
+</head>
+<body>
+<main class="panel">
+<p class="muted">DIGITAL CARD OS · KEAMANAN AKUN</p>
+<h1>Atur ulang kata sandi</h1>
+<p class="muted">Buat kata sandi baru untuk akun Anda. Demi keamanan, tautan reset hanya berlaku dalam waktu terbatas.</p>
+<form id="resetForm">
+<div class="field"><label for="newPassword">Kata sandi baru</label><input id="newPassword" type="password" autocomplete="new-password" minlength="8" maxlength="128" required></div>
+<div class="field"><label for="confirmPassword">Ulangi kata sandi baru</label><input id="confirmPassword" type="password" autocomplete="new-password" minlength="8" maxlength="128" required></div>
+<button id="submitButton" type="submit">Simpan kata sandi baru</button>
+</form>
+<p id="status" class="status" role="status" aria-live="polite"></p>
+<a class="back" href="../">← Kembali ke halaman masuk</a>
+</main>
+<script type="module">
+import { createAuthClient } from "https://esm.sh/@neondatabase/auth@0.5.0-beta";
+const authClient = createAuthClient("https://ep-twilight-block-b38mafb2.neonauth.c-4.ap-southeast-1.aws.neon.tech/neondb/auth");
+const statusNode = document.getElementById("status");
+const form = document.getElementById("resetForm");
+const button = document.getElementById("submitButton");
+const params = new URLSearchParams(location.search);
+const hashParams = new URLSearchParams(location.hash.replace(/^#/, ""));
+const token = params.get("token") || params.get("resetToken") || hashParams.get("token");
+function status(message, kind="") { statusNode.textContent=message; statusNode.className="status "+kind; }
+if (!token) {
+  status("Tautan reset tidak lengkap atau sudah kedaluwarsa. Kembali ke halaman masuk lalu minta tautan baru.", "error");
+  form.classList.add("hidden");
+}
+form.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const password = document.getElementById("newPassword").value;
+  const confirmation = document.getElementById("confirmPassword").value;
+  if (password.length < 8) return status("Kata sandi minimal 8 karakter.", "error");
+  if (password !== confirmation) return status("Kedua kata sandi belum sama.", "error");
+  if (!token) return status("Tautan reset tidak valid. Minta tautan reset yang baru.", "error");
+  button.disabled = true; button.textContent = "Menyimpan…";
+  try {
+    let result;
+    if (typeof authClient.resetPassword === "function") {
+      result = await authClient.resetPassword({ token, newPassword: password });
+    } else if (typeof authClient.auth?.resetPassword === "function") {
+      result = await authClient.auth.resetPassword({ token, newPassword: password });
+    } else {
+      throw new Error("SDK autentikasi belum menyediakan fungsi penyimpanan password baru.");
+    }
+    if (result?.error) throw result.error;
+    status("Kata sandi berhasil diperbarui. Silakan masuk menggunakan kata sandi baru.", "success");
+    form.classList.add("hidden");
+  } catch (error) {
+    status(error?.message || "Reset gagal. Tautan mungkin kedaluwarsa; minta tautan baru dari halaman masuk.", "error");
+  } finally {
+    button.disabled = false; button.textContent = "Simpan kata sandi baru";
+  }
+});
+</script>
+</body>
+</html>
