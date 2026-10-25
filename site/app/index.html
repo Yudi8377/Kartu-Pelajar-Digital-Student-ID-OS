@@ -61,10 +61,10 @@
           <div class="field hidden" id="nameField"><label for="name">Nama tampilan</label><input id="name" name="name" autocomplete="name" maxlength="120"></div>
           <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" autocomplete="email" required maxlength="254"></div>
           <div class="field"><label for="password">Kata sandi</label><div class="password-wrap"><input id="password" name="password" type="password" autocomplete="current-password" required minlength="8" maxlength="128" aria-describedby="passwordHelp"><button class="eye-toggle" type="button" id="togglePassword" aria-label="Tampilkan kata sandi" aria-pressed="false" title="Tampilkan kata sandi"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z"></path><circle cx="12" cy="12" r="3"></circle></svg></button></div><small id="passwordHelp" class="muted">Minimal 8 karakter.</small></div>
-          <div class="auth-links" id="authLinks"><button type="button" class="text-link" id="forgotPassword">Lupa password?</button></div>
+          <div class="auth-links" id="authLinks"><button type="button" class="text-link" id="showMagicLink">Masuk dengan Magic Link</button><button type="button" class="text-link" id="forgotPassword">Lupa password?</button></div>
           <div class="actions"><button id="authSubmit" type="submit">Masuk</button></div>
         </form>
-        <form id="magicLinkForm">
+        <form id="magicLinkForm" class="hidden">
           <p class="muted">Masuk tanpa kata sandi. Kami akan mengirim tautan masuk ke email Anda.</p>
           <div class="field"><label for="magicEmail">Email untuk tautan masuk</label><input id="magicEmail" name="email" type="email" autocomplete="email" required maxlength="254"></div>
           <div class="actions"><button type="submit" id="sendMagicLink">Kirim Magic Link</button><button type="button" class="secondary" id="backToPassword">Gunakan kata sandi</button></div>
