@@ -43,7 +43,7 @@ jobs:
           grep -Eiq 'data fiktif|data simulasi' site/index.html
           grep -Eiq 'belum menerbitkan kartu resmi|tidak menerbitkan kartu resmi' site/index.html
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v5
         with:
           path: site
   deploy:
