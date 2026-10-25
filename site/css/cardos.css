@@ -187,7 +187,7 @@ footer .link-light:hover{color:#b7d7ff!important}
 .sample-card.custom-layout-mode.is-portrait{aspect-ratio:.63 / 1}
 .sample-card.custom-layout-mode:after{pointer-events:none;z-index:0}
 .sample-card.custom-layout-mode>:not(#customTemplateLayout){display:none!important}
-.custom-template-layout{position:absolute;inset:0;overflow:hidden;border-radius:inherit;z-index:1}
+.custom-template-layout{display:none;position:absolute;inset:0;overflow:hidden;border-radius:inherit;z-index:1}.sample-card.custom-layout-mode .custom-template-layout{display:block}
 .custom-template-element{position:absolute;box-sizing:border-box;min-height:16px;padding:4px 6px;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.15}
 .custom-template-element.is-qr,.custom-template-element.is-barcode{background:#fff;color:#111;border-radius:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:5px}
 .custom-template-qr-mark{display:block;width:min(42px,70%);aspect-ratio:1;background:repeating-conic-gradient(#111 0 25%,#fff 0 50%) 0/8px 8px;border:3px solid #fff;outline:1px solid #111}
