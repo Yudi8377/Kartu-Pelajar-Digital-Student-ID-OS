@@ -7,7 +7,7 @@ const allowedOrigins = new Set(["https://yudi8377.github.io","https://digital-ca
 const json = (data, status = 200, origin = "") => new Response(JSON.stringify(data), { status, headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store", ...(origin && allowedOrigins.has(origin) ? { "access-control-allow-origin": origin, "access-control-allow-credentials": "true", "vary": "Origin" } : {}) } });
 const hashKey = (key) => createHash("sha256").update(key, "utf8").digest("hex");
 const isValidKey = (key) => typeof key === "string" && /^[A-Za-z0-9_-]{40,120}$/.test(key);
-const safeTemplate = (row) => ({ id: row.id, name: row.name, category: row.category, status: row.visibility, updatedAt: row.updated_at, publishedAt: row.published_at, ...row.template_json });
+const safeTemplate = (row) => ({ ...row.template_json, id: row.id, name: row.name, category: row.category, status: row.visibility, updatedAt: row.updated_at, publishedAt: row.published_at, owned: row.owned === true });
 const MAX_BYTES = 65536;
 export default { async fetch(request) {
  const origin = request.headers.get("origin") || "";
@@ -20,9 +20,9 @@ export default { async fetch(request) {
   const key = request.headers.get("x-workspace-key") || "";
   const ownerHash = isValidKey(key) ? hashKey(key) : null;
   if (request.method === "GET" && url.pathname === "/templates") {
-   const pub = await pool.query("SELECT id,name,category,visibility,template_json,updated_at,published_at FROM public.card_template_assets WHERE visibility='published' ORDER BY published_at DESC LIMIT 200");
+   const pub = await pool.query("SELECT id,name,category,visibility,template_json,updated_at,published_at,(owner_key_hash=$1) AS owned FROM public.card_template_assets WHERE visibility='published' ORDER BY published_at DESC LIMIT 200", [ownerHash]);
    let rows = pub.rows;
-   if (ownerHash) { const drafts = await pool.query("SELECT id,name,category,visibility,template_json,updated_at,published_at FROM public.card_template_assets WHERE owner_key_hash=$1 AND visibility='draft' ORDER BY updated_at DESC LIMIT 100",[ownerHash]); rows=[...drafts.rows,...rows]; }
+   if (ownerHash) { const drafts = await pool.query("SELECT id,name,category,visibility,template_json,updated_at,published_at,true AS owned FROM public.card_template_assets WHERE owner_key_hash=$1 AND visibility='draft' ORDER BY updated_at DESC LIMIT 100",[ownerHash]); rows=[...drafts.rows,...rows]; }
    return json({templates:rows.map(safeTemplate),server:true},200,origin);
   }
   if (!ownerHash) return json({error:"Kunci ruang kerja diperlukan untuk menyimpan atau mengelola aset."},401,origin);
