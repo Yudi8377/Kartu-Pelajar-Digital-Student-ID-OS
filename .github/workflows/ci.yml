@@ -20,6 +20,10 @@ jobs:
           test -s site/index.html
           test -s site/css/cardos.css
           test -s site/js/card-studio.js
+          test -s site/app/index.html
+          test -s site/app/app.js
+          node --input-type=module --check < site/app/app.js
+          grep -Fq 'Konsol Penerbit' site/index.html
 
           for pattern in '.env' '.env.*' '*.map' '*private*key*'; do
             if find site -type f -name "$pattern" -print -quit | grep -q .; then
@@ -57,6 +61,13 @@ jobs:
             https://br-calm-mountain-azgavkou-cardosapi.compute.c-3.ap-southeast-1.aws.neon.tech/health)"
           printf '%s' "$response" | grep -Fq '"service":"digital-card-os-api"'
           printf '%s' "$response" | grep -Fq '"readiness":"bootstrap-only"'
+      - name: Verify Neon Auth JWKS endpoint is reachable
+        shell: bash
+        run: |
+          set -euo pipefail
+          jwks='https://ep-flat-surf-az2loe9u.neonauth.c-3.ap-southeast-1.aws.neon.tech/digital_card_os/auth/.well-known/jwks.json'
+          response="$(curl --fail --silent --show-error --retry 3 --retry-delay 2 --max-time 15 "$jwks")"
+          printf '%s' "$response" | grep -Fq '"keys"'
       - name: Verify browser preflight is limited to the GitHub Pages origin
         shell: bash
         run: |
