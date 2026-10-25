@@ -20,6 +20,7 @@ jobs:
           test -s site/index.html
           test -s site/css/cardos.css
           test -s site/js/card-studio.js
+          node --check site/js/card-studio.js
           test -s site/app/index.html
           test -s site/app/app.js
           node --input-type=module --check < site/app/app.js
