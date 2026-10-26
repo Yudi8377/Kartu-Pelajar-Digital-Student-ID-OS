@@ -292,8 +292,7 @@ $("magicLinkForm").addEventListener("submit", async (event) => {
         : typeof result?.error === "string" ? result.error
         : "";
       const detail = serverMessage.replace(/[\\r\\n\\t]+/g, " ").slice(0, 180);
-      throw new Error("Neon Auth menolak permintaan Magic Link (HTTP " + response.status + ")."
-        + (detail ? " Detail: " + detail : " Periksa apakah plugin Magic Link aktif pada branch production dan penyedia email Neon Auth siap."));
+      throw new Error("Tautan masuk belum dapat dikirim. Periksa alamat email atau coba lagi nanti.");
     }
     state.email = email;
     setStatus("magicStatus", "Jika email dapat digunakan, tautan masuk akan dikirim. Periksa kotak masuk dan folder spam. Buka tautan pada perangkat dan browser yang sama.", "success");
