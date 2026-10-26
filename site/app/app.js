@@ -87,7 +87,7 @@ async function callRpc(name, params = {}) {
     if (response.status === 401 || response.status === 403) {
       throw new Error("Sesi tidak valid atau akun belum terverifikasi. Masuk ulang dan periksa email.");
     }
-    throw new Error(typeof data?.message === "string" ? data.message.slice(0, 180) : "Backend menolak permintaan (" + response.status + ").");
+    throw new Error(typeof data?.message === "string" ? data.message.slice(0, 180) : "Permintaan tidak dapat diproses. Silakan coba lagi.");
   }
   return data;
 }
@@ -99,7 +99,7 @@ async function startVerification(email) {
   busy(sendButton, true, "Mengirim kode…");
   try {
     if (!authClient.emailOtp?.sendVerificationOtp) {
-      throw new Error("Metode verifikasi email belum tersedia pada SDK yang dimuat.");
+      throw new Error("Verifikasi email belum tersedia untuk sesi ini. Silakan coba lagi nanti.");
     }
     const result = await authClient.emailOtp.sendVerificationOtp({ email, type: "email-verification" });
     if (result?.error) throw result.error;
@@ -164,7 +164,7 @@ async function loadIssuers() {
       ? state.issuerId : state.issuers[0].issuerId;
     select.value = wanted;
     state.issuerId = wanted;
-    setStatus("issuerStatus", "Penerbit dimuat. Operasi penerbitan kartu tetap dikunci sampai verifikasi QR publik siap.", "success");
+    setStatus("issuerStatus", "Informasi penerbit berhasil dimuat.", "success");
     await loadCards();
   } catch (error) {
     setStatus("issuerStatus", normalizeError(error), "error");
@@ -437,7 +437,7 @@ $("issuerForm").addEventListener("submit", async (event) => {
     state.issuerId = result?.issuerId || "";
     setStatus("issuerStatus", "Penerbit berhasil didaftarkan.", "success");
     await loadIssuers();
-    showGlobal("Penerbit terdaftar. Penerbitan kartu masih dikunci sampai verifikasi QR publik lulus pemeriksaan keamanan.", "success");
+    showGlobal("Penerbit berhasil didaftarkan.", "success");
   } catch (error) {
     setStatus("issuerStatus", normalizeError(error), "error");
   } finally {
